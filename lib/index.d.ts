@@ -217,6 +217,7 @@ declare class FactoryProvider<M> implements Provider<M> {
 declare function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Injector): any[][];
 
 declare function Inject(token: any): (proto: any, key: string, index: number) => void;
+declare function Meta<T extends object = any>(meta: T): (target: any) => void;
 declare namespace AnnotationTools {
     function get_set_meta_data(metaKey: string, target: any, key: string | undefined, def: any): any;
     function get_param_types(target: any, key: string): any;
@@ -236,6 +237,34 @@ declare class CurrentTimestamp extends Number {
     private _timestamp;
     valueOf(): number;
 }
+
+declare class LsError extends Error {
+    readonly code: number;
+    readonly msg: string;
+    readonly detail?: any;
+    constructor(code: number, msg: string, detail?: any);
+    toJson(): {
+        code: number;
+        msg: string;
+        detail: any;
+    };
+}
+declare class LocalFinishProcess<Context extends LiteContext = LiteContext> extends Error {
+    private response_body;
+    constructor(response_body: any);
+    get body(): any;
+}
+declare class FinishProcess<Context extends LiteContext = LiteContext> extends Error {
+    private _ctx;
+    private response_body;
+    constructor(_ctx: Context, response_body: any);
+    get body(): any;
+    get ctx(): Context;
+}
+declare function fm_panic(code: number, msg: string, detail?: any): LsError;
+declare function throw_fm_panic(code: number, msg: string, detail?: any): never;
+declare function throw_local_panic(msg: any): never;
+declare function finish<C extends LiteContext>(ctx: C, data: any): never;
 
 interface FmModuleDef {
     imports?: Array<Type<any>>;
@@ -276,4 +305,4 @@ declare class Platform {
     private get_providers;
 }
 
-export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, FmKoa, FmModule, FmModuleDef, FmServer, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, Judgement, KeyOfFilterType, LifeCycle, LiteContext, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, Router, RouterOptions, SessionContext, SessionData, Type, UUID, ValueProvider, ValueProviderDef, ValueType, def2Provider };
+export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, FinishProcess, FmKoa, FmModule, FmModuleDef, FmServer, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, InjectorType, Judgement, KeyOfFilterType, LifeCycle, LiteContext, LocalFinishProcess, LsError, Meta, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, Router, RouterOptions, SessionContext, SessionData, Type, UUID, ValueProvider, ValueProviderDef, ValueType, def2Provider, finish, fm_panic, throw_fm_panic, throw_local_panic };
