@@ -18,7 +18,7 @@
         "type": "git",
         "url": "git+https://github.com/isatiso/tora.git"
     },
-    "author": "plankroot",
+    "author": "plankroot <sieglive@gmail.com>",
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/isatiso/tora/issues"
