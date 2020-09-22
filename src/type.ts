@@ -42,3 +42,11 @@ export interface FactoryProviderDef {
     useFactory: Function
     deps?: any[]
 }
+
+export interface Provider<T> {
+    name: string
+
+    set_used(parents?: any[]): void
+
+    create(...args: any[]): T
+}

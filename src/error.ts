@@ -1,6 +1,6 @@
 import { LiteContext } from './server'
 
-export class ToraError extends Error {
+export class ReasonableError extends Error {
 
     constructor(readonly code: number, readonly msg: string, readonly detail?: any) {
         super(msg)
@@ -15,7 +15,7 @@ export class ToraError extends Error {
     }
 }
 
-export class LocalFinishProcess<Context extends LiteContext = LiteContext> extends Error {
+export class InnerFinish<Context extends LiteContext = LiteContext> extends Error {
 
     constructor(private response_body: any) {
         super('')
@@ -26,7 +26,7 @@ export class LocalFinishProcess<Context extends LiteContext = LiteContext> exten
     }
 }
 
-export class FinishProcess<Context extends LiteContext = LiteContext> extends Error {
+export class OuterFinish<Context extends LiteContext = LiteContext> extends Error {
 
     constructor(private _ctx: Context, private response_body: any) {
         super('')
@@ -41,18 +41,18 @@ export class FinishProcess<Context extends LiteContext = LiteContext> extends Er
     }
 }
 
-export function tora_panic(code: number, msg: string, detail?: any) {
-    return new ToraError(code, msg, detail)
+export function reasonable(code: number, msg: string, detail?: any) {
+    return new ReasonableError(code, msg, detail)
 }
 
-export function throw_tora_panic(code: number, msg: string, detail?: any): never {
-    throw new ToraError(code, msg, detail)
+export function throw_reasonable(code: number, msg: string, detail?: any): never {
+    throw new ReasonableError(code, msg, detail)
 }
 
-export function throw_panic(msg: any): never {
+export function crash(msg: any): never {
     throw new Error(msg)
 }
 
-export function finish<C extends LiteContext>(ctx: C, data: any): never {
-    throw new FinishProcess(ctx, data)
+export function response<C extends LiteContext>(ctx: C, data: any): never {
+    throw new OuterFinish(ctx, data)
 }

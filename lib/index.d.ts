@@ -47,6 +47,11 @@ interface FactoryProviderDef {
     useFactory: Function;
     deps?: any[];
 }
+interface Provider<T> {
+    name: string;
+    set_used(parents?: any[]): void;
+    create(...args: any[]): T;
+}
 
 declare abstract class Authenticator<USER> {
     abstract load_token(ctx: LiteContext): this;
@@ -119,26 +124,6 @@ declare class ApiParams<T> extends Judgement<T> {
     doIf<P extends keyof T>(prop: P, match: ValueType | RegExp, then?: (res: T[P]) => void): void;
 }
 
-declare module 'koa' {
-    interface Request {
-        body?: any;
-        rawBody: string;
-    }
-}
-declare class ToraKoa {
-    private _koa;
-    private _body_parser;
-    constructor(options: {
-        cors?: boolean;
-        body_parser?: boolean;
-    });
-    use(middleware: (ctx: LiteContext, next: () => Promise<any>) => void): void;
-    handle_by(server: ToraServer): this;
-    listen(port: number, cb: () => void): void;
-    private body_parser;
-    private cors;
-}
-
 declare class ToraServer {
     private handlers;
     get_handler_list(need_handler?: boolean): {
@@ -168,21 +153,24 @@ declare class _NullInjector {
 }
 declare const NullInjector: _NullInjector;
 declare type InjectorType = Injector | _NullInjector;
+declare class InjectorProvider implements Provider<Injector> {
+    name: string;
+    private readonly value;
+    used: boolean;
+    constructor(name: string, value: Injector);
+    create(): Injector;
+    set_used(): void;
+}
 declare class Injector {
     private parent;
     providers: Map<any, any>;
-    provider?: ValueProvider<Injector>;
+    provider?: InjectorProvider;
     constructor(parent: InjectorType, providers?: Map<any, any>);
     static create(parent?: InjectorType | null, providers?: Map<any, any>): Injector;
     set_provider(token: any, provider: Provider<any>): void;
     get(token: any, info?: string): Provider<any>;
 }
 
-interface Provider<T> {
-    name: string;
-    set_used(parents?: any[]): void;
-    create(...args: any[]): T;
-}
 declare class ClassProvider<M> implements Provider<M> {
     private cls;
     injector: Injector;
@@ -191,11 +179,11 @@ declare class ClassProvider<M> implements Provider<M> {
     name: string;
     used: boolean;
     constructor(cls: Type<M>, injector: Injector, multi?: boolean | undefined);
+    create(parents?: any[]): M;
+    set_used(parents?: any[]): void;
     private get_param_instance;
     private set_param_instance_used;
-    create(parents?: any[]): M;
     private extract_param_types;
-    set_used(parents?: any[]): void;
 }
 declare class ValueProvider<M> implements Provider<M> {
     name: string;
@@ -214,7 +202,6 @@ declare class FactoryProvider<M> implements Provider<M> {
     create(): M;
     set_used(): void;
 }
-declare function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Injector): any[][];
 
 declare function Inject(token: any): (proto: any, key: string, index: number) => void;
 declare function Meta<T extends object = any>(meta: T): (target: any) => void;
@@ -238,7 +225,7 @@ declare class CurrentTimestamp extends Number {
     valueOf(): number;
 }
 
-declare class ToraError extends Error {
+declare class ReasonableError extends Error {
     readonly code: number;
     readonly msg: string;
     readonly detail?: any;
@@ -249,22 +236,10 @@ declare class ToraError extends Error {
         detail: any;
     };
 }
-declare class LocalFinishProcess<Context extends LiteContext = LiteContext> extends Error {
-    private response_body;
-    constructor(response_body: any);
-    get body(): any;
-}
-declare class FinishProcess<Context extends LiteContext = LiteContext> extends Error {
-    private _ctx;
-    private response_body;
-    constructor(_ctx: Context, response_body: any);
-    get body(): any;
-    get ctx(): Context;
-}
-declare function tora_panic(code: number, msg: string, detail?: any): ToraError;
-declare function throw_tora_panic(code: number, msg: string, detail?: any): never;
-declare function throw_panic(msg: any): never;
-declare function finish<C extends LiteContext>(ctx: C, data: any): never;
+declare function reasonable(code: number, msg: string, detail?: any): ReasonableError;
+declare function throw_reasonable(code: number, msg: string, detail?: any): never;
+declare function crash(msg: any): never;
+declare function response<C extends LiteContext>(ctx: C, data: any): never;
 
 interface ToraModuleDef {
     imports?: Array<Type<any>>;
@@ -305,4 +280,4 @@ declare class Platform {
     private get_providers;
 }
 
-export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, FinishProcess, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, InjectorType, Judgement, KeyOfFilterType, LifeCycle, LiteContext, LocalFinishProcess, Meta, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, Router, RouterOptions, SessionContext, SessionData, ToraError, ToraKoa, ToraModule, ToraModuleDef, ToraServer, Type, UUID, ValueProvider, ValueProviderDef, ValueType, def2Provider, finish, throw_panic, throw_tora_panic, tora_panic };
+export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, InjectorType, Judgement, KeyOfFilterType, LifeCycle, LiteContext, Meta, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, Router, RouterOptions, SessionContext, SessionData, ToraModule, ToraModuleDef, ToraServer, Type, UUID, ValueProvider, ValueProviderDef, ValueType, crash, reasonable, response, throw_reasonable };

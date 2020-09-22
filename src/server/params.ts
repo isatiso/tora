@@ -1,4 +1,4 @@
-import { throw_tora_panic } from '../error'
+import { throw_reasonable } from '../error'
 import { KeyOfFilterType } from '../type'
 import { SessionContext } from './context'
 
@@ -125,35 +125,35 @@ export class ApiParams<T> extends Judgement<T> {
     ensureAny<P extends keyof T>(prop: P, match: (ValueType | RegExp)[]): T[P] {
         const res = super.get(prop)
         if (res === undefined) {
-            throw_tora_panic(400, `Can not find ${prop}`)
+            throw_reasonable(400, `Can not find ${prop}`)
         }
         if (this.any(res, match)) {
             return res
         }
-        throw_tora_panic(400, `prop "${prop}" is illegal.`)
+        throw_reasonable(400, `prop "${prop}" is illegal.`)
     }
 
     ensureAll<P extends keyof T>(prop: P, match: (ValueType | RegExp)[]): T[P] {
         const res = super.get(prop)
         if (res === undefined) {
-            throw_tora_panic(400, `Can not find ${prop}`)
+            throw_reasonable(400, `Can not find ${prop}`)
         }
         if (this.all(res, match)) {
             return res
         }
-        throw_tora_panic(400, `prop "${prop}" is illegal.`)
+        throw_reasonable(400, `prop "${prop}" is illegal.`)
     }
 
     ensure<P extends keyof T>(prop: P, match?: ValueType | RegExp): T[P] {
         match = match || 'exist'
         const res = super.get(prop)
         if (res === undefined) {
-            throw_tora_panic(400, `Can not find ${prop}`)
+            throw_reasonable(400, `Can not find ${prop}`)
         }
         if (this.testValue(res, match)) {
             return res
         }
-        throw_tora_panic(400, `prop "${prop}" is illegal.`)
+        throw_reasonable(400, `prop "${prop}" is illegal.`)
     }
 
     diveDeepOrUndefined<P extends KeyOfFilterType<T, object>>(prop: P): ApiParams<T[P]> | undefined {
@@ -169,7 +169,7 @@ export class ApiParams<T> extends Judgement<T> {
         if (res !== undefined && this.testValue(res, 'object')) {
             return new ApiParams(res)
         }
-        throw_tora_panic(400, `"${prop}" not found.`)
+        throw_reasonable(400, `"${prop}" not found.`)
     }
 
     doIfAny<P extends keyof T>(prop: P, match: (ValueType | RegExp)[], then?: (res: T[P]) => void) {

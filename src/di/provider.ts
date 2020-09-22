@@ -1,14 +1,6 @@
 import { DI_TOKEN } from '../token'
-import { ClassProviderDef, FactoryProviderDef, ProviderDef, Type, ValueProviderDef } from '../type'
+import { Provider, Type } from '../type'
 import { Injector } from './injector'
-
-export interface Provider<T> {
-    name: string
-
-    set_used(parents?: any[]): void
-
-    create(...args: any[]): T
-}
 
 export class ClassProvider<M> implements Provider<M> {
 
@@ -23,18 +15,6 @@ export class ClassProvider<M> implements Provider<M> {
     ) {
         this.name = cls.name
         this.multi = this.multi ?? false
-    }
-
-    private get_param_instance(parents?: any[]) {
-        const provider_list = this.extract_param_types(parents)
-        const param_list = provider_list?.map((provider: any) => {
-            return provider?.create(parents)
-        }) ?? []
-        return new this.cls(...param_list)
-    }
-
-    private set_param_instance_used(parents?: any[]) {
-        this.extract_param_types(parents)?.forEach((provider: Provider<any>) => provider?.set_used(parents))
     }
 
     create(parents?: any[]) {
@@ -55,6 +35,24 @@ export class ClassProvider<M> implements Provider<M> {
         return this.resolved
     }
 
+    set_used(parents?: any[]): void {
+        parents = (parents ?? []).concat(this.cls)
+        this.used = true
+        this.set_param_instance_used(parents)
+    }
+
+    private get_param_instance(parents?: any[]) {
+        const provider_list = this.extract_param_types(parents)
+        const param_list = provider_list?.map((provider: any) => {
+            return provider?.create(parents)
+        }) ?? []
+        return new this.cls(...param_list)
+    }
+
+    private set_param_instance_used(parents?: any[]) {
+        this.extract_param_types(parents)?.forEach((provider: Provider<any>) => provider?.set_used(parents))
+    }
+
     private extract_param_types(parents?: any[]) {
         const inject_token_map = Reflect.getMetadata(DI_TOKEN.param_injection, this.cls)
         return Reflect.getMetadata('design:paramtypes', this.cls)?.map((token: any, i: number) => {
@@ -71,12 +69,6 @@ export class ClassProvider<M> implements Provider<M> {
             }
             throw new Error(`Can't find provider of "${token}" in [${this.cls?.name}, constructor, args[${i}]]`)
         })
-    }
-
-    set_used(parents?: any[]): void {
-        parents = (parents ?? []).concat(this.cls)
-        this.used = true
-        this.set_param_instance_used(parents)
     }
 }
 
@@ -120,36 +112,3 @@ export class FactoryProvider<M> implements Provider<M> {
         this.used = true
     }
 }
-
-export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Injector) {
-    return defs?.map(def => {
-        if ((def as any).useValue) {
-
-            const d = def as ValueProviderDef
-            return [d.provide, new ValueProvider('valueProvider', d.useValue)]
-
-        } else if ((def as any).useFactory) {
-
-            const d = def as FactoryProviderDef
-            return [d.provide, new FactoryProvider('FactoryProvider', d.useFactory as any, d.deps),]
-
-        } else if ((def as any).useClass) {
-
-            const d = def as ClassProviderDef
-            const isComponent = Reflect.getMetadata(DI_TOKEN.component, d.useClass)
-            if (!isComponent) {
-                throw new Error(`${d.useClass.name} is not Component.`)
-            }
-            return [d.provide, new ClassProvider<any>(d.useClass, injector, d.multi)]
-
-        } else {
-
-            const isComponent = Reflect.getMetadata(DI_TOKEN.component, def as any)
-            if (!isComponent) {
-                throw new Error(`${(def as any).name} is not Component.`)
-            }
-            return [def, new ClassProvider<any>(def as any, injector)]
-        }
-    })
-}
-

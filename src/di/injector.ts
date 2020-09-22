@@ -1,4 +1,4 @@
-import { Provider, ValueProvider } from './provider'
+import { Provider } from '../type'
 
 class _NullInjector {
     get(token: any, info?: string) {
@@ -10,9 +10,29 @@ export const NullInjector = new _NullInjector()
 
 export type InjectorType = Injector | _NullInjector
 
+export class InjectorProvider implements Provider<Injector> {
+
+    public used = false
+
+    constructor(
+        public name: string,
+        private readonly value: Injector
+    ) {
+    }
+
+    create() {
+        this.used = true
+        return this.value
+    }
+
+    set_used(): void {
+        this.used = true
+    }
+}
+
 export class Injector {
 
-    provider?: ValueProvider<Injector>
+    provider?: InjectorProvider
 
     constructor(
         private parent: InjectorType,
@@ -32,7 +52,7 @@ export class Injector {
     get(token: any, info?: string): Provider<any> {
         if (token === Injector) {
             if (!this.provider) {
-                this.provider = new ValueProvider('injector', this)
+                this.provider = new InjectorProvider('injector', this)
             }
             return this.provider
         }

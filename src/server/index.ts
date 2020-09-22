@@ -2,7 +2,6 @@ export { ApiMethod, HttpHandler, LiteContext, ApiReturnDataType, HandlerReturnTy
 export { ApiParams, Judgement, PURE_PARAMS, ValueType } from './params'
 export { Authenticator } from './authenticator'
 export { CacheProxy } from './cache-proxy'
-export { ToraKoa } from '../tora-koa'
 export { ToraServer } from './tora-server'
 export { LifeCycle } from './life-cycle'
 export { SessionContext } from './context'

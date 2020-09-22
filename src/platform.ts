@@ -1,21 +1,11 @@
 import { BuiltInModule } from './builtin/built-in.module'
-import { Injector, Provider, ValueProvider } from './di'
-import { FinishProcess, LocalFinishProcess, ToraError } from './error'
-import { find_usage, ProviderTreeNode } from './tora-module'
-import {
-    ApiParams,
-    Authenticator,
-    CacheProxy,
-    ToraKoa,
-    ToraServer,
-    LifeCycle,
-    LiteContext,
-    PURE_PARAMS,
-    SessionContext,
-    SessionData
-} from './server'
+import { Injector, ValueProvider } from './di'
+import { InnerFinish, OuterFinish, ReasonableError } from './error'
+import { ApiParams, Authenticator, CacheProxy, LifeCycle, LiteContext, PURE_PARAMS, SessionContext, SessionData, ToraServer } from './server'
 import { DI_TOKEN, TokenUtils } from './token'
-import { HandlerDescriptor } from './type'
+import { ToraKoa } from './tora-koa'
+import { find_usage, ProviderTreeNode } from './tora-module'
+import { HandlerDescriptor, Provider } from './type'
 
 export class Platform {
 
@@ -145,9 +135,9 @@ namespace PlatformStatic {
         try {
             return await handler_wrapper?.()
         } catch (reason) {
-            if (reason instanceof LocalFinishProcess) {
+            if (reason instanceof InnerFinish) {
                 return await reason.body
-            } else if (reason instanceof FinishProcess) {
+            } else if (reason instanceof OuterFinish) {
                 return reason
             } else {
                 return new ErrorWrapper(reason)
@@ -196,9 +186,9 @@ namespace PlatformStatic {
             const res = await run_handler(cs, () => desc.handler(...param_list))
 
             if (res instanceof ErrorWrapper) {
-                await hooks?.on_error(context, data, res.err)
+                await hooks?.on_error(context, data, res)
                 finish_process(cs, { error: res.err_data })
-            } else if (res instanceof FinishProcess) {
+            } else if (res instanceof OuterFinish) {
                 await hooks?.on_finish(context, data)
                 finish_process(cs, res.body)
             } else {
@@ -210,18 +200,25 @@ namespace PlatformStatic {
 }
 
 class ErrorWrapper<T> {
+
     public readonly err_data: any
+    public readonly err_type: 'reasonable' | 'crash'
 
     constructor(public readonly err: T) {
-        if (err instanceof ToraError) {
+        if (err instanceof ReasonableError) {
+            this.err_type = 'reasonable'
             this.err_data = err.toJson()
         } else if (err instanceof Error) {
+            this.err_type = 'crash'
             this.err_data = { msg: err.message + '\n' + err.stack }
         } else if (err instanceof String) {
+            this.err_type = 'crash'
             this.err_data = { msg: err.toString() }
         } else if (typeof err === 'string') {
+            this.err_type = 'crash'
             this.err_data = { msg: err }
         } else {
+            this.err_type = 'crash'
             this.err_data = err
         }
     }

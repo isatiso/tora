@@ -79,8 +79,6 @@ function createRollupConfig(externalModules) {
     ]
 }
 
-const config = createRollupConfig()
-
-console.log(JSON.stringify(config, null, 4))
+const config = createRollupConfig(['stream'])
 
 export default config

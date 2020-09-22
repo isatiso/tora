@@ -1,4 +1,4 @@
-import { FinishProcess, LocalFinishProcess, throw_tora_panic } from '../error'
+import { OuterFinish, InnerFinish, throw_reasonable } from '../error'
 import { Authenticator } from './authenticator'
 import { CacheProxy } from './cache-proxy'
 import { LiteContext } from './types'
@@ -44,7 +44,7 @@ export class SessionContext<USER extends object = any> {
     }
 
     get user(): USER {
-        return this.auth?.get_user_info() ?? throw_tora_panic(401, 'Unauthorized.')
+        return this.auth?.get_user_info() ?? throw_reasonable(401, 'Unauthorized.')
     }
 
     get maybe_user(): USER | undefined {
@@ -64,16 +64,16 @@ export class SessionContext<USER extends object = any> {
     }
 
     async do_auth(): Promise<USER | undefined> {
-        return await this.auth?.auth()
+        return this.auth?.auth()
     }
 
     redirect(url: string, alt?: string): never {
         this.ctx.redirect(url, alt)
-        throw new FinishProcess(this.ctx, '')
+        throw new OuterFinish(this.ctx, '')
     }
 
     finish(data: any): never {
-        throw new LocalFinishProcess(data)
+        throw new InnerFinish(data)
     }
 
     async clear_cache(key: string) {
