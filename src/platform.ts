@@ -223,3 +223,5 @@ class ErrorWrapper<T> {
         }
     }
 }
+
+export type ToraError<T> = ErrorWrapper<T>
