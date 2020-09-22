@@ -279,5 +279,12 @@ declare class Platform {
     start(port: number): void;
     private get_providers;
 }
+declare class ErrorWrapper<T> {
+    readonly err: T;
+    readonly err_data: any;
+    readonly err_type: 'reasonable' | 'crash';
+    constructor(err: T);
+}
+declare type ToraError<T> = ErrorWrapper<T>;
 
-export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, InjectorType, Judgement, KeyOfFilterType, LifeCycle, LiteContext, Meta, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, Router, RouterOptions, SessionContext, SessionData, ToraModule, ToraModuleDef, ToraServer, Type, UUID, ValueProvider, ValueProviderDef, ValueType, crash, reasonable, response, throw_reasonable };
+export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, InjectorType, Judgement, KeyOfFilterType, LifeCycle, LiteContext, Meta, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, Router, RouterOptions, SessionContext, SessionData, ToraError, ToraModule, ToraModuleDef, ToraServer, Type, UUID, ValueProvider, ValueProviderDef, ValueType, crash, reasonable, response, throw_reasonable };
