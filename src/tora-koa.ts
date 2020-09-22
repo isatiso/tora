@@ -1,6 +1,6 @@
 import parse from 'co-body'
 import Koa from 'koa'
-import { FmServer, LiteContext } from './server'
+import { ToraServer, LiteContext } from './server'
 
 declare module 'koa' {
     interface Request {
@@ -35,7 +35,7 @@ interface Options {
     onerror?: (err: Error, ctx: Koa.Context) => void
 }
 
-export class FmKoa {
+export class ToraKoa {
 
     private _koa = new Koa()
     private _body_parser = new BodyParser()
@@ -56,7 +56,7 @@ export class FmKoa {
         this._koa.use(middleware)
     }
 
-    handle_by(server: FmServer) {
+    handle_by(server: ToraServer) {
         this._koa.use(async (ctx: LiteContext, next) => server.handleRequest(ctx, next))
         return this
     }

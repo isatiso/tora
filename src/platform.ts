@@ -1,20 +1,20 @@
 import { BuiltInModule } from './builtin/built-in.module'
 import { Injector, Provider, ValueProvider } from './di'
-import { FinishProcess, LocalFinishProcess, LsError } from './error'
-import { find_usage, ProviderTreeNode } from './fm-module'
+import { FinishProcess, LocalFinishProcess, ToraError } from './error'
+import { find_usage, ProviderTreeNode } from './tora-module'
 import {
     ApiParams,
     Authenticator,
     CacheProxy,
-    FmKoa,
-    FmServer,
+    ToraKoa,
+    ToraServer,
     LifeCycle,
     LiteContext,
     PURE_PARAMS,
     SessionContext,
     SessionData
 } from './server'
-import { FM_DI_TOKEN, TokenUtils } from './token'
+import { DI_TOKEN, TokenUtils } from './token'
 import { HandlerDescriptor } from './type'
 
 export class Platform {
@@ -24,8 +24,8 @@ export class Platform {
         [prop: string]: any
     } = {}
     private root_injector = Injector.create()
-    private _server = new FmServer()
-    private _koa = new FmKoa({ cors: true, body_parser: true })
+    private _server = new ToraServer()
+    private _koa = new ToraKoa({ cors: true, body_parser: true })
 
     constructor() {
         this.started_at = new Date().getTime()
@@ -33,12 +33,11 @@ export class Platform {
         this.root_injector.set_provider(Authenticator, new ValueProvider('Authenticator', null))
         this.root_injector.set_provider(CacheProxy, new ValueProvider('CacheProxy', null))
         this.root_injector.set_provider(LifeCycle, new ValueProvider('LifeCycle', null))
-        Reflect.getMetadata(FM_DI_TOKEN.module_provider_collector, BuiltInModule)?.(this.root_injector)
+        Reflect.getMetadata(DI_TOKEN.module_provider_collector, BuiltInModule)?.(this.root_injector)
     }
 
-    loading_message(env: string, port: number) {
-        console.log(`fm-ts-backend starting...`)
-        console.log(`    using environment ${env}...`)
+    loading_message(port: number) {
+        console.log(`tora server starting...`)
         console.log(`    listen at port ${port}...`)
         return this
     }
@@ -58,17 +57,17 @@ export class Platform {
 
     bootstrap(root_module: any) {
 
-        TokenUtils.ensureClassType(root_module, 'fm_module')
+        TokenUtils.ensureClassType(root_module, 'tora_module')
 
         const sub_injector = Injector.create(this.root_injector)
-        const provider_tree: ProviderTreeNode = Reflect.getMetadata(FM_DI_TOKEN.module_provider_collector, root_module)?.(sub_injector)
+        const provider_tree: ProviderTreeNode = Reflect.getMetadata(DI_TOKEN.module_provider_collector, root_module)?.(sub_injector)
 
         sub_injector.get(Authenticator)?.set_used()
         sub_injector.get(LifeCycle)?.set_used()
         sub_injector.get(CacheProxy)?.set_used()
 
-        const router_module = Reflect.getMetadata(FM_DI_TOKEN.module_router_gate, root_module)
-        Reflect.getMetadata(FM_DI_TOKEN.router_handler_collector, router_module)?.(sub_injector)?.forEach((desc: HandlerDescriptor) => {
+        const router_module = Reflect.getMetadata(DI_TOKEN.module_router_gate, root_module)
+        Reflect.getMetadata(DI_TOKEN.router_handler_collector, router_module)?.(sub_injector)?.forEach((desc: HandlerDescriptor) => {
             if (!desc.disabled) {
                 const provider_list = this.get_providers(desc, sub_injector, [ApiParams, SessionContext, SessionData, PURE_PARAMS])
                 provider_list.forEach(p => p.create?.())
@@ -102,7 +101,7 @@ export class Platform {
         this._koa.handle_by(this._server)
             .listen(port, () => {
                 const duration = new Date().getTime() - this.started_at
-                console.log(`\nfm-ts-backend started successfully in ${duration / 1000}s.`)
+                console.log(`\ntora server started successfully in ${duration / 1000}s.`)
             })
     }
 
@@ -214,7 +213,7 @@ class ErrorWrapper<T> {
     public readonly err_data: any
 
     constructor(public readonly err: T) {
-        if (err instanceof LsError) {
+        if (err instanceof ToraError) {
             this.err_data = err.toJson()
         } else if (err instanceof Error) {
             this.err_data = { msg: err.message + '\n' + err.stack }

@@ -1,6 +1,6 @@
 import { AnnotationTools, ClassProvider, Injector } from './di'
 import { ApiMethod } from './server'
-import { FM_DI_TOKEN, TokenUtils } from './token'
+import { DI_TOKEN, TokenUtils } from './token'
 import { HandlerDescriptor } from './type'
 
 export interface RouterOptions {
@@ -13,15 +13,15 @@ function join_path(front: string, rear: string) {
 
 export function Router(path: string, options?: RouterOptions) {
     return function(target: any) {
-        TokenUtils.setClassType(target, 'fm_router')
-        Reflect.defineMetadata(FM_DI_TOKEN.router_handler_collector, makeRouterCollector(target, path, options), target)
-        Reflect.defineMetadata(FM_DI_TOKEN.router_options, options, target)
+        TokenUtils.setClassType(target, 'tora_router')
+        Reflect.defineMetadata(DI_TOKEN.router_handler_collector, makeRouterCollector(target, path, options), target)
+        Reflect.defineMetadata(DI_TOKEN.router_options, options, target)
     }
 }
 
 function createRequestDecorator(method: ApiMethod) {
     return (router_path?: string) => (target: any, key: string, desc: PropertyDescriptor) => {
-        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(FM_DI_TOKEN.request_handler, target, key, {})
+        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
         if (!handler.methods) {
             handler.methods = new Set()
         }
@@ -33,11 +33,11 @@ function createRequestDecorator(method: ApiMethod) {
             handler.handler = desc.value
         }
         if (!handler.param_types) {
-            const inject_token_map = Reflect.getMetadata(FM_DI_TOKEN.param_injection, target, key)
+            const inject_token_map = Reflect.getMetadata(DI_TOKEN.param_injection, target, key)
             handler.param_types = Reflect.getMetadata('design:paramtypes', target, key)
                 ?.map((t: any, i: number) => inject_token_map?.[i] ?? t)
         }
-        const handlers: Array<any> = AnnotationTools.get_set_meta_data(FM_DI_TOKEN.router_handlers, target, undefined, [])
+        const handlers: Array<any> = AnnotationTools.get_set_meta_data(DI_TOKEN.router_handlers, target, undefined, [])
         if (!handlers.includes(handler)) {
             handlers.push(handler)
         }
@@ -51,21 +51,21 @@ export const Delete = createRequestDecorator('DELETE')
 
 export function Auth(auth_target: 'admin' | 'client' = 'admin') {
     return (target: any, key: string) => {
-        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(FM_DI_TOKEN.request_handler, target, key, {})
+        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
         handler.auth = auth_target
     }
 }
 
 export function NoWrap() {
     return (target: any, key: string) => {
-        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(FM_DI_TOKEN.request_handler, target, key, {})
+        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
         handler.wrap_result = false
     }
 }
 
 export function CacheWith(prefix: string, expires?: number) {
     return (target: any, key: string) => {
-        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(FM_DI_TOKEN.request_handler, target, key, {})
+        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
         handler.cache_prefix = prefix
         handler.cache_expires = expires
     }
@@ -73,7 +73,7 @@ export function CacheWith(prefix: string, expires?: number) {
 
 export function Disabled() {
     return (target: any, key: string) => {
-        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(FM_DI_TOKEN.request_handler, target, key, {})
+        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
         handler.disabled = true
     }
 }
@@ -81,9 +81,9 @@ export function Disabled() {
 function makeRouterCollector(target: any, path: string, options?: RouterOptions) {
     return function(injector: Injector) {
         const instance = new ClassProvider(target, injector).create()
-        Reflect.defineMetadata(FM_DI_TOKEN.instance, instance, target)
+        Reflect.defineMetadata(DI_TOKEN.instance, instance, target)
 
-        const handlers: HandlerDescriptor[] = AnnotationTools.get_set_meta_data(FM_DI_TOKEN.router_handlers, target.prototype, undefined, [])
+        const handlers: HandlerDescriptor[] = AnnotationTools.get_set_meta_data(DI_TOKEN.router_handlers, target.prototype, undefined, [])
 
         handlers?.forEach((item: any) => Object.assign(item, {
             path: join_path(path, item.path),
@@ -91,7 +91,7 @@ function makeRouterCollector(target: any, path: string, options?: RouterOptions)
         }))
 
         options?.children?.forEach(r => {
-            Reflect.getMetadata(FM_DI_TOKEN.router_handler_collector, r)?.(injector)
+            Reflect.getMetadata(DI_TOKEN.router_handler_collector, r)?.(injector)
                 ?.forEach((sr: HandlerDescriptor) => {
                     sr.path = join_path(path, sr.path)
                     handlers.push(sr)

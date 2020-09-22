@@ -1,4 +1,4 @@
-import { FinishProcess, LocalFinishProcess, throw_fm_panic } from '../error'
+import { FinishProcess, LocalFinishProcess, throw_tora_panic } from '../error'
 import { Authenticator } from './authenticator'
 import { CacheProxy } from './cache-proxy'
 import { LiteContext } from './types'
@@ -44,7 +44,7 @@ export class SessionContext<USER extends object = any> {
     }
 
     get user(): USER {
-        return this.auth?.get_user_info() ?? throw_fm_panic(401, 'Unauthorized.')
+        return this.auth?.get_user_info() ?? throw_tora_panic(401, 'Unauthorized.')
     }
 
     get maybe_user(): USER | undefined {

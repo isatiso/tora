@@ -1,6 +1,6 @@
 import { LiteContext } from './server'
 
-export class LsError extends Error {
+export class ToraError extends Error {
 
     constructor(readonly code: number, readonly msg: string, readonly detail?: any) {
         super(msg)
@@ -41,15 +41,15 @@ export class FinishProcess<Context extends LiteContext = LiteContext> extends Er
     }
 }
 
-export function fm_panic(code: number, msg: string, detail?: any) {
-    return new LsError(code, msg, detail)
+export function tora_panic(code: number, msg: string, detail?: any) {
+    return new ToraError(code, msg, detail)
 }
 
-export function throw_fm_panic(code: number, msg: string, detail?: any): never {
-    throw new LsError(code, msg, detail)
+export function throw_tora_panic(code: number, msg: string, detail?: any): never {
+    throw new ToraError(code, msg, detail)
 }
 
-export function throw_local_panic(msg: any): never {
+export function throw_panic(msg: any): never {
     throw new Error(msg)
 }
 

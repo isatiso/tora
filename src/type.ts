@@ -1,6 +1,6 @@
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
-export type ClassType = 'fm_router' | 'fm_module'
+export type ClassType = 'tora_router' | 'tora_module'
 
 export interface Type<T> extends Function {
     new(...args: any[]): T;

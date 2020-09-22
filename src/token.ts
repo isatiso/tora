@@ -1,6 +1,6 @@
 import { ClassType } from './type'
 
-export enum FM_DI_TOKEN {
+export enum DI_TOKEN {
     component = 'lazor:component',
     cls_type = 'lazor:class-type',
 
@@ -17,31 +17,31 @@ export enum FM_DI_TOKEN {
     router_meta = 'lazor:router-meta',
 }
 
-export enum FM_CLS_TYPE {
-    fm_module = 'module',
-    fm_router = 'fm-router',
+export enum CLS_TYPE {
+    tora_module = 'tora-module',
+    tora_router = 'tora-router',
 }
 
 export namespace TokenUtils {
 
     export function setClassType(target: any, type: ClassType) {
-        if (Reflect.getMetadata(FM_DI_TOKEN.cls_type, target)) {
+        if (Reflect.getMetadata(DI_TOKEN.cls_type, target)) {
             throw new Error()
         }
-        Reflect.defineMetadata(FM_DI_TOKEN.cls_type, type2token(type), target)
+        Reflect.defineMetadata(DI_TOKEN.cls_type, type2token(type), target)
     }
 
     export function ensureClassType(target: any, type: ClassType) {
-        if (Reflect.getMetadata(FM_DI_TOKEN.cls_type, target) !== type2token(type)) {
-            throw new Error(`${target.name} is not FmModule.`)
+        if (Reflect.getMetadata(DI_TOKEN.cls_type, target) !== type2token(type)) {
+            throw new Error(`${target.name} is not a ToraModule.`)
         }
     }
 
     function type2token(type: ClassType) {
-        if (type === 'fm_router') {
-            return FM_CLS_TYPE.fm_router
-        } else if (type === 'fm_module') {
-            return FM_CLS_TYPE.fm_module
+        if (type === 'tora_router') {
+            return CLS_TYPE.tora_router
+        } else if (type === 'tora_module') {
+            return CLS_TYPE.tora_module
         } else {
             throw new Error(`unknown class type ${type}`)
         }

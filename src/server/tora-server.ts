@@ -1,7 +1,7 @@
 import { Request } from 'koa'
 import { ApiMethod, ApiPath, ApiReturnDataType, HandlerReturnType, HttpHandler, LiteContext } from './types'
 
-export class FmServer {
+export class ToraServer {
 
     private handlers: {
         [path: string]: {

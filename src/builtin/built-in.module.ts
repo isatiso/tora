@@ -1,8 +1,8 @@
-import { FmModule } from '../fm-module'
+import { ToraModule } from '../tora-module'
 import { CurrentTimestamp } from './current-timestamp'
 import { UUID } from './uuid'
 
-@FmModule({
+@ToraModule({
     providers: [
         { provide: CurrentTimestamp, useClass: CurrentTimestamp, multi: true },
         { provide: UUID, useClass: UUID, multi: true },

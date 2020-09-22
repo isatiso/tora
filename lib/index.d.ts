@@ -12,7 +12,7 @@ declare type ApiPath = string | string[];
 declare type ApiMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 declare type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
-declare type ClassType = 'fm_router' | 'fm_module';
+declare type ClassType = 'tora_router' | 'tora_module';
 interface Type<T> extends Function {
     new (...args: any[]): T;
 }
@@ -125,7 +125,7 @@ declare module 'koa' {
         rawBody: string;
     }
 }
-declare class FmKoa {
+declare class ToraKoa {
     private _koa;
     private _body_parser;
     constructor(options: {
@@ -133,13 +133,13 @@ declare class FmKoa {
         body_parser?: boolean;
     });
     use(middleware: (ctx: LiteContext, next: () => Promise<any>) => void): void;
-    handle_by(server: FmServer): this;
+    handle_by(server: ToraServer): this;
     listen(port: number, cb: () => void): void;
     private body_parser;
     private cors;
 }
 
-declare class FmServer {
+declare class ToraServer {
     private handlers;
     get_handler_list(need_handler?: boolean): {
         method: ApiMethod;
@@ -238,7 +238,7 @@ declare class CurrentTimestamp extends Number {
     valueOf(): number;
 }
 
-declare class LsError extends Error {
+declare class ToraError extends Error {
     readonly code: number;
     readonly msg: string;
     readonly detail?: any;
@@ -261,17 +261,17 @@ declare class FinishProcess<Context extends LiteContext = LiteContext> extends E
     get body(): any;
     get ctx(): Context;
 }
-declare function fm_panic(code: number, msg: string, detail?: any): LsError;
-declare function throw_fm_panic(code: number, msg: string, detail?: any): never;
-declare function throw_local_panic(msg: any): never;
+declare function tora_panic(code: number, msg: string, detail?: any): ToraError;
+declare function throw_tora_panic(code: number, msg: string, detail?: any): never;
+declare function throw_panic(msg: any): never;
 declare function finish<C extends LiteContext>(ctx: C, data: any): never;
 
-interface FmModuleDef {
+interface ToraModuleDef {
     imports?: Array<Type<any>>;
     providers?: (ProviderDef | Type<any>)[];
     router_gate?: Type<any>;
 }
-declare function FmModule(options?: FmModuleDef): (target: any) => void;
+declare function ToraModule(options?: ToraModuleDef): (target: any) => void;
 
 declare function Component(echo_dependencies?: boolean): (target: any) => void;
 
@@ -295,7 +295,7 @@ declare class Platform {
     private _server;
     private _koa;
     constructor();
-    loading_message(env: string, port: number): this;
+    loading_message(port: number): this;
     register_module(name: string, module: any): this;
     select_module(keys: string[]): this;
     bootstrap(root_module: any): this;
@@ -305,4 +305,4 @@ declare class Platform {
     private get_providers;
 }
 
-export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, FinishProcess, FmKoa, FmModule, FmModuleDef, FmServer, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, InjectorType, Judgement, KeyOfFilterType, LifeCycle, LiteContext, LocalFinishProcess, LsError, Meta, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, Router, RouterOptions, SessionContext, SessionData, Type, UUID, ValueProvider, ValueProviderDef, ValueType, def2Provider, finish, fm_panic, throw_fm_panic, throw_local_panic };
+export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, FinishProcess, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, InjectorType, Judgement, KeyOfFilterType, LifeCycle, LiteContext, LocalFinishProcess, Meta, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, Router, RouterOptions, SessionContext, SessionData, ToraError, ToraKoa, ToraModule, ToraModuleDef, ToraServer, Type, UUID, ValueProvider, ValueProviderDef, ValueType, def2Provider, finish, throw_panic, throw_tora_panic, tora_panic };

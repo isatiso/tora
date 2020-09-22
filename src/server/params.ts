@@ -1,4 +1,4 @@
-import { throw_fm_panic } from '../error'
+import { throw_tora_panic } from '../error'
 import { KeyOfFilterType } from '../type'
 import { SessionContext } from './context'
 
@@ -125,35 +125,35 @@ export class ApiParams<T> extends Judgement<T> {
     ensureAny<P extends keyof T>(prop: P, match: (ValueType | RegExp)[]): T[P] {
         const res = super.get(prop)
         if (res === undefined) {
-            throw_fm_panic(400, `Can not find ${prop}`)
+            throw_tora_panic(400, `Can not find ${prop}`)
         }
         if (this.any(res, match)) {
             return res
         }
-        throw_fm_panic(400, `prop "${prop}" is illegal.`)
+        throw_tora_panic(400, `prop "${prop}" is illegal.`)
     }
 
     ensureAll<P extends keyof T>(prop: P, match: (ValueType | RegExp)[]): T[P] {
         const res = super.get(prop)
         if (res === undefined) {
-            throw_fm_panic(400, `Can not find ${prop}`)
+            throw_tora_panic(400, `Can not find ${prop}`)
         }
         if (this.all(res, match)) {
             return res
         }
-        throw_fm_panic(400, `prop "${prop}" is illegal.`)
+        throw_tora_panic(400, `prop "${prop}" is illegal.`)
     }
 
     ensure<P extends keyof T>(prop: P, match?: ValueType | RegExp): T[P] {
         match = match || 'exist'
         const res = super.get(prop)
         if (res === undefined) {
-            throw_fm_panic(400, `Can not find ${prop}`)
+            throw_tora_panic(400, `Can not find ${prop}`)
         }
         if (this.testValue(res, match)) {
             return res
         }
-        throw_fm_panic(400, `prop "${prop}" is illegal.`)
+        throw_tora_panic(400, `prop "${prop}" is illegal.`)
     }
 
     diveDeepOrUndefined<P extends KeyOfFilterType<T, object>>(prop: P): ApiParams<T[P]> | undefined {
@@ -169,22 +169,8 @@ export class ApiParams<T> extends Judgement<T> {
         if (res !== undefined && this.testValue(res, 'object')) {
             return new ApiParams(res)
         }
-        throw_fm_panic(400, `"${prop}" not found.`)
+        throw_tora_panic(400, `"${prop}" not found.`)
     }
-
-    // parseProduct<P extends KeyOfFilterType<T, ProductConfig>>(prop: P): ProductDescriptor
-    // parseProduct<P extends KeyOfFilterType<T, ProductConfig>>(prop: P, maybe: true): ProductDescriptor | undefined
-    // parseProduct<P extends KeyOfFilterType<T, ProductConfig>>(prop: P, maybe?: true): ProductDescriptor | undefined {
-    //     const res = super.get(prop)
-    //     if (res !== undefined && this.testValue(res, 'object')) {
-    //         return new ProductDescriptor(res)
-    //     }
-    //     if (!maybe) {
-    //         throw_fm_panic(400, `"${prop}" not found.`)
-    //     } else {
-    //         return undefined
-    //     }
-    // }
 
     doIfAny<P extends keyof T>(prop: P, match: (ValueType | RegExp)[], then?: (res: T[P]) => void) {
         const res = super.get(prop)
@@ -215,7 +201,6 @@ export class ApiParams<T> extends Judgement<T> {
             then?.(res)
         }
     }
-
 }
 
 export function testApiParams(
@@ -228,10 +213,7 @@ export function testApiParams(
             int: number
             str: string
         }
-        // product: ProductConfig
     }>) {
-
-    // Usage:
 
     params.ensure('str', 'string')
     params.ensureAny('str', ['string', 'number'])
@@ -242,9 +224,6 @@ export function testApiParams(
     params.getIfAny('str', ['string', 'number'], 'foo')
     params.getIfAll('str', ['string', 'number'])
     params.getIfAll('str', ['string', 'number'], 'foo')
-
-    // params.parseProduct('product')
-    // params.parseProduct('product', true)
 
     params.diveDeepOrUndefined('obj')
     params.diveDeep('obj')

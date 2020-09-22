@@ -1,9 +1,9 @@
 import 'reflect-metadata'
 import { def2Provider, Injector, Provider } from './di'
-import { FM_DI_TOKEN, TokenUtils } from './token'
+import { DI_TOKEN, TokenUtils } from './token'
 import { ProviderDef, Type } from './type'
 
-export interface FmModuleDef {
+export interface ToraModuleDef {
     imports?: Array<Type<any>>
     providers?: (ProviderDef | Type<any>)[]
     router_gate?: Type<any>
@@ -15,12 +15,12 @@ export interface ProviderTreeNode {
     children: ProviderTreeNode[]
 }
 
-export function FmModule(options?: FmModuleDef) {
+export function ToraModule(options?: ToraModuleDef) {
     return function(target: any) {
-        TokenUtils.setClassType(target, 'fm_module')
-        Reflect.defineMetadata(FM_DI_TOKEN.module_provider_collector, makeProviderCollector(target, options), target)
+        TokenUtils.setClassType(target, 'tora_module')
+        Reflect.defineMetadata(DI_TOKEN.module_provider_collector, makeProviderCollector(target, options), target)
         if (options?.router_gate) {
-            Reflect.defineMetadata(FM_DI_TOKEN.module_router_gate, options.router_gate, target)
+            Reflect.defineMetadata(DI_TOKEN.module_router_gate, options.router_gate, target)
         }
     }
 }
@@ -30,9 +30,9 @@ export function find_usage(tree: ProviderTreeNode, indent: number = 0): boolean 
         || tree?.children?.find(t => find_usage(t, indent + 1))
 }
 
-function makeProviderCollector(target: any, options?: FmModuleDef) {
+function makeProviderCollector(target: any, options?: ToraModuleDef) {
     return function(injector: Injector) {
-        const children = options?.imports?.map(md => Reflect.getMetadata(FM_DI_TOKEN.module_provider_collector, md)?.(injector))
+        const children = options?.imports?.map(md => Reflect.getMetadata(DI_TOKEN.module_provider_collector, md)?.(injector))
         const providers: Provider<any>[] = [
             ...def2Provider([...options?.providers ?? []] as (ProviderDef | Type<any>)[], injector)
                 ?.map(item => {

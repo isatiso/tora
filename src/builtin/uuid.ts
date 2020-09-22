@@ -1,5 +1,5 @@
 import uuid from 'uuid'
-import { Component } from '../fm-component'
+import { Component } from '../tora-component'
 
 @Component()
 export class UUID extends String {
