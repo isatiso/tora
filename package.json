@@ -11,7 +11,8 @@
         "typescript"
     ],
     "scripts": {
-        "build": "webpack",
+        "publish": "npm version patch && rollup -c && npm publish",
+        "build": "rollup -c",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
