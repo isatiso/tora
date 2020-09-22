@@ -1,0 +1,1 @@
+{"code":"export class Authenticator {\r\n}\r\n//# sourceMappingURL=authenticator.js.map","references":["/Users/caojiahang/代码/tora/src/server/types.ts"],"map":"{\"version\":3,\"file\":\"authenticator.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../../src/server/authenticator.ts\"],\"names\":[],\"mappings\":\"AAEA,MAAM,OAAgB,aAAa;CAQlC\"}"}

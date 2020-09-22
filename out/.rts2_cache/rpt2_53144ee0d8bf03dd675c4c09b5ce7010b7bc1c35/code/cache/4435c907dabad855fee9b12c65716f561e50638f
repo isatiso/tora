@@ -1,0 +1,1 @@
+{"code":"export class CacheProxy {\r\n}\r\n//# sourceMappingURL=cache-proxy.js.map","references":[],"map":"{\"version\":3,\"file\":\"cache-proxy.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../../src/server/cache-proxy.ts\"],\"names\":[],\"mappings\":\"AAAA,MAAM,OAAgB,UAAU;CAa/B\"}"}

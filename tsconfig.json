@@ -1,0 +1,29 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "strict": true,
+        "baseUrl": "./",
+        "outDir": "./out/ts",
+        "sourceMap": true,
+        "declaration": false,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "es6",
+        "jsx": "react",
+        "jsxFactory": "tsx"
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ],
+    "exclude": [
+        "out",
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}

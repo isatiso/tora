@@ -1,0 +1,279 @@
+/// <reference types="node" />
+import { ExtendableContext } from 'koa';
+import { Stream } from 'stream';
+
+declare type LiteContext = ExtendableContext & {
+    process_start?: number;
+};
+declare type ApiReturnDataType = null | undefined | boolean | number | string | ApiReturnDataType[] | object | Stream | Buffer;
+declare type HandlerReturnType<R extends ApiReturnDataType> = R | Promise<R>;
+declare type HttpHandler = (params: any, ctx: LiteContext) => HandlerReturnType<any>;
+declare type ApiPath = string | string[];
+declare type ApiMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+declare type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+declare type ClassType = 'fm_router' | 'fm_module';
+interface Type<T> extends Function {
+    new (...args: any[]): T;
+}
+declare type KeyOfFilterType<T, U> = {
+    [K in keyof T]: Exclude<T[K], undefined> extends U ? K : never;
+}[keyof T];
+interface HandlerDescriptor {
+    path: string;
+    methods: Set<HttpMethod>;
+    handler?: any;
+    param_types?: any[];
+    inject_except_list?: any[];
+    auth?: 'admin' | 'client';
+    wrap_result?: boolean;
+    cache_prefix?: string;
+    cache_expires?: number;
+    disabled?: boolean;
+    pos: string;
+}
+declare type ProviderDef = ValueProviderDef | ClassProviderDef | FactoryProviderDef;
+interface ValueProviderDef {
+    provide: any;
+    useValue: any;
+}
+interface ClassProviderDef {
+    provide: any;
+    useClass: Type<any>;
+    multi?: boolean;
+}
+interface FactoryProviderDef {
+    provide: any;
+    useFactory: Function;
+    deps?: any[];
+}
+
+declare abstract class Authenticator<USER> {
+    abstract load_token(ctx: LiteContext): this;
+    abstract auth(): Promise<USER | undefined>;
+    abstract get_user_info(): USER | undefined;
+}
+
+declare abstract class CacheProxy {
+    abstract set_cache_options(options: {
+        cache_expires: number;
+        cache_prefix: string;
+    }): void;
+    abstract clear(key: string): Promise<number>;
+    abstract get(key?: string): Promise<any | null>;
+    abstract set(value: any): Promise<void>;
+}
+
+declare class SessionContext<USER extends object = any> {
+    private ctx;
+    private auth;
+    private cache?;
+    constructor(ctx: LiteContext, auth: Authenticator<USER>, cache?: CacheProxy | undefined, cache_prefix?: string, cache_expires?: number);
+    get url(): string | undefined;
+    get method(): string | undefined;
+    get path(): string;
+    get real_ip(): string;
+    get rawBody(): string;
+    get query(): any;
+    get user(): USER;
+    get maybe_user(): USER | undefined;
+    header(key: string): any;
+    headers(): any;
+    response_header(key: string, value: string | number): void;
+    do_auth(): Promise<USER | undefined>;
+    redirect(url: string, alt?: string): never;
+    finish(data: any): never;
+    clear_cache(key: string): Promise<number | undefined>;
+    return_if_cache(key?: string): Promise<null>;
+    finish_and_cache<T>(info_promise: Promise<T> | T): Promise<T>;
+    finish_and_cache<T>(info_promise: Promise<T> | T, also_return: true): Promise<never>;
+}
+
+declare type ValueType = 'exist' | 'function' | 'object' | 'array' | 'nonEmptyArray' | 'null' | 'nonNull' | 'string' | 'nonEmptyString' | 'number' | 'nonZeroNumber' | 'boolean' | 'true' | 'false';
+declare const PURE_PARAMS = "PURE_PARAMS";
+declare class Reference<T> {
+    data: T;
+    constructor(data: T);
+    get<P extends keyof T>(prop: P): T[P] | undefined;
+    get<P extends keyof T>(prop: P, def: T[P]): Exclude<T[P], undefined>;
+}
+declare class Judgement<T> extends Reference<T> {
+    protected testValue(value: any, type?: ValueType | RegExp): any;
+    protected any(value: any, types: (ValueType | RegExp)[]): boolean;
+    protected all(value: any, types: (ValueType | RegExp)[]): boolean;
+}
+declare class ApiParams<T> extends Judgement<T> {
+    getIf<P extends keyof T>(prop: P, match: ValueType | RegExp): T[P] | undefined;
+    getIf<P extends keyof T>(prop: P, match: ValueType | RegExp, def: T[P]): T[P];
+    getIfAny<P extends keyof T>(prop: P, match: (ValueType | RegExp)[]): T[P] | undefined;
+    getIfAny<P extends keyof T>(prop: P, match: (ValueType | RegExp)[], def: T[P]): T[P];
+    getIfAll<P extends keyof T>(prop: P, match: (ValueType | RegExp)[]): T[P] | undefined;
+    getIfAll<P extends keyof T>(prop: P, match: (ValueType | RegExp)[], def: T[P]): T[P];
+    ensureAny<P extends keyof T>(prop: P, match: (ValueType | RegExp)[]): T[P];
+    ensureAll<P extends keyof T>(prop: P, match: (ValueType | RegExp)[]): T[P];
+    ensure<P extends keyof T>(prop: P, match?: ValueType | RegExp): T[P];
+    diveDeepOrUndefined<P extends KeyOfFilterType<T, object>>(prop: P): ApiParams<T[P]> | undefined;
+    diveDeep<P extends KeyOfFilterType<T, object>>(prop: P): ApiParams<T[P]>;
+    doIfAny<P extends keyof T>(prop: P, match: (ValueType | RegExp)[], then?: (res: T[P]) => void): void;
+    doIfAll<P extends keyof T>(prop: P, match: (ValueType | RegExp)[], then?: (res: T[P]) => void): void;
+    doIf<P extends keyof T>(prop: P, match: ValueType | RegExp, then?: (res: T[P]) => void): void;
+}
+
+declare module 'koa' {
+    interface Request {
+        body?: any;
+        rawBody: string;
+    }
+}
+declare class FmKoa {
+    private _koa;
+    private _body_parser;
+    constructor(options: {
+        cors?: boolean;
+        body_parser?: boolean;
+    });
+    use(middleware: (ctx: LiteContext, next: () => Promise<any>) => void): void;
+    handle_by(server: FmServer): this;
+    listen(port: number, cb: () => void): void;
+    private body_parser;
+    private cors;
+}
+
+declare class FmServer {
+    private handlers;
+    get_handler_list(need_handler?: boolean): {
+        method: ApiMethod;
+        path: string;
+        handler?: HttpHandler | undefined;
+    }[];
+    on<T, R extends ApiReturnDataType>(method: ApiMethod, path: ApiPath, handler: (params: T, ctx: LiteContext) => HandlerReturnType<R>): void;
+    handleRequest(context: LiteContext, next: Function): Promise<any>;
+    private set_handler;
+}
+
+declare class SessionData<T extends object = any> {
+    private _custom_data;
+    set(key: keyof T, value: T[typeof key]): void;
+    get(key: keyof T): T[typeof key] | undefined;
+}
+
+declare abstract class LifeCycle {
+    abstract on_init(cs: SessionContext, data: SessionData): Promise<void>;
+    abstract on_finish(cs: SessionContext, data: SessionData): Promise<void>;
+    abstract on_error(cs: SessionContext, data: SessionData, err: any): Promise<void>;
+}
+
+declare class _NullInjector {
+    get(token: any, info?: string): void;
+}
+declare const NullInjector: _NullInjector;
+declare type InjectorType = Injector | _NullInjector;
+declare class Injector {
+    private parent;
+    providers: Map<any, any>;
+    provider?: ValueProvider<Injector>;
+    constructor(parent: InjectorType, providers?: Map<any, any>);
+    static create(parent?: InjectorType | null, providers?: Map<any, any>): Injector;
+    set_provider(token: any, provider: Provider<any>): void;
+    get(token: any, info?: string): Provider<any>;
+}
+
+interface Provider<T> {
+    name: string;
+    set_used(parents?: any[]): void;
+    create(...args: any[]): T;
+}
+declare class ClassProvider<M> implements Provider<M> {
+    private cls;
+    injector: Injector;
+    private readonly multi?;
+    resolved?: M;
+    name: string;
+    used: boolean;
+    constructor(cls: Type<M>, injector: Injector, multi?: boolean | undefined);
+    private get_param_instance;
+    private set_param_instance_used;
+    create(parents?: any[]): M;
+    private extract_param_types;
+    set_used(parents?: any[]): void;
+}
+declare class ValueProvider<M> implements Provider<M> {
+    name: string;
+    private readonly value;
+    used: boolean;
+    constructor(name: string, value: M);
+    create(): M;
+    set_used(): void;
+}
+declare class FactoryProvider<M> implements Provider<M> {
+    name: string;
+    private factory;
+    private deps?;
+    used: boolean;
+    constructor(name: string, factory: (...args: any[]) => M, deps?: any[] | undefined);
+    create(): M;
+    set_used(): void;
+}
+declare function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Injector): any[][];
+
+declare function Inject(token: any): (proto: any, key: string, index: number) => void;
+declare namespace AnnotationTools {
+    function get_set_meta_data(metaKey: string, target: any, key: string | undefined, def: any): any;
+    function get_param_types(target: any, key: string): any;
+    function create_decorator<T>(processor: (target: any, meta: any, options?: T) => void): (options?: T | undefined) => (target: any) => void;
+    function add_handler(proto: any, desc: HandlerDescriptor): void;
+    function get_custom_data<T>(target: any, key: string): T | undefined;
+    function define_custom_data<T = any>(target: any, key: string, value: T): boolean;
+}
+
+declare class UUID extends String {
+    private _id;
+    valueOf(): string;
+    toString(): string;
+}
+
+declare class CurrentTimestamp extends Number {
+    private _timestamp;
+    valueOf(): number;
+}
+
+interface FmModuleDef {
+    imports?: Array<Type<any>>;
+    providers?: (ProviderDef | Type<any>)[];
+    router_gate?: Type<any>;
+}
+declare function FmModule(options?: FmModuleDef): (target: any) => void;
+
+declare function Component(echo_dependencies?: boolean): (target: any) => void;
+
+interface RouterOptions {
+    children?: any[];
+}
+declare function Router(path: string, options?: RouterOptions): (target: any) => void;
+declare const Get: (router_path?: string | undefined) => (target: any, key: string, desc: PropertyDescriptor) => void;
+declare const Post: (router_path?: string | undefined) => (target: any, key: string, desc: PropertyDescriptor) => void;
+declare const Put: (router_path?: string | undefined) => (target: any, key: string, desc: PropertyDescriptor) => void;
+declare const Delete: (router_path?: string | undefined) => (target: any, key: string, desc: PropertyDescriptor) => void;
+declare function Auth(auth_target?: 'admin' | 'client'): (target: any, key: string) => void;
+declare function NoWrap(): (target: any, key: string) => void;
+declare function CacheWith(prefix: string, expires?: number): (target: any, key: string) => void;
+declare function Disabled(): (target: any, key: string) => void;
+
+declare class Platform {
+    private readonly started_at;
+    private modules;
+    private root_injector;
+    private _server;
+    private _koa;
+    constructor();
+    loading_message(env: string, port: number): this;
+    register_module(name: string, module: any): this;
+    select_module(keys: string[]): this;
+    bootstrap(root_module: any): this;
+    koa_use(middleware: (ctx: LiteContext, next: () => Promise<any>) => void): this;
+    show_api_list(): this;
+    start(port: number): void;
+    private get_providers;
+}
+
+export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, FmKoa, FmModule, FmModuleDef, FmServer, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, Judgement, KeyOfFilterType, LifeCycle, LiteContext, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, Router, RouterOptions, SessionContext, SessionData, Type, UUID, ValueProvider, ValueProviderDef, ValueType, def2Provider };
