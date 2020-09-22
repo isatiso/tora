@@ -11,7 +11,7 @@
         "typescript"
     ],
     "scripts": {
-        "publish": "npm version patch && rollup -c && npm publish",
+        "publish": "npm version patch && rollup -c && npm publish --registry=https://registry.npmjs.org",
         "build": "rollup -c",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
