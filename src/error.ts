@@ -1,4 +1,4 @@
-import { LiteContext } from './server'
+import { LiteContext } from './types'
 
 export class ReasonableError extends Error {
 

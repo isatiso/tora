@@ -1,4 +1,4 @@
-import { ClassType } from './type'
+import { ClassType } from './types'
 
 export enum DI_TOKEN {
     component = 'lazor:component',

@@ -1,4 +1,4 @@
-import { Provider } from '../type'
+import { Provider } from '../types'
 
 class _NullInjector {
     get(token: any, info?: string) {

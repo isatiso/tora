@@ -10,15 +10,14 @@ declare type HandlerReturnType<R extends ApiReturnDataType> = R | Promise<R>;
 declare type HttpHandler = (params: any, ctx: LiteContext) => HandlerReturnType<any>;
 declare type ApiPath = string | string[];
 declare type ApiMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
-
-declare type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
-declare type ClassType = 'tora_router' | 'tora_module';
 interface Type<T> extends Function {
     new (...args: any[]): T;
 }
 declare type KeyOfFilterType<T, U> = {
     [K in keyof T]: Exclude<T[K], undefined> extends U ? K : never;
 }[keyof T];
+declare type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+declare type ClassType = 'tora_router' | 'tora_module';
 interface HandlerDescriptor {
     path: string;
     methods: Set<HttpMethod>;
@@ -69,18 +68,48 @@ declare abstract class CacheProxy {
     abstract set(value: any): Promise<void>;
 }
 
+/**
+ * @author plankroot
+ * @class
+ * @name SessionContext
+ * @description Request session context for data transform.
+ */
 declare class SessionContext<USER extends object = any> {
     private ctx;
     private auth;
     private cache?;
     constructor(ctx: LiteContext, auth: Authenticator<USER>, cache?: CacheProxy | undefined, cache_prefix?: string, cache_expires?: number);
+    /**
+     * @return url of request, include query string.
+     */
     get url(): string | undefined;
+    /**
+     * @return method of request.
+     */
     get method(): string | undefined;
+    /**
+     * @return url of request, exclude query string.
+     */
     get path(): string;
+    /**
+     * @return ip address of request, from header X-Real-Ip.
+     */
     get real_ip(): string;
+    /**
+     * @return raw string of request body.
+     */
     get rawBody(): string;
+    /**
+     * @return query object which parsed from query string.
+     */
     get query(): any;
+    /**
+     * @return user info, if user info is not exist, throw a 401 Unauthorized Error.
+     */
     get user(): USER;
+    /**
+     * @return user info, if user info is not exist, return undefined.
+     */
     get maybe_user(): USER | undefined;
     header(key: string): any;
     headers(): any;

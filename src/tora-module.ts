@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { ClassProvider, FactoryProvider, Injector, ValueProvider } from './di'
 import { DI_TOKEN, TokenUtils } from './token'
-import { ClassProviderDef, FactoryProviderDef, Provider, ProviderDef, Type, ValueProviderDef } from './type'
+import { ClassProviderDef, FactoryProviderDef, Provider, ProviderDef, Type, ValueProviderDef } from './types'
 
 export interface ToraModuleDef {
     imports?: Array<Type<any>>

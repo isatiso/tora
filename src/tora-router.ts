@@ -1,7 +1,6 @@
 import { AnnotationTools, ClassProvider, Injector } from './di'
-import { ApiMethod } from './server'
+import { ApiMethod, HandlerDescriptor } from './types'
 import { DI_TOKEN, TokenUtils } from './token'
-import { HandlerDescriptor } from './type'
 
 export interface RouterOptions {
     children?: any[]

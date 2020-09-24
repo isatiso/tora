@@ -1,4 +1,4 @@
-import { LiteContext } from './types'
+import { LiteContext } from '../../types'
 
 export abstract class Authenticator<USER> {
 

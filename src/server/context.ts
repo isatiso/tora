@@ -1,8 +1,14 @@
-import { OuterFinish, InnerFinish, throw_reasonable } from '../error'
-import { Authenticator } from './authenticator'
-import { CacheProxy } from './cache-proxy'
-import { LiteContext } from './types'
+import { InnerFinish, OuterFinish, throw_reasonable } from '../error'
+import { LiteContext } from '../types'
+import { Authenticator } from './service/authenticator'
+import { CacheProxy } from './service/cache-proxy'
 
+/**
+ * @author plankroot
+ * @class
+ * @name SessionContext
+ * @description Request session context for data transform.
+ */
 export class SessionContext<USER extends object = any> {
 
     constructor(
@@ -19,34 +25,58 @@ export class SessionContext<USER extends object = any> {
         })
     }
 
+    /**
+     * @return url of request, include query string.
+     */
     get url() {
         return this.ctx.req.url
     }
 
+    /**
+     * @return method of request.
+     */
     get method() {
         return this.ctx.req.method
     }
 
+    /**
+     * @return url of request, exclude query string.
+     */
     get path() {
         return this.ctx.path
     }
 
+    /**
+     * @return ip address of request, from header X-Real-Ip.
+     */
     get real_ip() {
         return this.ctx.request.get('X-Real-IP')
     }
 
+    /**
+     * @return raw string of request body.
+     */
     get rawBody() {
         return this.ctx.request.rawBody
     }
 
+    /**
+     * @return query object which parsed from query string.
+     */
     get query() {
         return this.ctx.query
     }
 
+    /**
+     * @return user info, if user info is not exist, throw a 401 Unauthorized Error.
+     */
     get user(): USER {
         return this.auth?.get_user_info() ?? throw_reasonable(401, 'Unauthorized.')
     }
 
+    /**
+     * @return user info, if user info is not exist, return undefined.
+     */
     get maybe_user(): USER | undefined {
         return this.auth?.get_user_info()
     }

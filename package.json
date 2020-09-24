@@ -5,6 +5,9 @@
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
     "module": "./lib/index.esm.js",
+    "files": [
+        "lib"
+    ],
     "keywords": [
         "tora",
         "di",
@@ -24,8 +27,7 @@
         "url": "https://github.com/isatiso/tora/issues"
     },
     "directories": {
-        "lib": "lib",
-        "test": "__tests__"
+        "lib": "lib"
     },
     "homepage": "https://github.com/isatiso/tora#readme",
     "dependencies": {

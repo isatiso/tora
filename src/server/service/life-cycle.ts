@@ -1,5 +1,5 @@
-import { SessionData } from './session-data'
-import { SessionContext } from './context'
+import { SessionContext } from '../context'
+import { SessionData } from '../session-data'
 
 export abstract class LifeCycle {
 

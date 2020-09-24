@@ -1,5 +1,5 @@
 import { DI_TOKEN } from '../token'
-import { HandlerDescriptor } from '../type'
+import { HandlerDescriptor } from '../types'
 
 export function Inject(token: any) {
     return function(proto: any, key: string, index: number) {

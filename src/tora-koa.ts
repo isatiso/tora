@@ -1,6 +1,7 @@
 import parse from 'co-body'
 import Koa from 'koa'
-import { ToraServer, LiteContext } from './server'
+import { ToraServer } from './server'
+import { LiteContext } from './types'
 
 declare module 'koa' {
     interface Request {

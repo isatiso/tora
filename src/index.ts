@@ -1,7 +1,7 @@
 export * from './server'
 export * from './di'
 export * from './builtin'
-export * from './type'
+export * from './types'
 export { response, crash, throw_reasonable, reasonable } from './error'
 export { ToraModule, ToraModuleDef } from './tora-module'
 export { Component } from './tora-component'

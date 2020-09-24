@@ -1,11 +1,12 @@
 import { BuiltInModule } from './builtin/built-in.module'
 import { Injector, ValueProvider } from './di'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
-import { ApiParams, Authenticator, CacheProxy, LifeCycle, LiteContext, PURE_PARAMS, SessionContext, SessionData, ToraServer } from './server'
+import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, SessionContext, SessionData, ToraServer } from './server'
+import { ResultWrapper } from './server/service/result-wrapper'
 import { DI_TOKEN, TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
 import { find_usage, ProviderTreeNode } from './tora-module'
-import { HandlerDescriptor, Provider } from './type'
+import { HandlerDescriptor, LiteContext, Provider } from './types'
 
 export class Platform {
 
@@ -119,17 +120,7 @@ namespace PlatformStatic {
         ctx.response.body = r
     }
 
-    export function deal_wrapper(wrap: boolean | undefined, res: any) {
-        if (wrap) {
-            if (Array.isArray(res)) {
-                return { data: { results: res } }
-            } else {
-                return { data: res }
-            }
-        } else {
-            return res
-        }
-    }
+
 
     export async function run_handler(cs: LiteContext, handler_wrapper: () => any) {
         try {
@@ -150,6 +141,7 @@ namespace PlatformStatic {
         return async function(params: any, cs: LiteContext) {
 
             const cache: CacheProxy | undefined = injector.get(CacheProxy)?.create()
+            const result_wrapper: ResultWrapper | undefined = injector.get(ResultWrapper)?.create()
             const hooks: LifeCycle | undefined = injector.get(LifeCycle)?.create()
             const auth: Authenticator<any> = injector.get(Authenticator)?.create()
 
@@ -193,7 +185,8 @@ namespace PlatformStatic {
                 finish_process(cs, res.body)
             } else {
                 await hooks?.on_finish(context, data)
-                finish_process(cs, deal_wrapper(desc.wrap_result, res))
+                const real_result = desc.wrap_result ? result_wrapper?.wrap(res) : res
+                finish_process(cs, real_result)
             }
         }
     }

@@ -1,5 +1,5 @@
 import { DI_TOKEN } from '../token'
-import { Provider, Type } from '../type'
+import { Provider, Type } from '../types'
 import { Injector } from './injector'
 
 export class ClassProvider<M> implements Provider<M> {

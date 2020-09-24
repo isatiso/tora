@@ -1,5 +1,5 @@
 import { throw_reasonable } from '../error'
-import { KeyOfFilterType } from '../type'
+import { KeyOfFilterType } from '../types'
 import { SessionContext } from './context'
 
 export type ValueType = 'exist'
