@@ -185,7 +185,7 @@ namespace PlatformStatic {
                 finish_process(cs, res.body)
             } else {
                 await hooks?.on_finish(context, data)
-                const real_result = desc.wrap_result ? result_wrapper?.wrap(res) : res
+                const real_result = desc.wrap_result ? result_wrapper?.wrap(res) ?? res : res
                 finish_process(cs, real_result)
             }
         }
