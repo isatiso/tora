@@ -1,3 +1,6 @@
+/**
+ * Class to save and pass data in a single session.
+ */
 export class SessionData<T extends object = any> {
 
     private _custom_data: Partial<T> = {}

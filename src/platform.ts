@@ -1,13 +1,15 @@
 import { BuiltInModule } from './builtin/built-in.module'
 import { Injector, ValueProvider } from './di'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
-import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, SessionContext, SessionData, ToraServer } from './server'
-import { ResultWrapper } from './server/service/result-wrapper'
+import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWrapper, SessionContext, SessionData, ToraServer } from './server'
 import { DI_TOKEN, TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
 import { find_usage, ProviderTreeNode } from './tora-module'
 import { HandlerDescriptor, LiteContext, Provider } from './types'
 
+/**
+ * Platform of Tora, where is a place of actual execution.
+ */
 export class Platform {
 
     private readonly started_at: number
@@ -27,17 +29,42 @@ export class Platform {
         Reflect.getMetadata(DI_TOKEN.module_provider_collector, BuiltInModule)?.(this.root_injector)
     }
 
+    /**
+     * @function
+     *
+     * Print message before loading platform.
+     *
+     * @param port(number) - port to listen.
+     */
     loading_message(port: number) {
         console.log(`tora server starting...`)
         console.log(`    listen at port ${port}...`)
         return this
     }
 
+    /**
+     * @function
+     *
+     * Register module for Platform.select_module.
+     *
+     * @param name(string) - module name
+     * @param module(ToraModule) - module object
+     */
     register_module(name: string, module: any) {
         this.modules[name] = module
         return this
     }
 
+    /**
+     * @function
+     *
+     * Select registered module to bootstrap.
+     *
+     * Usually prepare a lot of module by Platform.register_module.
+     * Then select some of them by command args.
+     *
+     * @param keys(string[]) - a list of module name
+     */
     select_module(keys: string[]) {
         console.log('selected servers:', keys)
         keys.map(k => this.modules[k])
@@ -46,6 +73,13 @@ export class Platform {
         return this
     }
 
+    /**
+     * @function
+     *
+     * Bootstrap module directly.
+     *
+     * @param root_module(ToraModule) - module to load.
+     */
     bootstrap(root_module: any) {
 
         TokenUtils.ensureClassType(root_module, 'tora_module')
@@ -74,11 +108,23 @@ export class Platform {
         return this
     }
 
+    /**
+     * @function
+     *
+     * Expose of Koa.use
+     *
+     * @param middleware
+     */
     koa_use(middleware: (ctx: LiteContext, next: () => Promise<any>) => void) {
         this._koa.use(middleware)
         return this
     }
 
+    /**
+     * @function
+     *
+     * Print all handler to stdout.
+     */
     show_api_list() {
         const handler_list = this._server.get_handler_list()
         console.log('\nUsable API list:')
@@ -88,6 +134,13 @@ export class Platform {
         return this
     }
 
+    /**
+     * @function
+     *
+     * Start listening of server.
+     *
+     * @param port
+     */
     start(port: number) {
         this._koa.handle_by(this._server)
             .listen(port, () => {
@@ -114,13 +167,16 @@ export class Platform {
     }
 }
 
+/**
+ * @namespace PlatformStatic
+ *
+ * collection functions
+ */
 namespace PlatformStatic {
 
     export function finish_process(ctx: LiteContext, r: any) {
         ctx.response.body = r
     }
-
-
 
     export async function run_handler(cs: LiteContext, handler_wrapper: () => any) {
         try {

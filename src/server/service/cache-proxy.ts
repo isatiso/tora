@@ -1,3 +1,6 @@
+/**
+ * @abstract CacheProxy
+ */
 export abstract class CacheProxy {
 
     abstract set_cache_options(options: {

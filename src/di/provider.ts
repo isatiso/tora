@@ -2,6 +2,10 @@ import { DI_TOKEN } from '../token'
 import { Provider, Type } from '../types'
 import { Injector } from './injector'
 
+/**
+ * @author plankroot
+ * ClassProvider: wrap a class, and create instance when needed.
+ */
 export class ClassProvider<M> implements Provider<M> {
 
     public resolved?: M
@@ -17,6 +21,14 @@ export class ClassProvider<M> implements Provider<M> {
         this.multi = this.multi ?? false
     }
 
+    /**
+     * @author plankroot
+     * @function create instance of this.cls and of its dependence if needed.
+     *
+     * @param parents: record calling path.
+     *
+     * @return Provider.
+     */
     create(parents?: any[]) {
         const exist = parents?.indexOf(this.cls) ?? -1
         if (exist >= 0) {
@@ -35,6 +47,11 @@ export class ClassProvider<M> implements Provider<M> {
         return this.resolved
     }
 
+    /**
+     * @author plankroot
+     * @function mark used of provider recursively
+     * @param parents
+     */
     set_used(parents?: any[]): void {
         parents = (parents ?? []).concat(this.cls)
         this.used = true
@@ -108,6 +125,9 @@ export class FactoryProvider<M> implements Provider<M> {
         return this.factory(...(this.deps ?? []))
     }
 
+    /**
+     * @function mark used of provider.
+     */
     set_used(): void {
         this.used = true
     }

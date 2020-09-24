@@ -36,6 +36,9 @@ interface Options {
     onerror?: (err: Error, ctx: Koa.Context) => void
 }
 
+/**
+ * Koa adaptor.
+ */
 export class ToraKoa {
 
     private _koa = new Koa()
@@ -53,15 +56,35 @@ export class ToraKoa {
         }
     }
 
+    /**
+     * @function
+     *
+     * Expose of Koa.use
+     *
+     * @param middleware
+     */
     use(middleware: (ctx: LiteContext, next: () => Promise<any>) => void) {
         this._koa.use(middleware)
     }
 
+    /**
+     * @function
+     *
+     * Set server handlers.
+     *
+     * @param server(ToraServer)
+     */
     handle_by(server: ToraServer) {
         this._koa.use(async (ctx: LiteContext, next) => server.handleRequest(ctx, next))
         return this
     }
 
+    /**
+     * Koa listen
+     *
+     * @param port
+     * @param cb
+     */
     listen(port: number, cb: () => void): void {
         this._koa.on('error', (err, ctx: LiteContext) => {
             if (err.code !== 'HPE_INVALID_EOF_STATE') {

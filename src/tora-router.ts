@@ -2,6 +2,9 @@ import { AnnotationTools, ClassProvider, Injector } from './di'
 import { ApiMethod, HandlerDescriptor } from './types'
 import { DI_TOKEN, TokenUtils } from './token'
 
+/**
+ * @interface RouterOptions
+ */
 export interface RouterOptions {
     children?: any[]
 }
@@ -10,6 +13,14 @@ function join_path(front: string, rear: string) {
     return (front + '/' + rear).replace(/^\//, '').replace(/\/$/, '')
 }
 
+/**
+ * @annotation Router
+ *
+ * Collect and load router info.
+ *
+ * @param path(string) - Path of this node. Finally join all the path in one branch.
+ * @param options(RouterOptions)
+ */
 export function Router(path: string, options?: RouterOptions) {
     return function(target: any) {
         TokenUtils.setClassType(target, 'tora_router')
@@ -43,18 +54,51 @@ function createRequestDecorator(method: ApiMethod) {
     }
 }
 
+/**
+ * @annotation Get
+ *
+ * Mark a method to handle a GET request.
+ */
 export const Get = createRequestDecorator('GET')
+
+/**
+ * @annotation Post
+ *
+ * Mark a method to handle a POST request.
+ */
 export const Post = createRequestDecorator('POST')
+
+/**
+ * @annotation Put
+ *
+ * Mark a method to handle a PUT request.
+ */
 export const Put = createRequestDecorator('PUT')
+
+/**
+ * @annotation Delete
+ *
+ * Mark a method to handle a DELETE request.
+ */
 export const Delete = createRequestDecorator('DELETE')
 
-export function Auth(auth_target: 'admin' | 'client' = 'admin') {
+/**
+ * @annotation Auth
+ *
+ * Mark a method which need to authorize client info.
+ */
+export function Auth() {
     return (target: any, key: string) => {
         const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
-        handler.auth = auth_target
+        handler.auth = true
     }
 }
 
+/**
+ * @annotation NoWrap
+ *
+ * Mark a method which's result is no need to wrap.
+ */
 export function NoWrap() {
     return (target: any, key: string) => {
         const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
@@ -62,6 +106,11 @@ export function NoWrap() {
     }
 }
 
+/**
+ * @annotation CacheWith
+ *
+ * Mark cache prefix and expires of a method's response .
+ */
 export function CacheWith(prefix: string, expires?: number) {
     return (target: any, key: string) => {
         const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
@@ -70,6 +119,11 @@ export function CacheWith(prefix: string, expires?: number) {
     }
 }
 
+/**
+ * @annotation NoWrap
+ *
+ * Mark a method which is no need to load.
+ */
 export function Disabled() {
     return (target: any, key: string) => {
         const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})

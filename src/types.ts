@@ -39,7 +39,7 @@ export interface HandlerDescriptor {
     handler?: any
     param_types?: any[]
     inject_except_list?: any[]
-    auth?: 'admin' | 'client'
+    auth?: boolean
     wrap_result?: boolean
     cache_prefix?: string
     cache_expires?: number

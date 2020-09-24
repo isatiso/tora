@@ -1,6 +1,9 @@
 import { SessionContext } from '../context'
 import { SessionData } from '../session-data'
 
+/**
+ * @abstract LifeCycle
+ */
 export abstract class LifeCycle {
 
     abstract async on_init(cs: SessionContext, data: SessionData): Promise<void>
