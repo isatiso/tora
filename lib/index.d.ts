@@ -92,7 +92,7 @@ declare class SessionContext<USER extends object = any> {
      */
     get path(): string;
     /**
-     * @return ip address of request, from header X-Real-Ip.
+     * @return ip address of request, from header X-Real-Ip or X-Forward-For or remote-address.
      */
     get real_ip(): string;
     /**
