@@ -177,6 +177,10 @@ declare abstract class LifeCycle {
     abstract on_error(cs: SessionContext, data: SessionData, err: any): Promise<void>;
 }
 
+declare abstract class ResultWrapper {
+    abstract wrap(result: any): object;
+}
+
 declare class _NullInjector {
     get(token: any, info?: string): void;
 }
@@ -316,4 +320,4 @@ declare class ErrorWrapper<T> {
 }
 declare type ToraError<T> = ErrorWrapper<T>;
 
-export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, InjectorType, Judgement, KeyOfFilterType, LifeCycle, LiteContext, Meta, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, Router, RouterOptions, SessionContext, SessionData, ToraError, ToraModule, ToraModuleDef, ToraServer, Type, UUID, ValueProvider, ValueProviderDef, ValueType, crash, reasonable, response, throw_reasonable };
+export { AnnotationTools, ApiMethod, ApiParams, ApiPath, ApiReturnDataType, Auth, Authenticator, CacheProxy, CacheWith, ClassProvider, ClassProviderDef, ClassType, Component, CurrentTimestamp, Delete, Disabled, FactoryProvider, FactoryProviderDef, Get, HandlerDescriptor, HandlerReturnType, HttpHandler, HttpMethod, Inject, Injector, InjectorType, Judgement, KeyOfFilterType, LifeCycle, LiteContext, Meta, NoWrap, NullInjector, PURE_PARAMS, Platform, Post, Provider, ProviderDef, Put, ResultWrapper, Router, RouterOptions, SessionContext, SessionData, ToraError, ToraModule, ToraModuleDef, ToraServer, Type, UUID, ValueProvider, ValueProviderDef, ValueType, crash, reasonable, response, throw_reasonable };
