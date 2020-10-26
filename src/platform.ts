@@ -35,10 +35,14 @@ export class Platform {
      * Print message before loading platform.
      *
      * @param port(number) - port to listen.
+     * @param infos(string[]) - extra infos to be print.
      */
-    loading_message(port: number) {
+    loading_message(port: number, infos?: string[]) {
         console.log(`tora server starting...`)
         console.log(`    listen at port ${port}...`)
+        for (const info of infos ?? []) {
+            console.log(info)
+        }
         return this
     }
 
@@ -51,6 +55,13 @@ export class Platform {
      * @param module(ToraModule) - module object
      */
     register_module(name: string, module: any) {
+        if (TokenUtils.getClassType(module) !== 'tora_module') {
+            throw new Error(`${module} is not a "tora_module".`)
+        }
+        const router_gate = TokenUtils.getRouterGate(module)
+        if (!router_gate || TokenUtils.getClassType(router_gate) !== 'tora_router') {
+            throw new Error(`${router_gate} is not a "tora_router". Only a "tora_module" with "tora_router" can be registered.`)
+        }
         this.modules[name] = module
         return this
     }
@@ -70,41 +81,6 @@ export class Platform {
         keys.map(k => this.modules[k])
             .filter(m => m)
             .forEach(m => this.bootstrap(m))
-        return this
-    }
-
-    /**
-     * @function
-     *
-     * Bootstrap module directly.
-     *
-     * @param root_module(ToraModule) - module to load.
-     */
-    bootstrap(root_module: any) {
-
-        TokenUtils.ensureClassType(root_module, 'tora_module')
-
-        const sub_injector = Injector.create(this.root_injector)
-        const provider_tree: ProviderTreeNode = Reflect.getMetadata(DI_TOKEN.module_provider_collector, root_module)?.(sub_injector)
-
-        sub_injector.get(Authenticator)?.set_used()
-        sub_injector.get(LifeCycle)?.set_used()
-        sub_injector.get(CacheProxy)?.set_used()
-
-        const router_module = Reflect.getMetadata(DI_TOKEN.module_router_gate, root_module)
-        Reflect.getMetadata(DI_TOKEN.router_handler_collector, router_module)?.(sub_injector)?.forEach((desc: HandlerDescriptor) => {
-            if (!desc.disabled) {
-                const provider_list = this.get_providers(desc, sub_injector, [ApiParams, SessionContext, SessionData, PURE_PARAMS])
-                provider_list.forEach(p => p.create?.())
-                desc.methods.forEach(m => this._server.on(m, '/' + desc.path, PlatformStatic.makeHandler(sub_injector, desc, provider_list)))
-            }
-        })
-
-        provider_tree.children.filter(def => !find_usage(def))
-            .forEach(def => {
-                console.log(`Warning: ${root_module.name} -> ${def.name} not used.`)
-            })
-
         return this
     }
 
@@ -147,6 +123,41 @@ export class Platform {
                 const duration = new Date().getTime() - this.started_at
                 console.log(`\ntora server started successfully in ${duration / 1000}s.`)
             })
+    }
+
+    /**
+     * @function
+     *
+     * Bootstrap module directly.
+     *
+     * @param root_module(ToraModule) - module to load.
+     */
+    private bootstrap(root_module: any) {
+
+        TokenUtils.ensureClassType(root_module, 'tora_module')
+
+        const sub_injector = Injector.create(this.root_injector)
+        const provider_tree: ProviderTreeNode = Reflect.getMetadata(DI_TOKEN.module_provider_collector, root_module)?.(sub_injector)
+
+        sub_injector.get(Authenticator)?.set_used()
+        sub_injector.get(LifeCycle)?.set_used()
+        sub_injector.get(CacheProxy)?.set_used()
+
+        const router_module = Reflect.getMetadata(DI_TOKEN.module_router_gate, root_module)
+        Reflect.getMetadata(DI_TOKEN.router_handler_collector, router_module)?.(sub_injector)?.forEach((desc: HandlerDescriptor) => {
+            if (!desc.disabled) {
+                const provider_list = this.get_providers(desc, sub_injector, [ApiParams, SessionContext, SessionData, PURE_PARAMS])
+                provider_list.forEach(p => p.create?.())
+                desc.methods.forEach(m => this._server.on(m, '/' + desc.path, PlatformStatic.makeHandler(sub_injector, desc, provider_list)))
+            }
+        })
+
+        provider_tree.children.filter(def => !find_usage(def))
+            .forEach(def => {
+                console.log(`Warning: ${root_module.name} -> ${def.name} not used.`)
+            })
+
+        return this
     }
 
     private get_providers(desc: HandlerDescriptor, injector: Injector, except_list?: any[]): Provider<any>[] {

@@ -31,10 +31,18 @@ export namespace TokenUtils {
         Reflect.defineMetadata(DI_TOKEN.cls_type, type2token(type), target)
     }
 
+    export function getClassType(target: any) {
+        return Reflect.getMetadata(DI_TOKEN.cls_type, target)
+    }
+
     export function ensureClassType(target: any, type: ClassType) {
         if (Reflect.getMetadata(DI_TOKEN.cls_type, target) !== type2token(type)) {
             throw new Error(`${target.name} is not a ToraModule.`)
         }
+    }
+
+    export function getRouterGate(target: any) {
+        return Reflect.getMetadata(DI_TOKEN.module_router_gate, target)
     }
 
     function type2token(type: ClassType) {
