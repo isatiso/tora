@@ -1,6 +1,6 @@
 import { AnnotationTools, ClassProvider, Injector } from './di'
-import { ApiMethod, HandlerDescriptor } from './types'
 import { DI_TOKEN, TokenUtils } from './token'
+import { ApiMethod, HandlerDescriptor } from './types'
 
 /**
  * @interface RouterOptions

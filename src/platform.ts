@@ -2,7 +2,7 @@ import { BuiltInModule } from './builtin/built-in.module'
 import { Injector, ValueProvider } from './di'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
 import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWrapper, SessionContext, SessionData, ToraServer } from './server'
-import { DI_TOKEN, TokenUtils } from './token'
+import { CLS_TYPE, DI_TOKEN, TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
 import { find_usage, ProviderTreeNode } from './tora-module'
 import { HandlerDescriptor, LiteContext, Provider } from './types'
@@ -55,12 +55,15 @@ export class Platform {
      * @param module(ToraModule) - module object
      */
     register_module(name: string, module: any) {
-        if (TokenUtils.getClassType(module) !== 'tora_module') {
-            throw new Error(`${module} is not a "tora_module".`)
+        if (TokenUtils.getClassType(module) !== CLS_TYPE.tora_module) {
+            throw new Error(`${module.name ?? module.prototype?.toString()} is not a "tora_module".`)
         }
         const router_gate = TokenUtils.getRouterGate(module)
-        if (!router_gate || TokenUtils.getClassType(router_gate) !== 'tora_router') {
-            throw new Error(`${router_gate} is not a "tora_router". Only a "tora_module" with "tora_router" can be registered.`)
+        if (!router_gate) {
+            throw new Error(`"router_gate" should be set with a "tora_router".`)
+        }
+        if (TokenUtils.getClassType(router_gate) !== CLS_TYPE.tora_router) {
+            throw new Error(`${router_gate.name ?? router_gate.prototype?.toString()} is not a "tora_router". Only a "tora_module" with "tora_router" can be registered.`)
         }
         this.modules[name] = module
         return this
