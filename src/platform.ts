@@ -80,6 +80,10 @@ export class Platform {
      * @param keys(string[]) - a list of module name
      */
     select_module(keys: string[]) {
+        const unknown_keys = keys.filter(k => !this.modules[k])
+        if (unknown_keys?.length) {
+            throw new Error(`Module: "${unknown_keys}" not registered.`)
+        }
         console.log('selected servers:', keys)
         keys.map(k => this.modules[k])
             .filter(m => m)
