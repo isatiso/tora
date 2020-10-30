@@ -1,6 +1,9 @@
 # Tora
 node.js 的依赖注入框架，typescript 实现。
 
+> 鉴于编译低版本 nodejs 时使用 async & await 会导致内存泄漏。
+> 现在导出的包 target 为 es2019
+
 ## Installation
 
 ```
