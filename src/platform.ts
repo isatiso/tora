@@ -140,6 +140,7 @@ export class Platform {
      * @param root_module(ToraModule) - module to load.
      */
     private bootstrap(root_module: any) {
+        console.log('root_module', root_module)
 
         TokenUtils.ensureClassType(root_module, 'tora_module')
 
@@ -161,7 +162,7 @@ export class Platform {
 
         provider_tree.children.filter(def => !find_usage(def))
             .forEach(def => {
-                console.log(`Warning: ${root_module.name} -> ${def.name} not used.`)
+                console.log(`Warning: ${root_module.name} -> ${def?.name} not used.`)
             })
 
         return this
@@ -229,7 +230,7 @@ namespace PlatformStatic {
                     throw new Error(`no provider for <Authenticator>.`)
                 }
                 if (await context.do_auth() === undefined) {
-                    finish_process(cs, { error: { code: 401, msg: 'Unauthorized.' } })
+                    return finish_process(cs, { error: { code: 401, msg: 'Unauthorized.' } })
                 }
             }
 
