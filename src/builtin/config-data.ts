@@ -18,11 +18,29 @@ export class ConfigData<T> {
         return this._cache[prop]!
     }
 
-    get<K extends keyof T>(prop: K): T[K] {
-        return JSON.parse(JSON.stringify(this._data[prop]))
+    /**
+     * @function
+     * Return specified <prop> of config object.
+     *
+     * @param prop(string): name of property
+     */
+    get<K extends keyof T>(prop: K): Readonly<T[K]> {
+        return this._data[prop]
     }
 
-    toJson(): T {
-        return JSON.parse(JSON.stringify(this._data))
+    /**
+     * @function
+     * Return copy of config property object. If no <prop> specified, return config object self.
+     *
+     * @param prop(string) - name of property.
+     */
+    copy(): T
+    copy<K extends keyof T>(prop: K): T[K]
+    copy<K extends keyof T>(prop?: K): K extends undefined ? T : T[K] {
+        if (prop === undefined) {
+            return JSON.parse(JSON.stringify(this._data))
+        } else {
+            return JSON.parse(JSON.stringify(this._data[prop]))
+        }
     }
 }
