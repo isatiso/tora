@@ -1,5 +1,8 @@
+import fs from 'fs'
+import path from 'path'
+import { ConfigData } from './builtin'
 import { BuiltInModule } from './builtin/built-in.module'
-import { Injector, ValueProvider } from './di'
+import { ClassProvider, Injector, ValueProvider } from './di'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
 import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWrapper, SessionContext, SessionData, ToraServer } from './server'
 import { CLS_TYPE, DI_TOKEN, TokenUtils } from './token'
@@ -19,6 +22,7 @@ export class Platform {
     private root_injector = Injector.create()
     private _server = new ToraServer()
     private _koa = new ToraKoa({ cors: true, body_parser: true })
+    private _config_data: any
 
     constructor() {
         this.started_at = new Date().getTime()
@@ -27,6 +31,21 @@ export class Platform {
         this.root_injector.set_provider(CacheProxy, new ValueProvider('CacheProxy', null))
         this.root_injector.set_provider(LifeCycle, new ValueProvider('LifeCycle', null))
         Reflect.getMetadata(DI_TOKEN.module_provider_collector, BuiltInModule)?.(this.root_injector)
+    }
+
+    /**
+     * @function
+     *
+     * load configuration from file, .
+     *
+     * @param file_path(string) - path of config file, default is 'config/default.json'.
+     */
+    load_config(file_path?: string) {
+        const configFile = path.join(process.cwd(), file_path ?? 'config/default.json')
+        this._config_data = JSON.parse(
+            fs.readFileSync(configFile).toString('utf-8'))
+        this.root_injector.set_provider(ConfigData, new ValueProvider('ConfigData', new ConfigData(this._config_data)))
+        return this
     }
 
     /**
