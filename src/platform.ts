@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
-import { ConfigData } from './builtin'
+import { ConfigData, ToraConfig } from './builtin'
 import { BuiltInModule } from './builtin/built-in.module'
-import { ClassProvider, Injector, ValueProvider } from './di'
+import { Injector, ValueProvider } from './di'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
 import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWrapper, SessionContext, SessionData, ToraServer } from './server'
 import { CLS_TYPE, DI_TOKEN, TokenUtils } from './token'
@@ -22,7 +22,7 @@ export class Platform {
     private root_injector = Injector.create()
     private _server = new ToraServer()
     private _koa = new ToraKoa({ cors: true, body_parser: true })
-    private _config_data: any
+    private _config_data?: ConfigData<ToraConfig>
 
     constructor() {
         this.started_at = new Date().getTime()
@@ -42,9 +42,10 @@ export class Platform {
      */
     load_config(file_path?: string) {
         const configFile = path.join(process.cwd(), file_path ?? 'config/default.json')
-        this._config_data = JSON.parse(
+        const config_data = JSON.parse(
             fs.readFileSync(configFile).toString('utf-8'))
-        this.root_injector.set_provider(ConfigData, new ValueProvider('ConfigData', new ConfigData(this._config_data)))
+        this._config_data = new ConfigData(config_data)
+        this.root_injector.set_provider(ConfigData, new ValueProvider('ConfigData', this._config_data))
         return this
     }
 
@@ -53,14 +54,11 @@ export class Platform {
      *
      * Print message before loading platform.
      *
-     * @param port(number) - port to listen.
-     * @param infos(string[]) - extra infos to be print.
+     * @param msg_builder(function) - extra infos to be print.
      */
-    loading_message(port: number, infos?: string[]) {
-        console.log(`tora server starting...`)
-        console.log(`    listen at port ${port}...`)
-        for (const info of infos ?? []) {
-            console.log(info)
+    loading_message<T extends ToraConfig>(msg_builder: (config: ConfigData<T>) => string[]) {
+        if (this._config_data) {
+            msg_builder(this._config_data as any)?.forEach(info => console.log(info))
         }
         return this
     }
@@ -141,9 +139,15 @@ export class Platform {
      *
      * Start listening of server.
      *
-     * @param port
+     * @param port(number) - if not specified, will look up from 'tora.port'
+     *                       of <ConfigData>. if no config found, use 3000.
      */
-    start(port: number) {
+    start() {
+        const port = this._config_data?.deep('tora')?.get('port') ?? 3000
+
+        console.log(`tora server starting...`)
+        console.log(`    listen at port ${port}...`)
+
         this._koa.handle_by(this._server)
             .listen(port, () => {
                 const duration = new Date().getTime() - this.started_at

@@ -1,9 +1,15 @@
 import { KeyOfFilterType } from '../types'
 
-export class ConfigData<T> {
+export interface ToraConfig {
+    tora?: {
+        port?: number
+    }
+}
 
-    private _cache: {
-        [K in KeyOfFilterType<T, object>]?: ConfigData<T[K]>
+export class ConfigData<T extends ToraConfig> {
+
+    _cache: {
+        [K in KeyOfFilterType<T, object>]?: ConfigData<T[K]> | null
     } = {}
 
     constructor(
@@ -11,11 +17,15 @@ export class ConfigData<T> {
     ) {
     }
 
-    deep<K extends KeyOfFilterType<T, object>>(prop: K): ConfigData<T[K]> {
-        if (!this._cache[prop]) {
-            this._cache[prop] = new ConfigData(this._data[prop])
+    deep<K extends KeyOfFilterType<T, object>, U = T[K]>(prop: K): ConfigData<Exclude<U, undefined>> | (U extends undefined ? undefined : never) {
+        if (this._cache[prop] === undefined) {
+            if (this._data[prop]) {
+                this._cache[prop] = new ConfigData(this._data[prop])
+            } else {
+                this._cache[prop] = null
+            }
         }
-        return this._cache[prop]!
+        return this._cache[prop] ?? undefined as any
     }
 
     /**
@@ -24,23 +34,15 @@ export class ConfigData<T> {
      *
      * @param prop(string): name of property
      */
-    get<K extends keyof T>(prop: K): Readonly<T[K]> {
+    get<K extends keyof Omit<T, KeyOfFilterType<T, object>>>(prop: K): T[K] {
         return this._data[prop]
     }
 
     /**
      * @function
-     * Return copy of config property object. If no <prop> specified, return config object self.
-     *
-     * @param prop(string) - name of property.
+     * Return copy of config object.
      */
-    copy(): T
-    copy<K extends keyof T>(prop: K): T[K]
-    copy<K extends keyof T>(prop?: K): K extends undefined ? T : T[K] {
-        if (prop === undefined) {
-            return JSON.parse(JSON.stringify(this._data))
-        } else {
-            return JSON.parse(JSON.stringify(this._data[prop]))
-        }
+    copy(): T {
+        return JSON.parse(JSON.stringify(this._data))
     }
 }
