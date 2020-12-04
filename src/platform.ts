@@ -8,7 +8,7 @@ import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWra
 import { CLS_TYPE, DI_TOKEN, TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
 import { find_usage, ProviderTreeNode } from './tora-module'
-import { HandlerDescriptor, LiteContext, Provider } from './types'
+import { ApiMethod, ApiPath, ApiReturnDataType, HandlerDescriptor, HandlerReturnType, LiteContext, Provider } from './types'
 
 /**
  * Platform of Tora, where is a place of actual execution.
@@ -26,11 +26,14 @@ export class Platform {
 
     constructor() {
         this.started_at = new Date().getTime()
-        this._server.on('GET', '/health-check', () => '')
         this.root_injector.set_provider(Authenticator, new ValueProvider('Authenticator', null))
         this.root_injector.set_provider(CacheProxy, new ValueProvider('CacheProxy', null))
         this.root_injector.set_provider(LifeCycle, new ValueProvider('LifeCycle', null))
         Reflect.getMetadata(DI_TOKEN.module_provider_collector, BuiltInModule)?.(this.root_injector)
+    }
+
+    health_check(method: ApiMethod, path: ApiPath) {
+        this._server.on(method, path, () => '')
     }
 
     /**
