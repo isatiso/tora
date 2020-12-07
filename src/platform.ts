@@ -34,6 +34,7 @@ export class Platform {
 
     health_check(method: ApiMethod, path: ApiPath) {
         this._server.on(method, path, () => '')
+        return this
     }
 
     /**
