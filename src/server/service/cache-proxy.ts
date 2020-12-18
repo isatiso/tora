@@ -8,10 +8,10 @@ export abstract class CacheProxy {
         cache_prefix: string
     }): void
 
-    abstract async clear(key: string): Promise<number>
+    abstract clear(key: string): Promise<number>
 
-    abstract async get(key?: string): Promise<any | null>
+    abstract get(key?: string): Promise<any | null>
 
-    abstract async set(value: any): Promise<void>
+    abstract set(value: any): Promise<void>
 
 }

@@ -5,11 +5,11 @@ export class SessionData<T extends object = any> {
 
     private _custom_data: Partial<T> = {}
 
-    set(key: keyof T, value: T[typeof key]) {
+    set<M extends keyof T>(key: M, value: T[M]) {
         this._custom_data[key] = value
     }
 
-    get(key: keyof T): T[typeof key] | undefined {
+    get<M extends keyof T>(key: M): T[M] | undefined {
         return this._custom_data[key]
     }
 }
