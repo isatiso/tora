@@ -1,48 +1,65 @@
-import { KeyOfFilterType } from '../types'
-
 export interface ToraConfig {
     tora?: {
         port?: number
     }
 }
 
+type Path<T extends Object, Key extends keyof T = keyof T, Value = Exclude<T[Key], undefined>> =
+    Key extends string
+        ? Value extends Record<string, any>
+        ? `${Key}.${Path<Value>}` | Key
+        : (Value extends number | string | boolean | null ? Key : never)
+        : never;
+
+type PathValue<T extends Object, P extends Path<T>> =
+    P extends `${infer Key}.${infer Rest}`
+        ? Key extends keyof T
+        ? Rest extends Path<Exclude<T[Key], undefined>>
+            ? PathValue<Exclude<T[Key], undefined>, Rest>
+            : never
+        : never
+        : P extends keyof T
+        ? T[P]
+        : never;
+
 export class ConfigData<T extends ToraConfig> {
 
     _cache: {
-        [K in KeyOfFilterType<T, object>]?: ConfigData<T[K]> | null
+        [path: string]: any
     } = {}
 
     constructor(
         private _data: T
     ) {
-    }
-
-    deep<K extends KeyOfFilterType<T, object>, U = T[K]>(prop: K): ConfigData<Exclude<U, undefined>> | (U extends undefined ? undefined : never) {
-        if (this._cache[prop] === undefined) {
-            if (this._data[prop]) {
-                this._cache[prop] = new ConfigData(this._data[prop])
-            } else {
-                this._cache[prop] = null
-            }
-        }
-        return this._cache[prop] ?? undefined as any
+        this._cache[''] = JSON.parse(JSON.stringify(this._data))
     }
 
     /**
-     * @function
+     * Return specified <prop> of config object.
+     */
+    get<K extends Path<T>>(): T
+    /**
      * Return specified <prop> of config object.
      *
-     * @param prop(string): name of property
+     * @param path(string): name of property
      */
-    get<K extends keyof Omit<T, KeyOfFilterType<T, object>>>(prop: K): T[K] {
-        return this._data[prop]
-    }
-
-    /**
-     * @function
-     * Return copy of config object.
-     */
-    copy(): T {
-        return JSON.parse(JSON.stringify(this._data))
+    get<K extends Path<T>>(path: K): PathValue<T, K>
+    get<K extends Path<T>>(path?: K): PathValue<T, K> | T {
+        if (!path) {
+            return this._cache['']
+        }
+        if (this._cache[path] === undefined) {
+            const paths = path.split('.')
+            let data: any = this._data
+            for (const p of paths) {
+                data = data?.[p]
+                if (data === undefined) {
+                    data = null
+                    break
+                }
+            }
+            this._cache[path] = JSON.parse(JSON.stringify(data))
+        }
+        return this._cache[path] as any
     }
 }

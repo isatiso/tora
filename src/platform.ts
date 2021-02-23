@@ -8,7 +8,7 @@ import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWra
 import { CLS_TYPE, DI_TOKEN, TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
 import { find_usage, ProviderTreeNode } from './tora-module'
-import { ApiMethod, ApiPath, ApiReturnDataType, HandlerDescriptor, HandlerReturnType, LiteContext, Provider } from './types'
+import { ApiMethod, ApiPath, HandlerDescriptor, LiteContext, Provider } from './types'
 
 /**
  * Platform of Tora, where is a place of actual execution.
@@ -139,15 +139,10 @@ export class Platform {
     }
 
     /**
-     * @function
-     *
      * Start listening of server.
-     *
-     * @param port(number) - if not specified, will look up from 'tora.port'
-     *                       of <ConfigData>. if no config found, use 3000.
      */
     start() {
-        const port = this._config_data?.deep('tora')?.get('port') ?? 3000
+        const port = this._config_data?.get('tora.port') ?? 3000
 
         console.log(`tora server starting...`)
         console.log(`    listen at port ${port}...`)

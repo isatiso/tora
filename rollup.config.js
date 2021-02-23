@@ -79,6 +79,6 @@ function createRollupConfig(externalModules) {
     ]
 }
 
-const config = createRollupConfig(['stream', 'fs', 'path'])
+const config = createRollupConfig(['stream', 'fs', 'path', 'http', 'querystring'])
 
 export default config
