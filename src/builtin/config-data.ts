@@ -4,13 +4,13 @@ export interface ToraConfig {
     }
 }
 
-type Path<T extends Object, Key extends keyof T = keyof T, Value = Exclude<T[Key], undefined>> =
+type Path<T extends Object, Key extends keyof T = keyof T> =
     Key extends string
-        ? Value extends Array<any>
-        ? `${Key}.${Path<Value, Exclude<keyof Value, keyof Array<any> & string>>}` | Key
-        : Value extends Record<string, any>
-            ? `${Key}.${Path<Value>}` | Key
-            : (Value extends number | string | boolean | null ? Key : never)
+        ? Exclude<T[Key], undefined> extends Array<any>
+        ? `${Key}.${Path<Exclude<T[Key], undefined>, Exclude<keyof Exclude<T[Key], undefined>, keyof Array<any> & string>>}` | Key
+        : Exclude<T[Key], undefined> extends Record<string, any>
+            ? `${Key}.${Path<Exclude<T[Key], undefined>>}` | Key
+            : (Exclude<T[Key], undefined> extends number | string | boolean | null ? Key : never)
         : never;
 
 type PathValue<T extends Object, P extends Path<T>> =
