@@ -6,9 +6,11 @@ export interface ToraConfig {
 
 type Path<T extends Object, Key extends keyof T = keyof T, Value = Exclude<T[Key], undefined>> =
     Key extends string
-        ? Value extends Record<string, any>
-        ? `${Key}.${Path<Value>}` | Key
-        : (Value extends number | string | boolean | null ? Key : never)
+        ? Value extends Array<any>
+        ? `${Key}.${Path<Value, Exclude<keyof Value, keyof Array<any> & string>>}` | Key
+        : Value extends Record<string, any>
+            ? `${Key}.${Path<Value>}` | Key
+            : (Value extends number | string | boolean | null ? Key : never)
         : never;
 
 type PathValue<T extends Object, P extends Path<T>> =
