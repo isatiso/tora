@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import { ClassProvider, FactoryProvider, Injector, ValueProvider } from './di'
+import { def2Provider } from './di/provider'
 import { DI_TOKEN, TokenUtils } from './token'
 import { ClassProviderDef, FactoryProviderDef, Provider, ProviderDef, Type, ValueProviderDef } from './types'
 
@@ -64,37 +65,5 @@ function makeProviderCollector(target: any, options?: ToraModuleDef) {
 
         return { name: target.name, providers, children }
     }
-}
-
-function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Injector) {
-    return defs?.map(def => {
-        if ((def as any).useValue) {
-
-            const d = def as ValueProviderDef
-            return [d.provide, new ValueProvider('valueProvider', d.useValue)]
-
-        } else if ((def as any).useFactory) {
-
-            const d = def as FactoryProviderDef
-            return [d.provide, new FactoryProvider('FactoryProvider', d.useFactory as any, d.deps),]
-
-        } else if ((def as any).useClass) {
-
-            const d = def as ClassProviderDef
-            const isComponent = Reflect.getMetadata(DI_TOKEN.component, d.useClass)
-            if (!isComponent) {
-                throw new Error(`${d.useClass.name} is not Component.`)
-            }
-            return [d.provide, new ClassProvider<any>(d.useClass, injector, d.multi)]
-
-        } else {
-
-            const isComponent = Reflect.getMetadata(DI_TOKEN.component, def as any)
-            if (!isComponent) {
-                throw new Error(`${(def as any).name} is not Component.`)
-            }
-            return [def, new ClassProvider<any>(def as any, injector)]
-        }
-    })
 }
 

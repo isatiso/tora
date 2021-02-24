@@ -3,12 +3,13 @@ import path from 'path'
 import { ConfigData, ToraConfig } from './builtin'
 import { BuiltInModule } from './builtin/built-in.module'
 import { Injector, ValueProvider } from './di'
+import { def2Provider } from './di/provider'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
 import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWrapper, SessionContext, SessionData, ToraServer } from './server'
 import { CLS_TYPE, DI_TOKEN, TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
 import { find_usage, ProviderTreeNode } from './tora-module'
-import { ApiMethod, ApiPath, HandlerDescriptor, LiteContext, Provider } from './types'
+import { ApiMethod, ApiPath, HandlerDescriptor, LiteContext, Provider, ProviderDef, Type } from './types'
 
 /**
  * Platform of Tora, where is a place of actual execution.
@@ -30,6 +31,10 @@ export class Platform {
         this.root_injector.set_provider(CacheProxy, new ValueProvider('CacheProxy', null))
         this.root_injector.set_provider(LifeCycle, new ValueProvider('LifeCycle', null))
         Reflect.getMetadata(DI_TOKEN.module_provider_collector, BuiltInModule)?.(this.root_injector)
+    }
+
+    provide(def: (ProviderDef | Type<any>)) {
+        def2Provider([def], this.root_injector)
     }
 
     health_check(method: ApiMethod, path: ApiPath) {
