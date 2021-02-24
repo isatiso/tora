@@ -63,7 +63,7 @@ export class SessionContext<USER extends object = any> {
     /**
      * @return query object which parsed from query string.
      */
-    get query() {
+    get query(): NodeJS.Dict<string | string[]> {
         return this.ctx.query
     }
 
@@ -85,14 +85,14 @@ export class SessionContext<USER extends object = any> {
      * @function Get header of specified key.
      * @param key(string) - eg. Content-Type
      */
-    header(key: string) {
+    header(key: string): string | string[] | undefined {
         return this.ctx.request.headers[key.toLowerCase()]
     }
 
     /**
      * @function Get all headers as a dict.
      */
-    headers() {
+    headers(): NodeJS.Dict<string | string[]> {
         return this.ctx.request.headers
     }
 
