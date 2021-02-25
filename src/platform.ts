@@ -38,6 +38,12 @@ export class Platform {
         return this
     }
 
+    import(module: any) {
+        TokenUtils.ensureClassType(module, 'tora_module')
+        Reflect.getMetadata(DI_TOKEN.module_provider_collector, module)?.(this.root_injector)
+        return this
+    }
+
     health_check(method: ApiMethod, path: ApiPath) {
         this._server.on(method, path, () => '')
         return this
