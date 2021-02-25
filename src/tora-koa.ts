@@ -48,7 +48,6 @@ export class ToraKoa {
         cors?: boolean
         body_parser?: boolean
     }) {
-        this._koa.proxy = true
         if (options.cors) {
             this._koa.use(this.cors)
         }

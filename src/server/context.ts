@@ -50,7 +50,7 @@ export class SessionContext<USER extends object = any> {
      * @return ip address of request, from header X-Real-Ip or X-Forward-For or remote-address.
      */
     get real_ip() {
-        return this.ctx.request.get('X-Real-Ip') ?? this.ctx.ip
+        return this.ctx.request.get('X-Real-Ip') || this.ctx.request.get('X-Forwarded-For')?.split(',')[0] || this.ctx.ip
     }
 
     /**
