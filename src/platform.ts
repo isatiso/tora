@@ -35,6 +35,7 @@ export class Platform {
 
     provide(def: (ProviderDef | Type<any>)) {
         def2Provider([def], this.root_injector)
+        return this
     }
 
     health_check(method: ApiMethod, path: ApiPath) {
