@@ -24,14 +24,14 @@ type PathValue<T extends Object, P extends Path<T>> =
         ? T[P]
         : never;
 
-export class ConfigData<T extends ToraConfig> {
+export class ConfigData<T extends Record<string, any>> {
 
     _cache: {
         [path: string]: any
     } = {}
 
     constructor(
-        private _data: T
+        private _data: T & ToraConfig
     ) {
         this._cache[''] = JSON.parse(JSON.stringify(this._data))
     }
@@ -39,14 +39,14 @@ export class ConfigData<T extends ToraConfig> {
     /**
      * Return specified <prop> of config object.
      */
-    get<K extends Path<T>>(): T
+    get<K extends Path<T & ToraConfig>>(): T & ToraConfig
     /**
      * Return specified <prop> of config object.
      *
      * @param path(string): name of property
      */
-    get<K extends Path<T>>(path: K): PathValue<T, K>
-    get<K extends Path<T>>(path?: K): PathValue<T, K> | T {
+    get<K extends Path<T & ToraConfig>>(path: K): PathValue<T & ToraConfig, K>
+    get<K extends Path<T & ToraConfig>>(path?: K): PathValue<T & ToraConfig, K> | T & ToraConfig {
         if (!path) {
             return this._cache['']
         }

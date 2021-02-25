@@ -57,11 +57,20 @@ export class Platform {
      *
      * @param file_path(string) - path of config file, default is 'config/default.json'.
      */
-    load_config(file_path?: string) {
-        const configFile = path.join(process.cwd(), file_path ?? 'config/default.json')
-        const config_data = JSON.parse(
-            fs.readFileSync(configFile).toString('utf-8'))
-        this._config_data = new ConfigData(config_data)
+    load_config(file_path?: string): this
+    load_config<T extends ToraConfig>(data: T): this
+    load_config<T extends ToraConfig>(data?: string | T) {
+        if (!data) {
+            data = 'config/default.json'
+        }
+        if (typeof data === 'string') {
+            const configFile = path.join(process.cwd(), data)
+            const config_data: T = JSON.parse(
+                fs.readFileSync(configFile).toString('utf-8'))
+            this._config_data = new ConfigData(config_data)
+        } else {
+            this._config_data = new ConfigData(data)
+        }
         this.root_injector.set_provider(ConfigData, new ValueProvider('ConfigData', this._config_data))
         return this
     }
