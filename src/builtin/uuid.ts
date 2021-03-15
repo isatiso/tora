@@ -79,15 +79,15 @@ export class UUID extends String {
     private static _lastNSecs = 0
     private static _util = new UUIDUtils()
 
-    private readonly _id: string
-
-    constructor() {
-        super()
-
-        this._id = this.uuid()
+    private _id?: string
+    private get id() {
+        if (!this._id) {
+            this._id = this.create()
+        }
+        return this._id
     }
 
-    uuid() {
+    create() {
         let i = 0
         const b = new Array(16)
         let node = _nodeId
@@ -139,10 +139,10 @@ export class UUID extends String {
     }
 
     valueOf() {
-        return this._id
+        return this.id
     }
 
     toString() {
-        return this._id
+        return this.id
     }
 }
