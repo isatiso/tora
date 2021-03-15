@@ -9,7 +9,7 @@ import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWra
 import { CLS_TYPE, DI_TOKEN, TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
 import { find_usage, ProviderTreeNode } from './tora-module'
-import { ApiMethod, ApiPath, HandlerDescriptor, LiteContext, Provider, ProviderDef, Type } from './types'
+import { ApiMethod, ApiPath, ApiReturnDataType, HandlerDescriptor, HandlerReturnType, LiteContext, Provider, ProviderDef, Type } from './types'
 
 /**
  * Platform of Tora, where is a place of actual execution.
@@ -45,8 +45,26 @@ export class Platform {
         return this
     }
 
+    /**
+     * @deprecated
+     *
+     * @param method
+     * @param path
+     */
     health_check(method: ApiMethod, path: ApiPath) {
         this._server.on(method, path, () => '')
+        return this
+    }
+
+    /**
+     *
+     * @param method
+     * @param path
+     */
+    handle(method: ApiMethod, path: ApiPath): Platform
+    handle<R extends ApiReturnDataType>(method: ApiMethod, path: ApiPath, func: () => HandlerReturnType<R>): Platform
+    handle(method: ApiMethod, path: ApiPath, func?: () => any) {
+        this._server.on(method, path, func ?? (() => ''))
         return this
     }
 

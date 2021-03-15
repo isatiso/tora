@@ -6,7 +6,7 @@ export type LiteContext = ExtendableContext & {
 }
 
 export type ApiReturnDataType =
-    null
+    | null
     | undefined
     | boolean
     | number
