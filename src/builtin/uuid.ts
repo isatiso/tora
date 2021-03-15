@@ -4,8 +4,8 @@ import { Component } from '../tora-component'
 class UUIDUtils {
 
     private byteToHex: string[] = []
-    private rnds8Pool = new Uint8Array(256) // # of random values to pre-allocate
-    private poolPtr = this.rnds8Pool.length
+    private random_8_pool = new Uint8Array(256) // # of random values to pre-allocate
+    private poolPtr = this.random_8_pool.length
 
     constructor() {
         for (let i = 0; i < 256; ++i) {
@@ -35,26 +35,26 @@ class UUIDUtils {
     }
 
     rng() {
-        if (this.poolPtr > this.rnds8Pool.length - 16) {
-            crypto.randomFillSync(this.rnds8Pool)
+        if (this.poolPtr > this.random_8_pool.length - 16) {
+            crypto.randomFillSync(this.random_8_pool)
             this.poolPtr = 0
         }
-        return this.rnds8Pool.slice(this.poolPtr, (this.poolPtr += 16))
+        return this.random_8_pool.slice(this.poolPtr, (this.poolPtr += 16))
     }
 }
 
-const seedBytes = new UUIDUtils().rng()
+const seed_bytes = new UUIDUtils().rng()
 
-let _nodeId = [
-    seedBytes[0] | 0x01,
-    seedBytes[1],
-    seedBytes[2],
-    seedBytes[3],
-    seedBytes[4],
-    seedBytes[5],
+let NODE_ID = [
+    seed_bytes[0] | 0x01,
+    seed_bytes[1],
+    seed_bytes[2],
+    seed_bytes[3],
+    seed_bytes[4],
+    seed_bytes[5],
 ]
 
-let _clockseq = ((seedBytes[6] << 8) | seedBytes[7]) & 0x3fff
+let CLOCK_SEQ = ((seed_bytes[6] << 8) | seed_bytes[7]) & 0x3fff
 
 /**
  * @author plankroot
@@ -90,46 +90,46 @@ export class UUID extends String {
     create() {
         let i = 0
         const b = new Array(16)
-        let node = _nodeId
-        let clockseq = _clockseq
-        let msecs = Date.now()
-        let nsecs = UUID._lastNSecs + 1
-        const dt = msecs - UUID._lastMSecs + (nsecs - UUID._lastNSecs) / 10000
+        let node = NODE_ID
+        let clock_sequence = CLOCK_SEQ
+        let milli_secs = Date.now()
+        let nano_secs = UUID._lastNSecs + 1
+        const dt = milli_secs - UUID._lastMSecs + (nano_secs - UUID._lastNSecs) / 10000
 
         if (dt < 0) {
-            clockseq = (clockseq + 1) & 0x3fff
+            clock_sequence = (clock_sequence + 1) & 0x3fff
         }
 
-        if ((dt < 0 || msecs > UUID._lastMSecs)) {
-            nsecs = 0
+        if ((dt < 0 || milli_secs > UUID._lastMSecs)) {
+            nano_secs = 0
         }
 
-        if (nsecs >= 10000) {
+        if (nano_secs >= 10000) {
             throw new Error('Can\'t create more than 10M uuids/sec')
         }
 
-        UUID._lastMSecs = msecs
-        UUID._lastNSecs = nsecs
-        _clockseq = clockseq
+        UUID._lastMSecs = milli_secs
+        UUID._lastNSecs = nano_secs
+        CLOCK_SEQ = clock_sequence
 
-        msecs += 12219292800000
+        milli_secs += 12219292800000
 
-        const tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000
+        const tl = ((milli_secs & 0xfffffff) * 10000 + nano_secs) % 0x100000000
         b[i++] = (tl >>> 24) & 0xff
         b[i++] = (tl >>> 16) & 0xff
         b[i++] = (tl >>> 8) & 0xff
         b[i++] = tl & 0xff
 
-        const tmh = ((msecs / 0x100000000) * 10000) & 0xfffffff
+        const tmh = ((milli_secs / 0x100000000) * 10000) & 0xfffffff
         b[i++] = (tmh >>> 8) & 0xff
         b[i++] = tmh & 0xff
 
         b[i++] = ((tmh >>> 24) & 0xf) | 0x10
         b[i++] = (tmh >>> 16) & 0xff
 
-        b[i++] = (clockseq >>> 8) | 0x80
+        b[i++] = (clock_sequence >>> 8) | 0x80
 
-        b[i++] = clockseq & 0xff
+        b[i++] = clock_sequence & 0xff
 
         for (let n = 0; n < 6; ++n) {
             b[i + n] = node[n]
