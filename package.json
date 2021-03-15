@@ -1,6 +1,6 @@
 {
     "name": "tora",
-    "version": "0.0.46",
+    "version": "0.0.47",
     "description": "dependency injector for node.js",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
