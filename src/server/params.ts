@@ -27,7 +27,7 @@ class Reference<T> {
     get<P extends keyof T>(prop: P): T[P] | undefined;
     get<P extends keyof T>(prop: P, def: T[P]): Exclude<T[P], undefined> ;
     get<P extends keyof T>(prop: P, def?: T[P]): T[P] | undefined {
-        return this.data[prop] ?? def
+        return this.data?.[prop] ?? def
     }
 }
 
