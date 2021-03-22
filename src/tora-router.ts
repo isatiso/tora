@@ -6,11 +6,11 @@ import { ApiMethod, HandlerDescriptor } from './types'
  * @interface RouterOptions
  */
 export interface RouterOptions {
-    children?: any[]
+    // children?: any[]
 }
 
 function join_path(front: string, rear: string) {
-    return (front + '/' + rear).replace(/^\//, '').replace(/\/$/, '')
+    return [front, rear].filter(i => i).join('/')
 }
 
 /**
@@ -18,10 +18,10 @@ function join_path(front: string, rear: string) {
  *
  * Collect and load router info.
  *
- * @param path(string) - Path of this node. Finally join all the path in one branch.
+ * @param path(string) - Absolute path of this node.
  * @param options(RouterOptions)
  */
-export function Router(path: string, options?: RouterOptions) {
+export function Router(path: `/${string}`, options?: RouterOptions) {
     return function(target: any) {
         TokenUtils.setClassType(target, 'tora_router')
         Reflect.defineMetadata(DI_TOKEN.router_handler_collector, makeRouterCollector(target, path, options), target)
@@ -29,8 +29,13 @@ export function Router(path: string, options?: RouterOptions) {
     }
 }
 
+export type NoTrailingAndLeadingSlash<T> =
+    T extends `/${string}` | `${string}/`
+        ? 'NoTrailingAndLeadingSlash' :
+        T
+
 function createRequestDecorator(method: ApiMethod) {
-    return (router_path?: string) => (target: any, key: string, desc: PropertyDescriptor) => {
+    return <T extends string>(router_path?: NoTrailingAndLeadingSlash<T>) => (target: any, key: string, desc: PropertyDescriptor) => {
         const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
         if (!handler.methods) {
             handler.methods = new Set()
@@ -138,17 +143,11 @@ function makeRouterCollector(target: any, path: string, options?: RouterOptions)
 
         const handlers: HandlerDescriptor[] = AnnotationTools.get_set_meta_data(DI_TOKEN.router_handlers, target.prototype, undefined, [])
 
-        handlers?.forEach((item: any) => Object.assign(item, {
-            path: join_path(path, item.path),
-            handler: item.handler.bind(instance)
-        }))
-
-        options?.children?.forEach(r => {
-            Reflect.getMetadata(DI_TOKEN.router_handler_collector, r)?.(injector)
-                ?.forEach((sr: HandlerDescriptor) => {
-                    sr.path = join_path(path, sr.path)
-                    handlers.push(sr)
-                })
+        handlers?.forEach((item: any) => {
+            Object.assign(item, {
+                path: join_path(path, item.path.replace(/(^\/|\/$)/g, '')),
+                handler: item.handler.bind(instance)
+            })
         })
 
         return handlers

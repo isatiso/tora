@@ -1,4 +1,4 @@
-import { ClassType } from './types'
+import { ClassType, Type } from './types'
 
 export enum DI_TOKEN {
     component = 'lazor:component',
@@ -8,7 +8,7 @@ export enum DI_TOKEN {
 
     instance = 'lazor:instance',
     module_provider_collector = 'lazor:module-provider-collector',
-    module_router_gate = 'lazor:module-router-gate',
+    module_routers = 'lazor:module-routers',
     param_injection = 'lazor:param-injection',
     request_handler = 'lazor:request-handler',
     router_handler_collector = 'lazor:router-handler-collector',
@@ -41,8 +41,8 @@ export namespace TokenUtils {
         }
     }
 
-    export function getRouterGate(target: any) {
-        return Reflect.getMetadata(DI_TOKEN.module_router_gate, target)
+    export function getRouters(target: any): Type<any>[] {
+        return Reflect.getMetadata(DI_TOKEN.module_routers, target)
     }
 
     function type2token(type: ClassType) {

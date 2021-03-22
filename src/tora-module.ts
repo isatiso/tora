@@ -10,7 +10,7 @@ import { ClassProviderDef, FactoryProviderDef, Provider, ProviderDef, Type, Valu
 export interface ToraModuleDef {
     imports?: Array<Type<any>>
     providers?: (ProviderDef | Type<any>)[]
-    router_gate?: Type<any>
+    routers?: Type<any>[]
 }
 
 /**
@@ -33,8 +33,8 @@ export function ToraModule(options?: ToraModuleDef) {
     return function(target: any) {
         TokenUtils.setClassType(target, 'tora_module')
         Reflect.defineMetadata(DI_TOKEN.module_provider_collector, makeProviderCollector(target, options), target)
-        if (options?.router_gate) {
-            Reflect.defineMetadata(DI_TOKEN.module_router_gate, options.router_gate, target)
+        if (options?.routers) {
+            Reflect.defineMetadata(DI_TOKEN.module_routers, options.routers, target)
         }
     }
 }

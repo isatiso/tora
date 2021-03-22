@@ -119,13 +119,15 @@ export class Platform {
         if (TokenUtils.getClassType(module) !== CLS_TYPE.tora_module) {
             throw new Error(`${module.name ?? module.prototype?.toString()} is not a "tora_module".`)
         }
-        const router_gate = TokenUtils.getRouterGate(module)
-        if (!router_gate) {
-            throw new Error(`"router_gate" should be set with a "tora_router".`)
+        const routers = TokenUtils.getRouters(module)
+        if (!routers) {
+            throw new Error(`"routers" should be set with a list of "tora_router".`)
         }
-        if (TokenUtils.getClassType(router_gate) !== CLS_TYPE.tora_router) {
-            throw new Error(`${router_gate.name ?? router_gate.prototype?.toString()} is not a "tora_router". Only a "tora_module" with "tora_router" can be registered.`)
-        }
+        routers.forEach(router => {
+            if (TokenUtils.getClassType(router) !== CLS_TYPE.tora_router) {
+                throw new Error(`${router.name ?? router.prototype?.toString()} is not a "tora_router". Only a "tora_module" with a list of "tora_router" can be registered.`)
+            }
+        })
         this.modules[name] = module
         return this
     }
@@ -213,13 +215,17 @@ export class Platform {
         sub_injector.get(LifeCycle)?.set_used()
         sub_injector.get(CacheProxy)?.set_used()
 
-        const router_module = Reflect.getMetadata(DI_TOKEN.module_router_gate, root_module)
-        Reflect.getMetadata(DI_TOKEN.router_handler_collector, router_module)?.(sub_injector)?.forEach((desc: HandlerDescriptor) => {
-            if (!desc.disabled) {
-                const provider_list = this.get_providers(desc, sub_injector, [ApiParams, SessionContext, SessionData, PURE_PARAMS])
-                provider_list.forEach(p => p.create?.())
-                desc.methods.forEach(m => this._server.on(m, '/' + desc.path, PlatformStatic.makeHandler(sub_injector, desc, provider_list)))
-            }
+        // const routers = Reflect.getMetadata(DI_TOKEN.module_routers, root_module)
+        const routers = TokenUtils.getRouters(root_module)
+        routers.forEach(router_module => {
+            Reflect.getMetadata(DI_TOKEN.router_handler_collector, router_module)?.(sub_injector)?.forEach((desc: HandlerDescriptor) => {
+                if (!desc.disabled) {
+                    const provider_list = this.get_providers(desc, sub_injector, [ApiParams, SessionContext, SessionData, PURE_PARAMS])
+                    provider_list.forEach(p => p.create?.())
+                    const real_path = desc.path?.startsWith('/') ? desc.path : '/' + desc.path
+                    desc.methods.forEach(m => this._server.on(m, real_path, PlatformStatic.makeHandler(sub_injector, desc, provider_list)))
+                }
+            })
         })
 
         provider_tree.children.filter(def => !find_usage(def))
