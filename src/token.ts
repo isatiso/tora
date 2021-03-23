@@ -13,6 +13,8 @@ export enum DI_TOKEN {
     request_handler = 'lazor:request-handler',
     router_handler_collector = 'lazor:router-handler-collector',
     router_handlers = 'lazor:router-handlers',
+    router_absolute_path = 'lazor:router-absolute-path',
+    router_method_path = 'lazor:router-method-path',
     router_options = 'lazor:router-options',
     router_meta = 'lazor:router-meta',
 }

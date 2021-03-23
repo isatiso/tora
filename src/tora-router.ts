@@ -1,6 +1,6 @@
 import { AnnotationTools, ClassProvider, Injector } from './di'
 import { DI_TOKEN, TokenUtils } from './token'
-import { ApiMethod, HandlerDescriptor } from './types'
+import { ApiMethod, HandlerDescriptor, Type } from './types'
 
 /**
  * @interface RouterOptions
@@ -22,10 +22,38 @@ function join_path(front: string, rear: string) {
  * @param options(RouterOptions)
  */
 export function Router(path: `/${string}`, options?: RouterOptions) {
-    return function(target: any) {
-        TokenUtils.setClassType(target, 'tora_router')
-        Reflect.defineMetadata(DI_TOKEN.router_handler_collector, makeRouterCollector(target, path, options), target)
-        Reflect.defineMetadata(DI_TOKEN.router_options, options, target)
+    return function(constructor: any) {
+        TokenUtils.setClassType(constructor, 'tora_router')
+        Reflect.defineMetadata(DI_TOKEN.router_absolute_path, path, constructor)
+        Reflect.defineMetadata(DI_TOKEN.router_handler_collector, makeRouterCollector(constructor, options), constructor)
+        Reflect.defineMetadata(DI_TOKEN.router_options, options, constructor)
+        constructor.mount = (new_path: `/${string}`) => {
+            Reflect.defineMetadata(DI_TOKEN.router_absolute_path, new_path, constructor)
+            return constructor
+        }
+        constructor.replace = (method: string, new_path: string) => {
+            const method_path_map = AnnotationTools.get_set_meta_data(DI_TOKEN.router_method_path, constructor, undefined, {})
+            method_path_map[method] = new_path
+            return constructor
+        }
+    }
+}
+
+interface _Gunslinger<T> {
+    replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & _Gunslinger<Omit<T, M>>
+}
+
+export function Gunslinger<T>() {
+
+    return class Gunslinger {
+
+        static mount(path: `/${string}`): Type<T> & _Gunslinger<T> {
+            return null as any
+        }
+
+        static replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & _Gunslinger<Omit<T, M>> {
+            return null as any
+        }
     }
 }
 
@@ -44,6 +72,7 @@ function createRequestDecorator(method: ApiMethod) {
         handler.path = handler.path ?? router_path ?? key
         handler.wrap_result = true
         handler.pos = `${target.name}.${key}`
+        handler.property_key = key
         if (!handler.handler) {
             handler.handler = desc.value
         }
@@ -136,16 +165,20 @@ export function Disabled() {
     }
 }
 
-function makeRouterCollector(target: any, path: string, options?: RouterOptions) {
+function makeRouterCollector(target: any, options?: RouterOptions) {
     return function(injector: Injector) {
         const instance = new ClassProvider(target, injector).create()
         Reflect.defineMetadata(DI_TOKEN.instance, instance, target)
 
         const handlers: HandlerDescriptor[] = AnnotationTools.get_set_meta_data(DI_TOKEN.router_handlers, target.prototype, undefined, [])
+        const path = Reflect.getMetadata(DI_TOKEN.router_absolute_path, target)
+
+        const method_path_map = AnnotationTools.get_set_meta_data(DI_TOKEN.router_method_path, target, undefined, {})
 
         handlers?.forEach((item: any) => {
+            const item_path = method_path_map[item.property_key] ?? item.path
             Object.assign(item, {
-                path: join_path(path, item.path.replace(/(^\/|\/$)/g, '')),
+                path: join_path(path, item_path.replace(/(^\/|\/$)/g, '')),
                 handler: item.handler.bind(instance)
             })
         })

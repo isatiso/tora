@@ -45,6 +45,7 @@ export interface HandlerDescriptor {
     cache_expires?: number
     disabled?: boolean
     pos: string
+    property_key: string
 }
 
 export type ProviderDef = ValueProviderDef | ClassProviderDef | FactoryProviderDef

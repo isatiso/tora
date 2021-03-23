@@ -1389,16 +1389,6 @@ toidentifier@1.0.0:
   resolved "https://registry.npm.taobao.org/toidentifier/download/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
   integrity sha1-fhvjRw8ed5SLxD2Uo8j013UrpVM=
 
-tora@^0.0.49:
-  version "0.0.49"
-  resolved "http://nexus.formovie.net/repository/aliyun-group/tora/-/tora-0.0.49.tgz#5cde91fefc7c6758c4d6f352bef4b80a83d839c5"
-  integrity sha512-E0igdMhZpaZ7UcePVKcicVbdeZxcCPq5z1j7q/bM6L5/cZRwDRmDB/wPd53FE4YO2P331f865GgSom26KkdBWA==
-  dependencies:
-    co-body "^6.1.0"
-    koa "^2.13.1"
-    reflect-metadata "^0.1.13"
-    tslib "^2.1.0"
-
 tree-kill@^1.2.2:
   version "1.2.2"
   resolved "https://registry.npm.taobao.org/tree-kill/download/tree-kill-1.2.2.tgz#4ca09a9092c88b73a7cdc5e8a01b507b0790a0cc"

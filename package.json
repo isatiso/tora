@@ -34,7 +34,6 @@
         "co-body": "^6.1.0",
         "koa": "^2.13.1",
         "reflect-metadata": "^0.1.13",
-        "tora": "^0.0.49",
         "tslib": "^2.1.0"
     },
     "devDependencies": {
