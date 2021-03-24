@@ -39,19 +39,19 @@ export function Router(path: `/${string}`, options?: RouterOptions) {
     }
 }
 
-interface _Gunslinger<T> {
-    replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & _Gunslinger<Omit<T, M>>
+export interface IGunslinger<T> {
+    replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & IGunslinger<Omit<T, M>>
 }
 
 export function Gunslinger<T>() {
 
     return class Gunslinger {
 
-        static mount(path: `/${string}`): Type<T> & _Gunslinger<T> {
+        static mount(path: `/${string}`): Type<T> & IGunslinger<T> {
             return null as any
         }
 
-        static replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & _Gunslinger<Omit<T, M>> {
+        static replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & IGunslinger<Omit<T, M>> {
             return null as any
         }
     }
