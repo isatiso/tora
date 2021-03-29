@@ -1,12 +1,13 @@
 import { AnnotationTools, ClassProvider, Injector } from './di'
 import { DI_TOKEN, TokenUtils } from './token'
-import { ApiMethod, HandlerDescriptor, Type } from './types'
+import { ApiMethod, HandlerDescriptor, ProviderDef, Type } from './types'
 
 /**
  * @interface RouterOptions
  */
 export interface RouterOptions {
-    // children?: any[]
+    imports?: Array<Type<any>>
+    providers?: (ProviderDef | Type<any>)[]
 }
 
 function join_path(front: string, rear: string) {
@@ -26,6 +27,8 @@ export function Router(path: `/${string}`, options?: RouterOptions) {
         TokenUtils.setClassType(constructor, 'tora_router')
         Reflect.defineMetadata(DI_TOKEN.router_absolute_path, path, constructor)
         Reflect.defineMetadata(DI_TOKEN.router_handler_collector, makeRouterCollector(constructor, options), constructor)
+        TokenUtils.setRouterImports(constructor, options?.imports)
+        TokenUtils.setRouterProviders(constructor, options?.providers)
         Reflect.defineMetadata(DI_TOKEN.router_options, options, constructor)
         constructor.mount = (new_path: `/${string}`) => {
             Reflect.defineMetadata(DI_TOKEN.router_absolute_path, new_path, constructor)
