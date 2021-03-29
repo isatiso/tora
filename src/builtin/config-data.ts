@@ -4,6 +4,12 @@ export interface ToraConfig {
     }
 }
 
+declare global {
+    interface ToraConfigSchema {
+        tora?: ToraConfig['tora']
+    }
+}
+
 type Path<T extends Object, Key extends keyof T = keyof T> =
     Key extends string
         ? Exclude<T[Key], undefined> extends Array<any>
