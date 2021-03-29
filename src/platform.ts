@@ -46,6 +46,7 @@ export class Platform {
         this.root_injector.set_provider(Authenticator, new ValueProvider('Authenticator', null))
         this.root_injector.set_provider(CacheProxy, new ValueProvider('CacheProxy', null))
         this.root_injector.set_provider(LifeCycle, new ValueProvider('LifeCycle', null))
+        this.root_injector.set_provider(ResultWrapper, new ValueProvider('ResultWrapper', null))
         Reflect.getMetadata(DI_TOKEN.module_provider_collector, BuiltInModule)?.(this.root_injector)
     }
 
