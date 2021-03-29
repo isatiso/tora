@@ -11,6 +11,22 @@ import { ToraKoa } from './tora-koa'
 import { find_usage, ProviderTreeNode } from './tora-module'
 import { ApiMethod, ApiPath, ApiReturnDataType, HandlerDescriptor, HandlerReturnType, LiteContext, Provider, ProviderDef, Type } from './types'
 
+function _try_read_json(file: string) {
+    try {
+        const res = JSON.parse(fs.readFileSync(path.resolve(file)).toString('utf-8'))
+        if (!res) {
+            console.error('Specified configuration file is empty.')
+            process.exit(1)
+        }
+        return res
+    } catch (e) {
+        console.error(`Parse configuration file failed.`)
+        console.error(`    File: ${path.resolve(file)}`)
+        console.error(`    Error: ${e.message}`)
+        process.exit(1)
+    }
+}
+
 /**
  * Platform of Tora, where is a place of actual execution.
  */
@@ -79,13 +95,17 @@ export class Platform {
     load_config<T extends ToraConfig>(data: T): this
     load_config<T extends ToraConfig>(data?: string | T) {
         if (!data) {
-            data = 'config/default.json'
-        }
-        if (typeof data === 'string') {
-            const configFile = path.join(process.cwd(), data)
-            const config_data: T = JSON.parse(
-                fs.readFileSync(configFile).toString('utf-8'))
-            this._config_data = new ConfigData(config_data)
+            if (!fs.existsSync(path.resolve('config/default.json'))) {
+                console.error('No specified configuration file, and "config/default.json" not exist.')
+                process.exit(1)
+            }
+            this._config_data = new ConfigData(_try_read_json('config/default.json'))
+        } else if (typeof data === 'string') {
+            if (!fs.existsSync(path.resolve(path.resolve(data)))) {
+                console.error(`Specified configuration file "${data}" not exists.`)
+                process.exit(1)
+            }
+            this._config_data = new ConfigData(_try_read_json(data))
         } else {
             this._config_data = new ConfigData(data)
         }

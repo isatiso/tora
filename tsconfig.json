@@ -1,21 +1,22 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "strict": true,
-        "baseUrl": "./",
-        "outDir": "./out/ts",
-        "sourceMap": true,
-        "declaration": false,
-        "module": "commonjs",
-        "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
+        "baseUrl": "./",
+        "declaration": false,
         "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
         "experimentalDecorators": true,
         "importHelpers": true,
-        "target": "es2019",
         "jsx": "react",
-        "jsxFactory": "tsx"
+        "jsxFactory": "tsx",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "outDir": "./out/ts",
+        "resolveJsonModule": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "es2019"
     },
     "include": [
         "src/**/*.ts",

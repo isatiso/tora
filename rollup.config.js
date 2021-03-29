@@ -1,5 +1,6 @@
 const typescript = require('rollup-plugin-typescript2')
 const dts = require("rollup-plugin-dts").default
+const json = require("@rollup/plugin-json")
 
 const fs = require('fs')
 
@@ -33,6 +34,7 @@ function createRollupConfig(externalModules) {
 
     const external = [
         ...Object.keys(pkg.dependencies || {}),
+        ...Object.keys(pkg.peerDependencies || {}),
         ...external_modules,
     ]
 
@@ -79,6 +81,12 @@ function createRollupConfig(externalModules) {
     ]
 }
 
-const config = createRollupConfig(['stream', 'crypto', 'fs', 'path'])
+const config = createRollupConfig([
+    'stream',
+    'crypto',
+    'fs',
+    'path',
+    'process',
+])
 
 export default config
