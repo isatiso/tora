@@ -238,19 +238,7 @@ export class Platform {
 
         const routers = TokenUtils.getRouters(root_module)
         routers.forEach(router_module => {
-            const router_provider_tree: ProviderTreeNode = Reflect.getMetadata(DI_TOKEN.module_provider_collector, router_module)?.(sub_injector)
-            Reflect.getMetadata(DI_TOKEN.router_handler_collector, router_module)?.(sub_injector)?.forEach((desc: HandlerDescriptor) => {
-                if (!desc.disabled) {
-                    const provider_list = this.get_providers(desc, sub_injector, [ApiParams, SessionContext, SessionData, PURE_PARAMS])
-                    provider_list.forEach(p => p.create?.())
-                    const real_path = desc.path?.startsWith('/') ? desc.path : '/' + desc.path
-                    desc.methods.forEach(m => this._server.on(m, real_path, PlatformStatic.makeHandler(sub_injector, desc, provider_list)))
-                }
-            })
-            router_provider_tree.children.filter(def => !find_usage(def))
-                .forEach(def => {
-                    console.log(`Warning: ${router_module.name} -> ${def?.name} not used.`)
-                })
+            this._mount_router(router_module, sub_injector)
         })
 
         provider_tree.children.filter(def => !find_usage(def))
@@ -259,6 +247,26 @@ export class Platform {
             })
 
         return this
+    }
+
+    mount(router_module: Type<any>) {
+        this._mount_router(router_module, this.root_injector)
+    }
+
+    private _mount_router(router_module: Type<any>, injector: Injector) {
+        const router_provider_tree: ProviderTreeNode = Reflect.getMetadata(DI_TOKEN.module_provider_collector, router_module)?.(injector)
+        Reflect.getMetadata(DI_TOKEN.router_handler_collector, router_module)?.(injector)?.forEach((desc: HandlerDescriptor) => {
+            if (!desc.disabled) {
+                const provider_list = this.get_providers(desc, injector, [ApiParams, SessionContext, SessionData, PURE_PARAMS])
+                provider_list.forEach(p => p.create?.())
+                const real_path = desc.path?.startsWith('/') ? desc.path : '/' + desc.path
+                desc.methods.forEach(m => this._server.on(m, real_path, PlatformStatic.makeHandler(injector, desc, provider_list)))
+            }
+        })
+        router_provider_tree.children.filter(def => !find_usage(def))
+            .forEach(def => {
+                console.log(`Warning: ${router_module.name} -> ${def?.name} not used.`)
+            })
     }
 
     private get_providers(desc: HandlerDescriptor, injector: Injector, except_list?: any[]): Provider<any>[] {
