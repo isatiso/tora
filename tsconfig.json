@@ -12,7 +12,7 @@
         "jsxFactory": "tsx",
         "module": "commonjs",
         "moduleResolution": "node",
-        "outDir": "./out/ts",
+        "outDir": "./out",
         "resolveJsonModule": true,
         "sourceMap": true,
         "strict": true,
