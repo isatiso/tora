@@ -55,7 +55,6 @@ export function find_usage(tree_node: ProviderTreeNode, indent: number = 0): boo
 export function makeProviderCollector(target: any, options?: ToraModuleDef) {
     return function(injector: Injector) {
         const children = options?.imports?.map(md => Reflect.getMetadata(DI_TOKEN.module_provider_collector, md)?.(injector)) ?? []
-        // children.push(...options?.routers?.map(md => Reflect.getMetadata(DI_TOKEN.module_provider_collector, md)?.(injector)) ?? [])
 
         const providers: Provider<any>[] = [
             ...def2Provider([...options?.providers ?? []] as (ProviderDef | Type<any>)[], injector)
