@@ -1,5 +1,6 @@
 import { AnnotationTools, ClassProvider, Injector } from './di'
 import { DI_TOKEN, TokenUtils } from './token'
+import { makeProviderCollector } from './tora-module'
 import { ApiMethod, HandlerDescriptor, ProviderDef, Type } from './types'
 
 /**
@@ -27,9 +28,10 @@ export function Router(path: `/${string}`, options?: RouterOptions) {
         TokenUtils.setClassType(constructor, 'tora_router')
         Reflect.defineMetadata(DI_TOKEN.router_absolute_path, path, constructor)
         Reflect.defineMetadata(DI_TOKEN.router_handler_collector, makeRouterCollector(constructor, options), constructor)
-        TokenUtils.setRouterImports(constructor, options?.imports)
-        TokenUtils.setRouterProviders(constructor, options?.providers)
         Reflect.defineMetadata(DI_TOKEN.router_options, options, constructor)
+
+        Reflect.defineMetadata(DI_TOKEN.module_provider_collector, makeProviderCollector(constructor, options), constructor)
+
         constructor.mount = (new_path: `/${string}`) => {
             Reflect.defineMetadata(DI_TOKEN.router_absolute_path, new_path, constructor)
             return constructor

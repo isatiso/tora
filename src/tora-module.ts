@@ -52,9 +52,10 @@ export function find_usage(tree_node: ProviderTreeNode, indent: number = 0): boo
         || tree_node?.children?.find(t => find_usage(t, indent + 1))
 }
 
-function makeProviderCollector(target: any, options?: ToraModuleDef) {
+export function makeProviderCollector(target: any, options?: ToraModuleDef) {
     return function(injector: Injector) {
         const children = options?.imports?.map(md => Reflect.getMetadata(DI_TOKEN.module_provider_collector, md)?.(injector)) ?? []
+        // children.push(...options?.routers?.map(md => Reflect.getMetadata(DI_TOKEN.module_provider_collector, md)?.(injector)) ?? [])
 
         const providers: Provider<any>[] = [
             ...def2Provider([...options?.providers ?? []] as (ProviderDef | Type<any>)[], injector)
@@ -63,17 +64,6 @@ function makeProviderCollector(target: any, options?: ToraModuleDef) {
                     return item[1]
                 })
             ?? []]
-
-        options?.routers?.forEach(router => {
-            children.push(...TokenUtils.getRouterImports(router)?.map(md => Reflect.getMetadata(DI_TOKEN.module_provider_collector, md)?.(injector)) ?? [])
-            providers.push(
-                ...def2Provider([...TokenUtils.getRouterProviders(router) ?? []] as (ProviderDef | Type<any>)[], injector)
-                    ?.map(item => {
-                        injector.set_provider(item[0], item[1])
-                        return item[1]
-                    })
-                ?? [])
-        })
 
         return { name: target.name, providers, children }
     }

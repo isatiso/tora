@@ -236,9 +236,9 @@ export class Platform {
         sub_injector.get(LifeCycle)?.set_used()
         sub_injector.get(CacheProxy)?.set_used()
 
-        // const routers = Reflect.getMetadata(DI_TOKEN.module_routers, root_module)
         const routers = TokenUtils.getRouters(root_module)
         routers.forEach(router_module => {
+            const router_provider_tree: ProviderTreeNode = Reflect.getMetadata(DI_TOKEN.module_provider_collector, router_module)?.(sub_injector)
             Reflect.getMetadata(DI_TOKEN.router_handler_collector, router_module)?.(sub_injector)?.forEach((desc: HandlerDescriptor) => {
                 if (!desc.disabled) {
                     const provider_list = this.get_providers(desc, sub_injector, [ApiParams, SessionContext, SessionData, PURE_PARAMS])
@@ -247,6 +247,10 @@ export class Platform {
                     desc.methods.forEach(m => this._server.on(m, real_path, PlatformStatic.makeHandler(sub_injector, desc, provider_list)))
                 }
             })
+            router_provider_tree.children.filter(def => !find_usage(def))
+                .forEach(def => {
+                    console.log(`Warning: ${router_module.name} -> ${def?.name} not used.`)
+                })
         })
 
         provider_tree.children.filter(def => !find_usage(def))
