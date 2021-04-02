@@ -57,12 +57,8 @@ export function makeProviderCollector(target: any, options?: ToraModuleDef) {
         const children = options?.imports?.map(md => Reflect.getMetadata(DI_TOKEN.module_provider_collector, md)?.(injector)) ?? []
 
         const providers: Provider<any>[] = [
-            ...def2Provider([...options?.providers ?? []] as (ProviderDef | Type<any>)[], injector)
-                ?.map(item => {
-                    injector.set_provider(item[0], item[1])
-                    return item[1]
-                })
-            ?? []]
+            ...def2Provider([...options?.providers ?? []] as (ProviderDef | Type<any>)[], injector) ?? []
+        ]
 
         return { name: target.name, providers, children }
     }

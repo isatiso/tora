@@ -1,5 +1,4 @@
 import { DI_TOKEN } from '../token'
-import { ToraModuleDef } from '../tora-module'
 import { ClassProviderDef, FactoryProviderDef, Provider, ProviderDef, Type, ValueProviderDef } from '../types'
 import { Injector } from './injector'
 
@@ -8,12 +7,24 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
         if ((def as any).useValue) {
 
             const d = def as ValueProviderDef
-            return [d.provide, new ValueProvider('valueProvider', d.useValue)]
+            if (injector.has(d.provide)) {
+                return injector.get(d.provide)
+            } else {
+                const provider = new ValueProvider('valueProvider', d.useValue)
+                injector.set_provider(d.provide, provider)
+                return provider
+            }
 
         } else if ((def as any).useFactory) {
 
             const d = def as FactoryProviderDef
-            return [d.provide, new FactoryProvider('FactoryProvider', d.useFactory as any, d.deps),]
+            if (injector.has(d.provide)) {
+                return injector.get(d.provide)
+            } else {
+                const provider = new FactoryProvider('FactoryProvider', d.useFactory as any, d.deps)
+                injector.set_provider(d.provide, provider)
+                return provider
+            }
 
         } else if ((def as any).useClass) {
 
@@ -22,7 +33,13 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
             if (!isComponent) {
                 throw new Error(`${d.useClass.name} is not Component.`)
             }
-            return [d.provide, new ClassProvider<any>(d.useClass, injector, d.multi)]
+            if (injector.has(d.provide)) {
+                return injector.get(d.provide)
+            } else {
+                const provider = new ClassProvider<any>(d.useClass, injector, d.multi)
+                injector.set_provider(d.provide, provider)
+                return provider
+            }
 
         } else {
 
@@ -30,7 +47,13 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
             if (!isComponent) {
                 throw new Error(`${(def as any).name} is not Component.`)
             }
-            return [def, new ClassProvider<any>(def as any, injector)]
+            if (injector.has(def)) {
+                return injector.get(def)
+            } else {
+                const provider = new ClassProvider<any>(def as any, injector)
+                injector.set_provider(def, provider)
+                return provider
+            }
         }
     })
 }

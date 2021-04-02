@@ -51,8 +51,7 @@ export class Platform {
     }
 
     provide(def: (ProviderDef | Type<any>)) {
-        const [token, provider] = def2Provider([def], this.root_injector)[0]
-        this.root_injector.set_provider(token, provider)
+        def2Provider([def], this.root_injector)
         return this
     }
 

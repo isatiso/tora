@@ -1,9 +1,16 @@
 import { Provider } from '../types'
 
 class _NullInjector {
+
+    has(token: any) {
+        return false
+    }
+
     get(token: any, info?: string) {
         throw new Error(`Can't find ${token?.name ?? token} in NullInjector [${info}]`)
     }
+
+    readonly children: InjectorType[] = []
 }
 
 export const NullInjector = new _NullInjector()
@@ -41,6 +48,7 @@ export class InjectorProvider implements Provider<Injector> {
 export class Injector {
 
     provider?: InjectorProvider
+    readonly children: InjectorType[] = []
 
     constructor(
         private parent: InjectorType,
@@ -57,7 +65,10 @@ export class Injector {
      */
     static create(parent?: InjectorType | null, providers?: Map<any, any>): Injector {
         providers = providers || new Map()
-        return new Injector(parent ?? NullInjector, providers)
+        parent = parent ?? NullInjector
+        const new_instance = new Injector(parent, providers)
+        parent.children.push(new_instance)
+        return new_instance
     }
 
     /**
@@ -85,5 +96,12 @@ export class Injector {
             return this.provider
         }
         return this.providers.get(token) ?? this.parent.get(token, info)
+    }
+
+    has(token: any): boolean {
+        if (token === Injector) {
+            return true
+        }
+        return this.providers.has(token) || this.parent.has(token)
     }
 }
