@@ -7,7 +7,7 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
         if ((def as any).useValue) {
 
             const d = def as ValueProviderDef
-            if (injector.has(d.provide)) {
+            if (injector.local_has(d.provide)) {
                 return injector.get(d.provide)
             } else {
                 const provider = new ValueProvider('valueProvider', d.useValue)
@@ -18,7 +18,7 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
         } else if ((def as any).useFactory) {
 
             const d = def as FactoryProviderDef
-            if (injector.has(d.provide)) {
+            if (injector.local_has(d.provide)) {
                 return injector.get(d.provide)
             } else {
                 const provider = new FactoryProvider('FactoryProvider', d.useFactory as any, d.deps)
@@ -33,7 +33,7 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
             if (!isComponent) {
                 throw new Error(`${d.useClass.name} is not Component.`)
             }
-            if (injector.has(d.provide)) {
+            if (injector.local_has(d.provide)) {
                 return injector.get(d.provide)
             } else {
                 const provider = new ClassProvider<any>(d.useClass, injector, d.multi)
@@ -47,7 +47,7 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
             if (!isComponent) {
                 throw new Error(`${(def as any).name} is not Component.`)
             }
-            if (injector.has(def)) {
+            if (injector.local_has(def)) {
                 return injector.get(def)
             } else {
                 const provider = new ClassProvider<any>(def as any, injector)

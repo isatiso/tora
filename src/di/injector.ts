@@ -98,6 +98,13 @@ export class Injector {
         return this.providers.get(token) ?? this.parent.get(token, info)
     }
 
+    local_has(token: any): boolean {
+        if (token === Injector) {
+            return true
+        }
+        return this.providers.has(token)
+    }
+
     has(token: any): boolean {
         if (token === Injector) {
             return true
