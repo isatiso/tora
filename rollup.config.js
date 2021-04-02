@@ -1,7 +1,7 @@
+const builtinModules = require("builtin-modules")
 const typescript = require('rollup-plugin-typescript2')
 const dts = require("rollup-plugin-dts").default
 const json = require("@rollup/plugin-json")
-
 const fs = require('fs')
 
 const typesDir = './types'
@@ -33,16 +33,17 @@ function createRollupConfig(externalModules) {
     const pkg = readJsonFileSync('./package.json')
 
     const external = [
+        ...builtinModules,
         ...Object.keys(pkg.dependencies || {}),
         ...Object.keys(pkg.peerDependencies || {}),
         ...external_modules,
     ]
 
     const dtsInTypes = fs.existsSync(typesDir) ?
-            fs.readdirSync(typesDir).filter(name => name.endsWith(".d.ts"))
-                    .map(name => `// merge from ${typesDir}/${name}\n${fs.readFileSync(`${typesDir}/${name}`, 'utf8').trim()}`)
-                    .join('\n\n') + '\n\n// generate by rollup-plugin-dts\n'
-            : ''
+        fs.readdirSync(typesDir).filter(name => name.endsWith(".d.ts"))
+            .map(name => `// merge from ${typesDir}/${name}\n${fs.readFileSync(`${typesDir}/${name}`, 'utf8').trim()}`)
+            .join('\n\n') + '\n\n// generate by rollup-plugin-dts\n'
+        : ''
 
     return [
         {
@@ -51,7 +52,6 @@ function createRollupConfig(externalModules) {
             plugins: [
                 typescript({
                     tsconfigOverride: tsconfigOverride,
-                    cacheRoot: "./out/.rts2_cache"
                 })
             ],
             output: [
@@ -81,12 +81,6 @@ function createRollupConfig(externalModules) {
     ]
 }
 
-const config = createRollupConfig([
-    'stream',
-    'crypto',
-    'fs',
-    'path',
-    'process',
-])
+const config = createRollupConfig([])
 
 export default config
