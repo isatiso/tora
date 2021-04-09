@@ -30,7 +30,6 @@ export function Task(crontab: string) {
         const task: TaskDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.task_handler, target, key, {})
         task.crontab = CronExpression.parse(crontab)
         task.property_key = key
-        task.pos = `${target.name}.${key}`
         if (!task.handler) {
             task.handler = desc.value
         }
@@ -54,7 +53,11 @@ function makeTaskCollector(target: any, options?: TriggerOptions) {
         tasks?.forEach((t: any) => {
             const disabled = Reflect.getMetadata(DI_TOKEN.disabled, target.prototype, t.property_key)
             const lock: LockDescriptor = Reflect.getMetadata(DI_TOKEN.lock, target.prototype, t.property_key)
-            Object.assign(t, { disabled, lock, handler: t.handler.bind(instance) })
+            Object.assign(t, {
+                disabled, lock,
+                pos: `${target.name}.${t.property_key}`,
+                handler: t.handler.bind(instance)
+            })
         })
         return tasks
     }

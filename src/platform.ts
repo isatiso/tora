@@ -355,8 +355,11 @@ namespace PlatformStatic {
         return async function(execution: Dayjs) {
             const hooks: TaskLifeCycle | undefined = injector.get(TaskLifeCycle)?.create()
             const task_lock: TaskLock | undefined = injector.get(TaskLock)?.create()
-            await hooks?.on_init()
+            if (desc.lock && !task_lock) {
+                throw new Error(`Decorator "@Lock" is settled on ${desc.pos}, but there's no "TaskLock" implements found.`)
+            }
 
+            await hooks?.on_init()
             const param_list = provider_list.map((provider: any) => {
                 if (provider === undefined) {
                     return undefined

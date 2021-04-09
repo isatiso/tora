@@ -75,7 +75,6 @@ function createRequestDecorator(method: ApiMethod) {
         handler.methods.add(method)
         handler.path = handler.path ?? router_path ?? key
         handler.wrap_result = true
-        handler.pos = `${target.name}.${key}`
         handler.property_key = key
         if (!handler.handler) {
             handler.handler = desc.value
@@ -171,6 +170,7 @@ function makeRouterCollector(target: any, options?: RouterOptions) {
             const item_path = method_path_map[item.property_key] ?? item.path
             Object.assign(item, {
                 disabled,
+                pos: `${target.name}.${item.property_key}`,
                 path: join_path(path, item_path.replace(/(^\/|\/$)/g, '')),
                 handler: item.handler.bind(instance)
             })
