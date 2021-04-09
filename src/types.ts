@@ -1,5 +1,7 @@
 import { ExtendableContext } from 'koa'
 import { Stream } from 'stream'
+import { LockDescriptor } from './di/annotation'
+import { CronExpression } from './trigger/cron-expression'
 
 export type LiteContext = ExtendableContext & {
     process_start?: number
@@ -31,7 +33,7 @@ export type KeyOfFilterType<T, U> = {
 }[keyof T]
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
-export type ClassType = 'tora_router' | 'tora_module'
+export type ClassType = 'tora_router' | 'tora_module' | 'tora_trigger'
 
 export interface HandlerDescriptor {
     path: string
@@ -46,6 +48,17 @@ export interface HandlerDescriptor {
     disabled?: boolean
     pos: string
     property_key: string
+}
+
+export interface TaskDescriptor {
+    crontab: CronExpression
+    lock: LockDescriptor
+    disabled?: boolean
+    handler?: any
+    param_types?: any[]
+    property_key: string
+    inject_except_list?: any[]
+    pos: string
 }
 
 export type ProviderDef = ValueProviderDef | ClassProviderDef | FactoryProviderDef

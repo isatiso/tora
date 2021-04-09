@@ -29,7 +29,6 @@ export function Router(path: `/${string}`, options?: RouterOptions) {
         Reflect.defineMetadata(DI_TOKEN.router_absolute_path, path, constructor)
         Reflect.defineMetadata(DI_TOKEN.router_handler_collector, makeRouterCollector(constructor, options), constructor)
         Reflect.defineMetadata(DI_TOKEN.router_options, options, constructor)
-
         Reflect.defineMetadata(DI_TOKEN.module_provider_collector, makeProviderCollector(constructor, options), constructor)
 
         constructor.mount = (new_path: `/${string}`) => {
@@ -158,18 +157,6 @@ export function CacheWith(prefix: string, expires?: number) {
     }
 }
 
-/**
- * @annotation NoWrap
- *
- * Mark a method which is no need to load.
- */
-export function Disabled() {
-    return (target: any, key: string) => {
-        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
-        handler.disabled = true
-    }
-}
-
 function makeRouterCollector(target: any, options?: RouterOptions) {
     return function(injector: Injector) {
         const instance = new ClassProvider(target, injector).create()
@@ -177,12 +164,13 @@ function makeRouterCollector(target: any, options?: RouterOptions) {
 
         const handlers: HandlerDescriptor[] = AnnotationTools.get_set_meta_data(DI_TOKEN.router_handlers, target.prototype, undefined, [])
         const path = Reflect.getMetadata(DI_TOKEN.router_absolute_path, target)
-
         const method_path_map = AnnotationTools.get_set_meta_data(DI_TOKEN.router_method_path, target, undefined, {})
 
-        handlers?.forEach((item: any) => {
+        handlers?.forEach(item => {
+            const disabled = Reflect.getMetadata(DI_TOKEN.disabled, target.prototype, item.property_key)
             const item_path = method_path_map[item.property_key] ?? item.path
             Object.assign(item, {
+                disabled,
                 path: join_path(path, item_path.replace(/(^\/|\/$)/g, '')),
                 handler: item.handler.bind(instance)
             })

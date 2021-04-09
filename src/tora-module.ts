@@ -11,6 +11,7 @@ export interface ToraModuleDef {
     imports?: Array<Type<any>>
     providers?: (ProviderDef | Type<any>)[]
     routers?: Type<any>[]
+    tasks?: Type<any>[]
 }
 
 /**
@@ -33,8 +34,11 @@ export function ToraModule(options?: ToraModuleDef) {
     return function(target: any) {
         TokenUtils.setClassType(target, 'tora_module')
         Reflect.defineMetadata(DI_TOKEN.module_provider_collector, makeProviderCollector(target, options), target)
-        if (options?.routers) {
+        if (options?.routers?.length) {
             Reflect.defineMetadata(DI_TOKEN.module_routers, options.routers, target)
+        }
+        if (options?.tasks?.length) {
+            Reflect.defineMetadata(DI_TOKEN.module_tasks, options.tasks, target)
         }
     }
 }

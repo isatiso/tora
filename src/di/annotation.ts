@@ -1,6 +1,11 @@
 import { DI_TOKEN } from '../token'
 import { HandlerDescriptor } from '../types'
 
+export interface LockDescriptor {
+    key: string
+    expires?: number
+}
+
 /**
  * @author plankroot
  * @annotation Inject: Provide a way to inject value by custom token whenever you need to inject with non-class one.
@@ -11,6 +16,28 @@ export function Inject(token: any) {
     return function(proto: any, key: string, index: number) {
         const injection = AnnotationTools.get_set_meta_data(DI_TOKEN.param_injection, proto, key, {})
         injection[index] = token
+    }
+}
+
+/**
+ * @annotation Disabled
+ *
+ * Mark a method which is no need to load.
+ */
+export function Disabled() {
+    return (target: any, key: string) => {
+        Reflect.defineMetadata(DI_TOKEN.disabled, true, target, key)
+    }
+}
+
+/**
+ * @annotation Lock
+ *
+ * Mark a method which is no need to load.
+ */
+export function Lock(key: string, expires?: number) {
+    return (target: any, key: string) => {
+        Reflect.defineMetadata(DI_TOKEN.lock, { key, expires }, target, key)
     }
 }
 

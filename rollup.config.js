@@ -81,6 +81,9 @@ function createRollupConfig(externalModules) {
     ]
 }
 
-const config = createRollupConfig([])
+const config = createRollupConfig([
+    'dayjs/plugin/timezone',
+    'dayjs/plugin/utc',
+])
 
 export default config

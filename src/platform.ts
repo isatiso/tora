@@ -1,7 +1,10 @@
+import { Dayjs } from 'dayjs'
 import fs from 'fs'
 import path from 'path'
 import { ConfigData, ToraConfig } from './builtin'
 import { BuiltInModule } from './builtin/built-in.module'
+import { TaskLock } from './trigger'
+import { Revolver } from './trigger/revolver'
 import { Injector, ValueProvider } from './di'
 import { def2Provider } from './di/provider'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
@@ -9,7 +12,8 @@ import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWra
 import { CLS_TYPE, DI_TOKEN, TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
 import { find_usage, ProviderTreeNode } from './tora-module'
-import { ApiMethod, ApiPath, ApiReturnDataType, HandlerDescriptor, HandlerReturnType, LiteContext, Provider, ProviderDef, Type } from './types'
+import { TaskLifeCycle } from './trigger/service/task-life-cycle'
+import { ApiMethod, ApiPath, ApiReturnDataType, HandlerDescriptor, HandlerReturnType, LiteContext, Provider, ProviderDef, TaskDescriptor, Type } from './types'
 
 function _try_read_json(file: string) {
     try {
@@ -40,6 +44,8 @@ export class Platform {
     private _server = new ToraServer()
     private _koa = new ToraKoa({ cors: true, body_parser: true })
     private _config_data?: ConfigData<ToraConfig>
+    private _revolver = new Revolver()
+    private _interval = setInterval(() => this.trigger(), 300)
 
     constructor() {
         this.started_at = new Date().getTime()
@@ -47,6 +53,8 @@ export class Platform {
         this.root_injector.set_provider(CacheProxy, new ValueProvider('CacheProxy', null))
         this.root_injector.set_provider(LifeCycle, new ValueProvider('LifeCycle', null))
         this.root_injector.set_provider(ResultWrapper, new ValueProvider('ResultWrapper', null))
+        this.root_injector.set_provider(TaskLifeCycle, new ValueProvider('TaskLifeCycle', null))
+        this.root_injector.set_provider(TaskLock, new ValueProvider('TaskLock', null))
         Reflect.getMetadata(DI_TOKEN.module_provider_collector, BuiltInModule)?.(this.root_injector)
     }
 
@@ -216,6 +224,14 @@ export class Platform {
             })
     }
 
+    mount(router_module: Type<any>) {
+        this._mount_router(router_module, this.root_injector)
+    }
+
+    private trigger() {
+        this._revolver.shoot(new Date().getTime())
+    }
+
     /**
      * @function
      *
@@ -236,8 +252,13 @@ export class Platform {
         sub_injector.get(CacheProxy)?.set_used()
 
         const routers = TokenUtils.getRouters(root_module)
-        routers.forEach(router_module => {
+        routers?.forEach(router_module => {
             this._mount_router(router_module, sub_injector)
+        })
+
+        const tasks = TokenUtils.getTasks(root_module)
+        tasks?.forEach(trigger_module => {
+            this._mount_task(trigger_module, sub_injector)
         })
 
         provider_tree.children.filter(def => !find_usage(def))
@@ -246,10 +267,6 @@ export class Platform {
             })
 
         return this
-    }
-
-    mount(router_module: Type<any>) {
-        this._mount_router(router_module, this.root_injector)
     }
 
     private _mount_router(router_module: Type<any>, injector: Injector) {
@@ -268,7 +285,22 @@ export class Platform {
             })
     }
 
-    private get_providers(desc: HandlerDescriptor, injector: Injector, except_list?: any[]): Provider<any>[] {
+    private _mount_task(trigger_module: Type<any>, injector: Injector) {
+        const router_provider_tree: ProviderTreeNode = Reflect.getMetadata(DI_TOKEN.module_provider_collector, trigger_module)?.(injector)
+        Reflect.getMetadata(DI_TOKEN.trigger_task_collector, trigger_module)?.(injector)?.forEach((desc: TaskDescriptor) => {
+            if (!desc.disabled) {
+                const provider_list = this.get_providers(desc, injector)
+                provider_list.forEach(p => p.create?.())
+                this._revolver.fill(desc.crontab, PlatformStatic.makeTask(injector, desc, provider_list))
+            }
+        })
+        router_provider_tree.children.filter(def => !find_usage(def))
+            .forEach(def => {
+                console.log(`Warning: ${trigger_module.name} -> ${def?.name} not used.`)
+            })
+    }
+
+    private get_providers(desc: HandlerDescriptor | TaskDescriptor, injector: Injector, except_list?: any[]): Provider<any>[] {
         return desc.param_types?.map((token: any, i: number) => {
             if (token === undefined) {
                 throw new Error(`type 'undefined' at ${desc.pos}[${i}], if it's not specified, there maybe a circular import.`)
@@ -307,6 +339,46 @@ namespace PlatformStatic {
                 return reason
             } else {
                 return new ErrorWrapper(reason)
+            }
+        }
+    }
+
+    function on_error_or_throw(hooks: TaskLifeCycle | undefined, err: any) {
+        if (hooks) {
+            return hooks.on_error(err)
+        } else {
+            throw err
+        }
+    }
+
+    export function makeTask(injector: Injector, desc: TaskDescriptor, provider_list: Provider<any>[]) {
+        return async function(execution: Dayjs) {
+            const hooks: TaskLifeCycle | undefined = injector.get(TaskLifeCycle)?.create()
+            const task_lock: TaskLock | undefined = injector.get(TaskLock)?.create()
+            await hooks?.on_init()
+
+            const param_list = provider_list.map((provider: any) => {
+                if (provider === undefined) {
+                    return undefined
+                } else {
+                    return provider.create()
+                }
+            })
+
+            if (task_lock && desc.lock) {
+                const locked = await task_lock.lock(desc.lock.key, execution, desc.lock.expires)
+                if (locked) {
+                    return desc.handler(...param_list)
+                        .then((res: any) => hooks?.on_finish(res))
+                        .catch((err: any) => on_error_or_throw(hooks, err))
+                        .finally(() => task_lock.unlock(desc.lock.key, locked))
+                } else {
+                    hooks?.on_finish(undefined)
+                }
+            } else {
+                return desc.handler(...param_list)
+                    .then((res: any) => hooks?.on_finish(res))
+                    .catch((err: any) => on_error_or_throw(hooks, err))
             }
         }
     }

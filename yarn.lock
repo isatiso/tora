@@ -294,6 +294,11 @@ create-require@^1.1.0:
   resolved "https://registry.npm.taobao.org/create-require/download/create-require-1.1.1.tgz"
   integrity sha1-wdfo8eX2z8n/ZfnNNS03NIdWwzM=
 
+dayjs@^1.10.4:
+  version "1.10.4"
+  resolved "https://nexus.formovie.net/repository/aliyun-group/dayjs/-/dayjs-1.10.4.tgz#8e544a9b8683f61783f570980a8a80eaf54ab1e2"
+  integrity sha512-RI/Hh4kqRc1UKLOAf/T5zdMMX5DQIlDxwUe3wSyMMnEbGunnpENCdbUgM+dW7kXidZqCttBrmw7BhN4TMddkCw==
+
 debug@~3.1.0:
   version "3.1.0"
   resolved "https://registry.npm.taobao.org/debug/download/debug-3.1.0.tgz?cache=0&sync_timestamp=1607566533140&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-3.1.0.tgz"
@@ -553,6 +558,11 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
+luxon@^1.26.0:
+  version "1.26.0"
+  resolved "https://nexus.formovie.net/repository/aliyun-group/luxon/-/luxon-1.26.0.tgz#d3692361fda51473948252061d0f8561df02b578"
+  integrity sha512-+V5QIQ5f6CDXQpWNICELwjwuHdqeJM1UenlZWx5ujcRMc9venvluCjFb4t5NYLhb6IhkbMVOxzVuOqkgMxee2A==
+
 magic-string@^0.25.7:
   version "0.25.7"
   resolved "https://registry.npm.taobao.org/magic-string/download/magic-string-0.25.7.tgz"
@@ -766,6 +776,11 @@ supports-color@^5.3.0:
   integrity sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==
   dependencies:
     has-flag "^3.0.0"
+
+todes@^0.0.37:
+  version "0.0.37"
+  resolved "https://nexus.formovie.net/repository/aliyun-group/todes/-/todes-0.0.37.tgz#2aa2c0314b771103371d8a088544d53f1c01fffa"
+  integrity sha512-RuFT2ga6Cczy27AKf1rrAAxfb8ggoIwlUSGRnbXYQTmv1C1M7t07rSnYGPb6UKj1wJX9gtfTfRVn7mLwNAIHZw==
 
 toidentifier@1.0.0:
   version "1.0.0"

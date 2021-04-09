@@ -3,14 +3,21 @@ import { ClassType, ProviderDef, Type } from './types'
 export enum DI_TOKEN {
     component = 'lazor:component',
     cls_type = 'lazor:class-type',
+    lock = 'lazor:lock',
 
     custom_data = 'lazor:custom-data',
 
     instance = 'lazor:instance',
     module_provider_collector = 'lazor:module-provider-collector',
     module_routers = 'lazor:module-routers',
+    module_tasks = 'lazor:module-tasks',
     param_injection = 'lazor:param-injection',
+    disabled = 'lazor:method-disabled',
     request_handler = 'lazor:request-handler',
+    task_handler = 'lazor:task-handler',
+    trigger_tasks = 'lazor:trigger-tasks',
+    trigger_task_collector = 'lazor:trigger-task-collector',
+    trigger_options = 'lazor:trigger-options',
     router_handler_collector = 'lazor:router-handler-collector',
     router_imports = 'lazor:router-imports',
     router_providers = 'lazor:router-providers',
@@ -24,6 +31,7 @@ export enum DI_TOKEN {
 export enum CLS_TYPE {
     tora_module = 'tora-module',
     tora_router = 'tora-router',
+    tora_trigger = 'tora-trigger',
 }
 
 export namespace TokenUtils {
@@ -49,6 +57,10 @@ export namespace TokenUtils {
         return Reflect.getMetadata(DI_TOKEN.module_routers, target)
     }
 
+    export function getTasks(target: any): Type<any>[] {
+        return Reflect.getMetadata(DI_TOKEN.module_tasks, target)
+    }
+
     export function setRouterImports(router: Type<any>, imports?: Array<Type<any>>) {
         Reflect.defineMetadata(DI_TOKEN.router_imports, imports, router)
     }
@@ -70,6 +82,8 @@ export namespace TokenUtils {
             return CLS_TYPE.tora_router
         } else if (type === 'tora_module') {
             return CLS_TYPE.tora_module
+        } else if (type === 'tora_trigger') {
+            return CLS_TYPE.tora_trigger
         } else {
             throw new Error(`unknown class type ${type}`)
         }
