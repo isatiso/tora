@@ -3,8 +3,6 @@ import fs from 'fs'
 import path from 'path'
 import { ConfigData, ToraConfig } from './builtin'
 import { BuiltInModule } from './builtin/built-in.module'
-import { TaskLock } from './trigger'
-import { Revolver } from './trigger/revolver'
 import { Injector, ValueProvider } from './di'
 import { def2Provider } from './di/provider'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
@@ -12,7 +10,7 @@ import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWra
 import { CLS_TYPE, DI_TOKEN, TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
 import { find_usage, ProviderTreeNode } from './tora-module'
-import { TaskLifeCycle } from './trigger/service/task-life-cycle'
+import { Revolver, TaskLifeCycle, TaskLock } from './trigger'
 import { ApiMethod, ApiPath, ApiReturnDataType, HandlerDescriptor, HandlerReturnType, LiteContext, Provider, ProviderDef, TaskDescriptor, Type } from './types'
 
 function _try_read_json(file: string) {
@@ -45,7 +43,7 @@ export class Platform {
     private _koa = new ToraKoa({ cors: true, body_parser: true })
     private _config_data?: ConfigData<ToraConfig>
     private _revolver = new Revolver()
-    private _interval = setInterval(() => this.trigger(), 300)
+    private _interval = setInterval(() => this.trigger(), 100)
 
     constructor() {
         this.started_at = new Date().getTime()
@@ -370,7 +368,7 @@ namespace PlatformStatic {
 
             if (task_lock && desc.lock) {
                 const locked = await task_lock.lock(desc.lock.key, execution, desc.lock.expires)
-                if (locked) {
+                if (locked !== undefined) {
                     return desc.handler(...param_list)
                         .then((res: any) => hooks?.on_finish(res))
                         .catch((err: any) => on_error_or_throw(hooks, err))

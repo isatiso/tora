@@ -1,9 +1,9 @@
 import { Dayjs } from 'dayjs'
-import { CronExpression } from './cron-expression'
+import { Schedule } from './schedule'
 
 export class Bullet {
     constructor(
-        public crontab: CronExpression,
+        public crontab: Schedule,
         public handler: Function,
         public execution: Dayjs,
         public next_bullet: Bullet | null,

@@ -5,45 +5,23 @@ import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-export interface CronScheduleDesc {
-    year: number
-    month: number
-    day: number[]
-    hour: number[]
-    minute: number[]
-    second: number[]
-}
-
-export class CronSchedule {
-
-    private _year: number
-    private _month: number
+export class CronMonth {
 
     private _field_name: ('date' | 'hour' | 'minute' | 'second')[] = ['date', 'hour', 'minute', 'second']
-    private _schedule: [number[], number[], number[], number[]] = [[], [], [], []]
     private _cur: [number, number, number, number] = [0, 0, 0, 0]
     private _current?: [number, number, number, number]
     private _has_next = true
 
     constructor(
-        private _schedule_desc: CronScheduleDesc,
+        private readonly _year: number,
+        private readonly _month: number,
         private _now: Dayjs,
-        private _tz: string | undefined
+        private _tz: string | undefined,
+        private readonly _schedule: [number[], number[], number[], number[]],
     ) {
-        this._year = this._schedule_desc.year
-        this._month = this._schedule_desc.month
-        this._schedule[0] = this._schedule_desc.day
-        this._schedule[1] = this._schedule_desc.hour
-        this._schedule[2] = this._schedule_desc.minute
-        this._schedule[3] = this._schedule_desc.second
         this._has_next = true
         this._align()
-        this._current = [
-            this._schedule[0][this._cur[0]],
-            this._schedule[1][this._cur[1]],
-            this._schedule[2][this._cur[2]],
-            this._schedule[3][this._cur[3]],
-        ]
+        this._current = this._assemble_current()
     }
 
     next() {
@@ -60,6 +38,15 @@ export class CronSchedule {
         } else {
             return
         }
+    }
+
+    private _assemble_current(): [number, number, number, number] {
+        return [
+            this._schedule[0][this._cur[0]],
+            this._schedule[1][this._cur[1]],
+            this._schedule[2][this._cur[2]],
+            this._schedule[3][this._cur[3]],
+        ]
     }
 
     private _tick(): [number, number, number, number] | undefined {
@@ -81,12 +68,7 @@ export class CronSchedule {
             }
         }
         this._has_next = true
-        return [
-            this._schedule[0][this._cur[0]],
-            this._schedule[1][this._cur[1]],
-            this._schedule[2][this._cur[2]],
-            this._schedule[3][this._cur[3]],
-        ]
+        return this._assemble_current()
     }
 
     private _walk_schedule(i: number): boolean {

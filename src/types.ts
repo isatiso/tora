@@ -1,7 +1,7 @@
 import { ExtendableContext } from 'koa'
 import { Stream } from 'stream'
 import { LockDescriptor } from './di/annotation'
-import { CronExpression } from './trigger/cron-expression'
+import { Schedule } from './trigger/schedule'
 
 export type LiteContext = ExtendableContext & {
     process_start?: number
@@ -51,7 +51,7 @@ export interface HandlerDescriptor {
 }
 
 export interface TaskDescriptor {
-    crontab: CronExpression
+    crontab: Schedule
     lock: LockDescriptor
     disabled?: boolean
     handler?: any

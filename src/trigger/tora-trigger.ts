@@ -1,5 +1,5 @@
 import { LockDescriptor } from '../di/annotation'
-import { CronExpression } from './cron-expression'
+import { Schedule } from './schedule'
 import { AnnotationTools, ClassProvider, Injector } from '../di'
 import { DI_TOKEN, TokenUtils } from '../token'
 import { makeProviderCollector } from '../tora-module'
@@ -28,7 +28,7 @@ export function Trigger(options?: TriggerOptions) {
 export function Task(crontab: string) {
     return function(target: any, key: string, desc: PropertyDescriptor) {
         const task: TaskDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.task_handler, target, key, {})
-        task.crontab = CronExpression.parse(crontab)
+        task.crontab = Schedule.parse(crontab)
         task.property_key = key
         if (!task.handler) {
             task.handler = desc.value

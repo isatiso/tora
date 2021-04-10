@@ -1,11 +1,11 @@
 import { Bullet } from './bullet'
-import { CronExpression } from './cron-expression'
+import { Schedule } from './schedule'
 
 export class Revolver {
 
     private _clip?: Bullet | null
 
-    fill(crontab: CronExpression, handler: Function) {
+    fill(crontab: Schedule, handler: Function) {
         const bullet = new Bullet(crontab, handler, crontab.next(), null)
         if (!this._clip) {
             this._clip = bullet
