@@ -8,10 +8,7 @@ import { ParsedFields } from './parsed-fields'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-interface ScheduleOptions {
-    currentDate?: Date
-    startDate?: Date
-    endDate?: Date
+export interface ScheduleOptions {
     utc?: boolean
     tz?: string
 }
