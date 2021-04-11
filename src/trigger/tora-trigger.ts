@@ -25,7 +25,7 @@ export function Trigger(options?: TriggerOptions) {
     }
 }
 
-export function Task(crontab: string, options: ScheduleOptions) {
+export function Task(crontab: string, options?: ScheduleOptions) {
     return function(target: any, key: string, desc: PropertyDescriptor) {
         const task: TaskDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.task_handler, target, key, {})
         task.crontab = Schedule.parse(crontab, options)
