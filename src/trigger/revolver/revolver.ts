@@ -1,5 +1,5 @@
+import { Schedule } from '../cron'
 import { Bullet } from './bullet'
-import { Schedule } from './schedule'
 
 export class Revolver {
 

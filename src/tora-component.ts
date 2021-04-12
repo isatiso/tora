@@ -1,18 +1,19 @@
 import 'reflect-metadata'
-import { DI_TOKEN } from './token'
+import { TokenUtils } from './token'
+import { ComponentOptions } from './types'
 
 /**
  * @annotation Component
  *
  * Mark for Reflect to resolve types of this class and constructor parameters.
  *
- * @param echo_dependencies: debug option, show dependencies of this class.
+ * @param options
  */
-export function Component(echo_dependencies?: boolean) {
+export function ToraComponent(options?: ComponentOptions) {
     return function(target: any) {
-        if (echo_dependencies) {
-            console.log('dependencies', Reflect.getMetadata('design:paramtypes', target))
-        }
-        Reflect.defineMetadata(DI_TOKEN.component, target.name, target)
+        TokenUtils.setClassTypeNX(target, 'ToraComponent')
+        TokenUtils.ToraComponent.set(target, target.name)
     }
 }
+
+export const Component = ToraComponent

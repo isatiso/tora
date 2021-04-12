@@ -1,5 +1,6 @@
-import { DI_TOKEN } from '../token'
+import { TokenUtils } from '../token'
 import { ClassProviderDef, FactoryProviderDef, Provider, ProviderDef, Type, ValueProviderDef } from '../types'
+import { AnnotationTools } from './annotation'
 import { Injector } from './injector'
 
 export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Injector) {
@@ -29,8 +30,8 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
         } else if ((def as any).useClass) {
 
             const d = def as ClassProviderDef
-            const isComponent = Reflect.getMetadata(DI_TOKEN.component, d.useClass)
-            if (!isComponent) {
+            const component_name = TokenUtils.ToraComponent.get(d.useClass)
+            if (!component_name) {
                 throw new Error(`${d.useClass.name} is not Component.`)
             }
             if (injector.local_has(d.provide)) {
@@ -43,8 +44,8 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
 
         } else {
 
-            const isComponent = Reflect.getMetadata(DI_TOKEN.component, def as any)
-            if (!isComponent) {
+            const component_name = TokenUtils.ToraComponent.get(def)
+            if (!component_name) {
                 throw new Error(`${(def as any).name} is not Component.`)
             }
             if (injector.local_has(def)) {
@@ -85,7 +86,7 @@ export class ClassProvider<M> implements Provider<M> {
      *
      * @return Provider.
      */
-    create(parents?: any[]) {
+    create(parents?: any[]): M {
         const exist = parents?.indexOf(this.cls) ?? -1
         if (exist >= 0) {
             const circle_path = parents?.slice(exist) ?? []
@@ -127,21 +128,22 @@ export class ClassProvider<M> implements Provider<M> {
     }
 
     private extract_param_types(parents?: any[]) {
-        const inject_token_map = Reflect.getMetadata(DI_TOKEN.param_injection, this.cls)
-        return Reflect.getMetadata('design:paramtypes', this.cls)?.map((token: any, i: number) => {
-            const inject_token = inject_token_map?.[i]
-            if (inject_token) {
-                token = inject_token
-            }
-            if (token === undefined) {
-                throw new Error(`type 'undefined' at ${this.cls?.name}.constructor[${i}], if it's not specified, there maybe a circular import.`)
-            }
-            const provider = this.injector.get(token, `${parents?.map(p => p.name).join(' -> ')}`)
-            if (provider) {
-                return provider
-            }
-            throw new Error(`Can't find provider of "${token}" in [${this.cls?.name}, constructor, args[${i}]]`)
-        })
+        const inject_token_map = TokenUtils.ParamInjection.get(this.cls)
+        return TokenUtils.getParamTypes(this.cls)
+            ?.map((token: any, i: number) => {
+                const inject_token = inject_token_map?.[i]
+                if (inject_token) {
+                    token = inject_token
+                }
+                if (token === undefined) {
+                    throw new Error(`type 'undefined' at ${this.cls?.name}.constructor[${i}], if it's not specified, there maybe a circular import.`)
+                }
+                const provider = this.injector.get(token, `${parents?.map(p => p.name).join(' -> ')}`)
+                if (provider) {
+                    return provider
+                }
+                throw new Error(`Can't find provider of "${token}" in [${this.cls?.name}, constructor, args[${i}]]`)
+            })
     }
 }
 

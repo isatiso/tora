@@ -1,5 +1,5 @@
 import { Dayjs } from 'dayjs'
-import { Schedule } from './schedule'
+import { Schedule } from '../cron'
 
 export class Bullet {
     constructor(

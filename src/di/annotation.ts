@@ -1,4 +1,4 @@
-import { DI_TOKEN } from '../token'
+import { GenericTypeOfCustomMeta, TokenUtils } from '../token'
 import { HandlerDescriptor } from '../types'
 
 export interface LockDescriptor {
@@ -14,7 +14,7 @@ export interface LockDescriptor {
  */
 export function Inject(token: any) {
     return function(proto: any, key: string, index: number) {
-        const injection = AnnotationTools.get_set_meta_data(DI_TOKEN.param_injection, proto, key, {})
+        const injection = TokenUtils.ParamInjection.getset(proto, key, [])
         injection[index] = token
     }
 }
@@ -24,20 +24,41 @@ export function Inject(token: any) {
  *
  * Mark a method which is no need to load.
  */
-export function Disabled() {
+export function Disabled(disabled_options?: GenericTypeOfCustomMeta<typeof TokenUtils.DisabledMeta>) {
     return (target: any, key: string) => {
-        Reflect.defineMetadata(DI_TOKEN.disabled, true, target, key)
+        TokenUtils.DisabledMeta.set(target, key, {})
     }
 }
 
 /**
  * @annotation Lock
  *
- * Mark a method which is no need to load.
+ * Mark LockMeta to a method.
  */
-export function Lock(key: string, expires?: number) {
-    return (target: any, key: string) => {
-        Reflect.defineMetadata(DI_TOKEN.lock, { key, expires }, target, key)
+export function Lock(lock_options?: GenericTypeOfCustomMeta<typeof TokenUtils.LockMeta>) {
+    return (target: any, property_key: string) => {
+        const { key, expires } = lock_options ?? {}
+        TokenUtils.LockMeta.set(target, property_key, { key, expires })
+    }
+}
+
+/**
+ * @annotation EchoDependencies
+ *
+ * Mark LockMeta to a method.
+ */
+export function EchoDependencies() {
+    return function(target: any, property_key?: string) {
+        if (property_key === undefined) {
+            console.log(`${target.name} dependencies`, TokenUtils.getParamTypes(target))
+            const dependencies = TokenUtils.Dependencies.getset(target.prototype, {})
+            Object.keys(dependencies).forEach(property_key => {
+                console.log(`${target.name}.${property_key} dependencies`, dependencies[property_key])
+            })
+        } else {
+            const dependencies = TokenUtils.Dependencies.getset(target, {})
+            dependencies[property_key] = TokenUtils.getParamTypes(target, property_key)
+        }
     }
 }
 
@@ -49,7 +70,7 @@ export function Lock(key: string, expires?: number) {
  */
 export function Meta<T extends object = any>(meta: T) {
     return function(target: any) {
-        Reflect.defineMetadata(DI_TOKEN.router_meta, meta, target)
+        TokenUtils.ClassMeta.set(target, meta)
     }
 }
 
@@ -87,9 +108,8 @@ export namespace AnnotationTools {
      * @return (Type[]) - array of types
      */
     export function get_param_types(target: any, key: string) {
-        const inject_token_map = Reflect.getMetadata(DI_TOKEN.param_injection, target, key)
-        return Reflect.getMetadata('design:paramtypes', target, key)
-            ?.map((t: any, i: number) => inject_token_map?.[i] ?? t)
+        const inject_token_map = TokenUtils.ParamInjection.get(target, key)
+        return TokenUtils.getParamTypes(target, key)?.map((t: any, i: number) => inject_token_map?.[i] ?? t)
     }
 
     /**
@@ -103,7 +123,7 @@ export namespace AnnotationTools {
     export function create_decorator<T>(processor: (target: any, meta: any, options?: T) => void) {
         return function(options?: T) {
             return function(target: any) {
-                const meta = get_set_meta_data(DI_TOKEN.router_meta, target, undefined, {})
+                const meta = TokenUtils.ClassMeta.getset(target, {})
                 processor(target, meta, options)
             }
         }
@@ -119,7 +139,7 @@ export namespace AnnotationTools {
      * @return (void)
      */
     export function add_handler(proto: any, desc: HandlerDescriptor) {
-        get_set_meta_data(DI_TOKEN.router_handlers, proto, undefined, [])?.push(desc)
+        TokenUtils.ToraRouterHandlerList.getset(proto, [])?.push(desc)
     }
 
     /**
@@ -132,7 +152,7 @@ export namespace AnnotationTools {
      * @return (any) - custom data.
      */
     export function get_custom_data<T>(target: any, key: string): T | undefined {
-        return Reflect.getMetadata(DI_TOKEN.custom_data, target)?.[key]
+        return TokenUtils.CustomData.get(target)?.[key]
     }
 
     /**
@@ -146,7 +166,7 @@ export namespace AnnotationTools {
      * @return (boolean) - true if set successfully.
      */
     export function define_custom_data<T = any>(target: any, key: string, value: T) {
-        const custom_data = get_set_meta_data(DI_TOKEN.custom_data, target, undefined, {})
+        const custom_data = TokenUtils.CustomData.getset(target, {})
         if (!custom_data) {
             return false
         }

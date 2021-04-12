@@ -1,5 +1,8 @@
-export { Revolver } from './revolver'
-export { Schedule } from './schedule'
+import { ToraTrigger } from './tora-trigger'
+
+export { Schedule } from './cron'
 export { TaskLifeCycle } from './service/task-life-cycle'
 export { TaskLock } from './service/task-lock'
-export { TriggerOptions, Task, Trigger } from './tora-trigger'
+export { Task, ToraTrigger } from './tora-trigger'
+
+export const Trigger = ToraTrigger

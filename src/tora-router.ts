@@ -1,19 +1,7 @@
-import { AnnotationTools, ClassProvider, Injector } from './di'
-import { DI_TOKEN, TokenUtils } from './token'
+import { ClassProvider, Injector } from './di'
+import { TokenUtils } from './token'
 import { makeProviderCollector } from './tora-module'
-import { ApiMethod, HandlerDescriptor, ProviderDef, Type } from './types'
-
-/**
- * @interface RouterOptions
- */
-export interface RouterOptions {
-    imports?: Array<Type<any>>
-    providers?: (ProviderDef | Type<any>)[]
-}
-
-function join_path(front: string, rear: string) {
-    return [front, rear].filter(i => i).join('/')
-}
+import { ApiMethod, HandlerDescriptor, RouterOptions, Type } from './types'
 
 /**
  * @annotation Router
@@ -23,25 +11,28 @@ function join_path(front: string, rear: string) {
  * @param path(string) - Absolute path of this node.
  * @param options(RouterOptions)
  */
-export function Router(path: `/${string}`, options?: RouterOptions) {
+export function ToraRouter(path: `/${string}`, options?: RouterOptions) {
     return function(constructor: any) {
-        TokenUtils.setClassType(constructor, 'tora_router')
-        Reflect.defineMetadata(DI_TOKEN.router_absolute_path, path, constructor)
-        Reflect.defineMetadata(DI_TOKEN.router_handler_collector, makeRouterCollector(constructor, options), constructor)
-        Reflect.defineMetadata(DI_TOKEN.router_options, options, constructor)
-        Reflect.defineMetadata(DI_TOKEN.module_provider_collector, makeProviderCollector(constructor, options), constructor)
+
+        TokenUtils.setClassTypeNX(constructor, 'ToraRouter')
+        TokenUtils.ToraRouterPath.set(constructor, path)
+        TokenUtils.ToraRouterOptions.set(constructor, options)
+        TokenUtils.ToraRouterHandlerCollector.set(constructor, makeRouterCollector(constructor, options))
+        TokenUtils.ToraModuleProviderCollector.set(constructor, makeProviderCollector(constructor, options))
 
         constructor.mount = (new_path: `/${string}`) => {
-            Reflect.defineMetadata(DI_TOKEN.router_absolute_path, new_path, constructor)
+            TokenUtils.ToraRouterPath.set(constructor, new_path)
             return constructor
         }
-        constructor.replace = (method: string, new_path: string) => {
-            const method_path_map = AnnotationTools.get_set_meta_data(DI_TOKEN.router_method_path, constructor, undefined, {})
-            method_path_map[method] = new_path
+
+        constructor.replace = (router_method_name: string, new_path: string) => {
+            TokenUtils.ToraRouterPathReplacement.getset(constructor, {})[router_method_name] = new_path
             return constructor
         }
     }
 }
+
+export const Router = ToraRouter
 
 export interface IGunslinger<T> {
     replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & IGunslinger<Omit<T, M>>
@@ -67,27 +58,32 @@ export type NoTrailingAndLeadingSlash<T> =
         T
 
 function createRequestDecorator(method: ApiMethod) {
-    return <T extends string>(router_path?: NoTrailingAndLeadingSlash<T>) => (target: any, key: string, desc: PropertyDescriptor) => {
-        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
-        if (!handler.methods) {
-            handler.methods = new Set()
-        }
-        handler.methods.add(method)
-        handler.path = handler.path ?? router_path ?? key
-        handler.wrap_result = true
-        handler.property_key = key
-        if (!handler.handler) {
+    return <T extends string>(path_tail?: NoTrailingAndLeadingSlash<T>) => (target: any, key: string, desc: PropertyDescriptor) => {
+        const handler = TokenUtils.ToraRouterHandler.getset(target, key, {})
+
+        // Mark handle function.
+        if (!handler.property_key) {
+            handler.property_key = key
             handler.handler = desc.value
+            const inject_token_map = TokenUtils.ParamInjection.get(target, key)
+            handler.param_types = TokenUtils.getParamTypes(target, key)?.map((t: any, i: number) => inject_token_map?.[i] ?? t)
+            const handlers = TokenUtils.ToraRouterHandlerList.getset(target, [])
+            if (!handlers.includes(handler)) {
+                handlers.push(handler)
+            }
         }
-        if (!handler.param_types) {
-            const inject_token_map = Reflect.getMetadata(DI_TOKEN.param_injection, target, key)
-            handler.param_types = Reflect.getMetadata('design:paramtypes', target, key)
-                ?.map((t: any, i: number) => inject_token_map?.[i] ?? t)
+
+        // Mark handler function if need to wrap result.
+        if (handler.wrap_result === undefined) {
+            handler.wrap_result = true
         }
-        const handlers: Array<any> = AnnotationTools.get_set_meta_data(DI_TOKEN.router_handlers, target, undefined, [])
-        if (!handlers.includes(handler)) {
-            handlers.push(handler)
+
+        // Mark API tail path with HTTP method.
+        if (!handler.method_and_path) {
+            handler.method_and_path = {}
         }
+        const method_path = path_tail ?? key as string
+        handler.method_and_path[`${method}-${method_path}`] = [method, method_path]
     }
 }
 
@@ -126,7 +122,7 @@ export const Delete = createRequestDecorator('DELETE')
  */
 export function Auth() {
     return (target: any, key: string) => {
-        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
+        const handler = TokenUtils.ToraRouterHandler.getset(target, key, {})
         handler.auth = true
     }
 }
@@ -138,7 +134,7 @@ export function Auth() {
  */
 export function NoWrap() {
     return (target: any, key: string) => {
-        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
+        const handler = TokenUtils.ToraRouterHandler.getset(target, key, {})
         handler.wrap_result = false
     }
 }
@@ -150,30 +146,26 @@ export function NoWrap() {
  */
 export function CacheWith(prefix: string, expires?: number) {
     return (target: any, key: string) => {
-        const handler: HandlerDescriptor = AnnotationTools.get_set_meta_data(DI_TOKEN.request_handler, target, key, {})
+        const handler = TokenUtils.ToraRouterHandler.getset(target, key, {})
         handler.cache_prefix = prefix
         handler.cache_expires = expires
     }
 }
 
-function makeRouterCollector(target: any, options?: RouterOptions) {
+function makeRouterCollector(target: any, options?: RouterOptions): (injector: Injector) => HandlerDescriptor[] {
     return function(injector: Injector) {
         const instance = new ClassProvider(target, injector).create()
-        Reflect.defineMetadata(DI_TOKEN.instance, instance, target)
-
-        const handlers: HandlerDescriptor[] = AnnotationTools.get_set_meta_data(DI_TOKEN.router_handlers, target.prototype, undefined, [])
-        const path = Reflect.getMetadata(DI_TOKEN.router_absolute_path, target)
-        const method_path_map = AnnotationTools.get_set_meta_data(DI_TOKEN.router_method_path, target, undefined, {})
-
+        TokenUtils.Instance.set(target, instance)
+        const handlers: HandlerDescriptor[] = TokenUtils.ToraRouterHandlerList.getset(target.prototype, [])
+        const path = TokenUtils.ToraRouterPath.get(target)!
+        const replacement = TokenUtils.ToraRouterPathReplacement.getset(target, {})
         handlers?.forEach(item => {
-            const disabled = Reflect.getMetadata(DI_TOKEN.disabled, target.prototype, item.property_key)
-            const item_path = method_path_map[item.property_key] ?? item.path
-            Object.assign(item, {
-                disabled,
-                pos: `${target.name}.${item.property_key}`,
-                path: join_path(path, item_path.replace(/(^\/|\/$)/g, '')),
-                handler: item.handler.bind(instance)
-            })
+            const disabled = TokenUtils.DisabledMeta.get(target.prototype, item.property_key)
+            const item_path = replacement[item.property_key ?? ''] ?? item.path
+            item.disabled = disabled
+            item.pos = `${target.name}.${item.property_key}`
+            item.path = path
+            item.handler = item.handler.bind(instance)
         })
 
         return handlers

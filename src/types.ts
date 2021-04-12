@@ -1,7 +1,7 @@
 import { ExtendableContext } from 'koa'
 import { Stream } from 'stream'
-import { LockDescriptor } from './di/annotation'
-import { Schedule } from './trigger/schedule'
+import { LockDescriptor } from './di'
+import { Schedule } from './trigger'
 
 export type LiteContext = ExtendableContext & {
     process_start?: number
@@ -33,11 +33,10 @@ export type KeyOfFilterType<T, U> = {
 }[keyof T]
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
-export type ClassType = 'tora_router' | 'tora_module' | 'tora_trigger'
 
 export interface HandlerDescriptor {
-    path: string
-    methods: Set<HttpMethod>
+    path?: string
+    method_and_path?: { [prop: string]: [ApiMethod, string] }
     handler?: any
     param_types?: any[]
     inject_except_list?: any[]
@@ -45,20 +44,20 @@ export interface HandlerDescriptor {
     wrap_result?: boolean
     cache_prefix?: string
     cache_expires?: number
-    disabled?: boolean
-    pos: string
-    property_key: string
+    disabled?: {}
+    pos?: string
+    property_key?: string
 }
 
 export interface TaskDescriptor {
-    crontab: Schedule
-    lock: LockDescriptor
+    crontab?: Schedule
+    lock?: LockDescriptor
     disabled?: boolean
     handler?: any
     param_types?: any[]
-    property_key: string
+    property_key?: string
     inject_except_list?: any[]
-    pos: string
+    pos?: string
 }
 
 export type ProviderDef = ValueProviderDef | ClassProviderDef | FactoryProviderDef
@@ -86,4 +85,35 @@ export interface Provider<T> {
     set_used(parents?: any[]): void
 
     create(...args: any[]): T
+}
+
+export interface ImportsAndProviders {
+    imports?: Array<Type<any>>
+    providers?: (ProviderDef | Type<any>)[]
+}
+
+export interface ModuleOptions extends ImportsAndProviders {
+    routers?: Type<any>[]
+    tasks?: Type<any>[]
+}
+
+export interface RouterOptions extends ImportsAndProviders {
+
+}
+
+export interface TriggerOptions extends ImportsAndProviders {
+
+}
+
+export interface ComponentOptions {
+    echo_dependencies?: boolean
+}
+
+/**
+ * @interface ProviderTreeNode
+ */
+export interface ProviderTreeNode {
+    name: string
+    providers: any[]
+    children: ProviderTreeNode[]
 }

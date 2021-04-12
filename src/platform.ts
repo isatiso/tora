@@ -7,11 +7,16 @@ import { Injector, ValueProvider } from './di'
 import { def2Provider } from './di/provider'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
 import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWrapper, SessionContext, SessionData, ToraServer } from './server'
-import { CLS_TYPE, DI_TOKEN, TokenUtils } from './token'
+import { TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
-import { find_usage, ProviderTreeNode } from './tora-module'
-import { Revolver, TaskLifeCycle, TaskLock } from './trigger'
-import { ApiMethod, ApiPath, ApiReturnDataType, HandlerDescriptor, HandlerReturnType, LiteContext, Provider, ProviderDef, TaskDescriptor, Type } from './types'
+import { find_usage } from './tora-module'
+import { TaskLifeCycle, TaskLock } from './trigger'
+import { Revolver } from './trigger/revolver/revolver'
+import { ApiMethod, ApiPath, ApiReturnDataType, HandlerDescriptor, HandlerReturnType, LiteContext, Provider, ProviderDef, ProviderTreeNode, TaskDescriptor, Type } from './types'
+
+function _join_path(front: string, rear: string) {
+    return [front, rear].filter(i => i).join('/')
+}
 
 function _try_read_json(file: string) {
     try {
@@ -53,7 +58,7 @@ export class Platform {
         this.root_injector.set_provider(ResultWrapper, new ValueProvider('ResultWrapper', null))
         this.root_injector.set_provider(TaskLifeCycle, new ValueProvider('TaskLifeCycle', null))
         this.root_injector.set_provider(TaskLock, new ValueProvider('TaskLock', null))
-        Reflect.getMetadata(DI_TOKEN.module_provider_collector, BuiltInModule)?.(this.root_injector)
+        TokenUtils.ToraModuleProviderCollector.get(BuiltInModule)?.(this.root_injector)
     }
 
     provide(def: (ProviderDef | Type<any>)) {
@@ -62,8 +67,10 @@ export class Platform {
     }
 
     import(module: any) {
-        TokenUtils.ensureClassType(module, 'tora_module')
-        Reflect.getMetadata(DI_TOKEN.module_provider_collector, module)?.(this.root_injector)
+        if (TokenUtils.ClassType.get(module) !== 'ToraModule') {
+            throw new Error(`${module.name} is not a ToraModule.`)
+        }
+        TokenUtils.ToraModuleProviderCollector.get(module)?.(this.root_injector)
         return this
     }
 
@@ -142,18 +149,20 @@ export class Platform {
      * @param module(ToraModule) - module object
      */
     register_module(name: string, module: any) {
-        if (TokenUtils.getClassType(module) !== CLS_TYPE.tora_module) {
+        if (TokenUtils.ClassType.get(module) !== 'ToraModule') {
             throw new Error(`${module.name ?? module.prototype?.toString()} is not a "tora_module".`)
         }
-        const routers = TokenUtils.getRouters(module)
+
+        const routers = TokenUtils.ToraModuleRouters.get(module)
         if (!routers) {
-            throw new Error(`"routers" should be set with a list of "tora_router".`)
+            throw new Error(`"routers" should be set with a list of "@ToraRouter".`)
+        } else {
+            routers.forEach(router => {
+                if (TokenUtils.ClassType.get(router) !== 'ToraRouter') {
+                    throw new Error(`${router.name ?? router.prototype?.toString()} is not a "tora_router". Only a "tora_module" with a list of "tora_router" can be registered.`)
+                }
+            })
         }
-        routers.forEach(router => {
-            if (TokenUtils.getClassType(router) !== CLS_TYPE.tora_router) {
-                throw new Error(`${router.name ?? router.prototype?.toString()} is not a "tora_router". Only a "tora_module" with a list of "tora_router" can be registered.`)
-            }
-        })
         this.modules[name] = module
         return this
     }
@@ -238,28 +247,29 @@ export class Platform {
      * @param root_module(ToraModule) - module to load.
      */
     private bootstrap(root_module: any) {
+
         console.log('root_module', root_module)
 
-        TokenUtils.ensureClassType(root_module, 'tora_module')
+        if (TokenUtils.ClassType.get(root_module) !== 'ToraModule') {
+            throw new Error(`${root_module.name} is not a ToraModule.`)
+        }
 
         const sub_injector = Injector.create(this.root_injector)
-        const provider_tree: ProviderTreeNode = Reflect.getMetadata(DI_TOKEN.module_provider_collector, root_module)?.(sub_injector)
+        const provider_tree: ProviderTreeNode | undefined = TokenUtils.ToraModuleProviderCollector.get(root_module)?.(sub_injector)
 
         sub_injector.get(Authenticator)?.set_used()
         sub_injector.get(LifeCycle)?.set_used()
         sub_injector.get(CacheProxy)?.set_used()
 
-        const routers = TokenUtils.getRouters(root_module)
-        routers?.forEach(router_module => {
+        TokenUtils.ToraModuleRouters.get(root_module)?.forEach(router_module => {
             this._mount_router(router_module, sub_injector)
         })
 
-        const tasks = TokenUtils.getTasks(root_module)
-        tasks?.forEach(trigger_module => {
+        TokenUtils.ToraModuleTasks.get(root_module)?.forEach(trigger_module => {
             this._mount_task(trigger_module, sub_injector)
         })
 
-        provider_tree.children.filter(def => !find_usage(def))
+        provider_tree?.children.filter(def => !find_usage(def))
             .forEach(def => {
                 console.log(`Warning: ${root_module.name} -> ${def?.name} not used.`)
             })
@@ -268,31 +278,40 @@ export class Platform {
     }
 
     private _mount_router(router_module: Type<any>, injector: Injector) {
-        const router_provider_tree: ProviderTreeNode = Reflect.getMetadata(DI_TOKEN.module_provider_collector, router_module)?.(injector)
-        Reflect.getMetadata(DI_TOKEN.router_handler_collector, router_module)?.(injector)?.forEach((desc: HandlerDescriptor) => {
+        const router_provider_tree: ProviderTreeNode | undefined = TokenUtils.ToraModuleProviderCollector.get(router_module)?.(injector)
+        TokenUtils.ToraRouterHandlerCollector.get(router_module)?.(injector)?.forEach((desc: HandlerDescriptor) => {
             if (!desc.disabled) {
                 const provider_list = this.get_providers(desc, injector, [ApiParams, SessionContext, SessionData, PURE_PARAMS])
                 provider_list.forEach(p => p.create?.())
-                const real_path = desc.path?.startsWith('/') ? desc.path : '/' + desc.path
-                desc.methods.forEach(m => this._server.on(m, real_path, PlatformStatic.makeHandler(injector, desc, provider_list)))
+                if (desc.method_and_path) {
+                    Object.values(desc.method_and_path)?.forEach(([method, method_path]) => {
+                        const router_path = desc.path?.startsWith('/') ? desc.path : '/' + desc.path
+                        const full_path = _join_path(router_path, method_path.replace(/(^\/|\/$)/g, ''))
+                        this._server.on(method, full_path, PlatformStatic.makeHandler(injector, desc, provider_list))
+                    })
+                }
             }
         })
-        router_provider_tree.children.filter(def => !find_usage(def))
+        router_provider_tree?.children.filter(def => !find_usage(def))
             .forEach(def => {
                 console.log(`Warning: ${router_module.name} -> ${def?.name} not used.`)
             })
     }
 
     private _mount_task(trigger_module: Type<any>, injector: Injector) {
-        const router_provider_tree: ProviderTreeNode = Reflect.getMetadata(DI_TOKEN.module_provider_collector, trigger_module)?.(injector)
-        Reflect.getMetadata(DI_TOKEN.trigger_task_collector, trigger_module)?.(injector)?.forEach((desc: TaskDescriptor) => {
+        const router_provider_tree: ProviderTreeNode | undefined = TokenUtils.ToraModuleProviderCollector.get(trigger_module)?.(injector)
+
+        TokenUtils.ToraTriggerTaskCollector.get(trigger_module)?.(injector)?.forEach((desc: TaskDescriptor) => {
             if (!desc.disabled) {
+                if (!desc.crontab) {
+                    throw new Error(`Crontab of task ${desc.pos} is empty.`)
+                }
                 const provider_list = this.get_providers(desc, injector)
                 provider_list.forEach(p => p.create?.())
                 this._revolver.fill(desc.crontab, PlatformStatic.makeTask(injector, desc, provider_list))
             }
         })
-        router_provider_tree.children.filter(def => !find_usage(def))
+        router_provider_tree?.children.filter(def => !find_usage(def))
             .forEach(def => {
                 console.log(`Warning: ${trigger_module.name} -> ${def?.name} not used.`)
             })
@@ -372,7 +391,7 @@ namespace PlatformStatic {
                     return desc.handler(...param_list)
                         .then((res: any) => hooks?.on_finish(res))
                         .catch((err: any) => on_error_or_throw(hooks, err))
-                        .finally(() => task_lock.unlock(desc.lock.key, locked))
+                        .finally(() => task_lock.unlock(desc.lock?.key!, locked))
                 } else {
                     hooks?.on_finish(undefined)
                 }
