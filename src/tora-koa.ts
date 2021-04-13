@@ -1,4 +1,11 @@
-import parse from 'co-body'
+/**
+ * Copyright (c) Plank Root.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+import CoBody from 'co-body'
 import Koa from 'koa'
 import { ToraServer } from './server'
 import { LiteContext } from './types'
@@ -8,32 +15,6 @@ declare module 'koa' {
         body?: any
         rawBody: string
     }
-}
-
-type BodyType = 'text' | 'json' | 'form'
-
-interface Options {
-
-    //  parser will only parse when request type hits enableTypes, default is ['json', 'form'].
-    enableTypes?: BodyType[]
-
-    // requested encoding. Default is utf-8 by co-body
-    encode?: string
-
-    // when set to true, JSON parser will only accept arrays and objects. Default is true
-    strict?: boolean
-
-    returnRawBody?: boolean
-
-    // support extend types
-    extendTypes?: {
-        json?: string[]
-        form?: string[]
-        text?: string[]
-    }
-
-    // support custom error handle
-    onerror?: (err: Error, ctx: Koa.Context) => void
 }
 
 /**
@@ -57,8 +38,6 @@ export class ToraKoa {
     }
 
     /**
-     * @function
-     *
      * Expose of Koa.use
      *
      * @param middleware
@@ -68,11 +47,9 @@ export class ToraKoa {
     }
 
     /**
-     * @function
-     *
      * Set server handlers.
      *
-     * @param server(ToraServer)
+     * @param server
      */
     handle_by(server: ToraServer) {
         this._koa.use(async (ctx: LiteContext, next) => server.handleRequest(ctx, next))
@@ -123,34 +100,25 @@ export class ToraKoa {
     }
 }
 
-export class BodyParser {
+class BodyParser {
 
-    private readonly opts: Omit<Options, 'onerror'>
-
-    private readonly enableForm: boolean
-    private readonly enableJson: boolean
-    private readonly enableText: boolean
+    private readonly opts: CoBody.Options
 
     private jsonTypes = ['application/json', 'application/json-patch+json', 'application/vnd.api+json', 'application/csp-report']
     private formTypes = ['application/x-www-form-urlencoded']
     private textTypes = ['text/plain', 'text/xml', 'application/xml', 'text/html']
 
-    constructor(options?: Options) {
-        this.opts = Object.assign({ returnRawBody: true }, options)
-        const enableTypes = this.opts.enableTypes || ['json', 'form', 'text']
-
-        this.enableForm = enableTypes?.includes('form')
-        this.enableJson = enableTypes?.includes('json')
-        this.enableText = enableTypes?.includes('text')
+    constructor() {
+        this.opts = { returnRawBody: true }
     }
 
     async parseBody(ctx: Koa.Context) {
-        if (this.enableJson && ctx.request.is(this.jsonTypes)) {
-            return parse.json(ctx, this.opts)
-        } else if (this.enableForm && ctx.request.is(this.formTypes)) {
-            return parse.form(ctx, this.opts)
-        } else if (this.enableText && ctx.request.is(this.textTypes)) {
-            return parse.text(ctx, this.opts).then((v: any) => v || '')
+        if (ctx.request.is(this.jsonTypes)) {
+            return CoBody.json(ctx, this.opts)
+        } else if (ctx.request.is(this.formTypes)) {
+            return CoBody.form(ctx, this.opts)
+        } else if (ctx.request.is(this.textTypes)) {
+            return CoBody.text(ctx, this.opts).then((v: any) => v || '')
         } else {
             return {}
         }

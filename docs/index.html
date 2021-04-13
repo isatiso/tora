@@ -1,0 +1,399 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+	<title>Tora</title>
+	<meta name="description" content="Documentation for Tora">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="assets/css/custom.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json"
+				data-base=".">
+				<div class="field">
+					<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+					<input id="tsd-search-field" type="text"/>
+				</div>
+				<ul class="results">
+					<li class="state loading">Preparing search index...</li>
+					<li class="state failure">The search index is not available</li>
+				</ul>
+				<div style="height: 40px; display: flex; justify-content: flex-start; align-items: center;">
+					<img src="assets/images/favicon.png" class="title" alt="logo" height="20px">
+					<a href="index.html" class="title" style="margin-left: 5px;">Tora</a>
+				</div>
+			</div>
+			<div class="table-cell" id="tsd-widgets">
+				<div id="tsd-filter">
+					<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+					<div class="tsd-filter-group">
+						<div class="tsd-select" id="tsd-filter-visibility">
+							<span class="tsd-select-label">All</span>
+							<ul class="tsd-select-list">
+								<li data-value="public">Public</li>
+								<li data-value="protected">Public/Protected</li>
+								<li data-value="private" class="selected">All</li>
+							</ul>
+						</div>
+						<input type="checkbox" id="tsd-filter-inherited" checked/>
+						<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						<input type="checkbox" id="tsd-filter-externals" checked/>
+						<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+					</div>
+				</div>
+				<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>Project Tora</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#tora" id="tora" style="color: inherit; text-decoration: none;">
+					<h1>Tora</h1>
+				</a>
+				<p>node.js 的依赖注入框架，typescript 实现。</p>
+				<blockquote>
+					<p>鉴于编译低版本 nodejs 时使用 async &amp; await 会导致内存泄漏。<br>现在导出的包 target 为 es2019</p>
+				</blockquote>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<pre><code><span style="color: #001080">$</span><span style="color: #000000"> </span><span style="color: #001080">npm</span><span style="color: #000000"> </span><span style="color: #001080">install</span><span style="color: #000000"> </span><span style="color: #001080">tora</span>
+</code></pre>
+				<a href="#hello-tora" id="hello-tora" style="color: inherit; text-decoration: none;">
+					<h2>Hello Tora</h2>
+				</a>
+				<pre><code><span style="color: #000000">@</span><span style="color: #795E26">Router</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;test&#039;</span><span style="color: #000000">, {</span>
+<span style="color: #000000">    </span><span style="color: #001080">children:</span><span style="color: #000000"> []</span>
+<span style="color: #000000">})</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">IndexRouter</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">    </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">env</span><span style="color: #000000">: </span><span style="color: #267F99">Environment</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">gen</span><span style="color: #000000">: </span><span style="color: #267F99">GeneratorService</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">jwt</span><span style="color: #000000">: </span><span style="color: #267F99">JwtService</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">oss</span><span style="color: #000000">: </span><span style="color: #267F99">OssService</span><span style="color: #000000">,</span>
+<span style="color: #000000">    ) {</span>
+<span style="color: #000000">    }</span>
+
+<span style="color: #000000">    @</span><span style="color: #795E26">Post</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;normal&#039;</span><span style="color: #000000">)</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #795E26">normal</span><span style="color: #000000">(</span>
+<span style="color: #000000">        </span><span style="color: #001080">cs</span><span style="color: #000000">: </span><span style="color: #267F99">SessionContext</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #001080">params</span><span style="color: #000000">: </span><span style="color: #267F99">ApiParams</span><span style="color: #000000">&lt;{</span>
+<span style="color: #000000">            </span><span style="color: #001080">a</span><span style="color: #000000">: </span><span style="color: #267F99">number</span>
+<span style="color: #000000">            </span><span style="color: #001080">b</span><span style="color: #000000">: </span><span style="color: #267F99">string</span>
+<span style="color: #000000">        }&gt;) {</span>
+
+<span style="color: #000000">        </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">a</span><span style="color: #000000"> = </span><span style="color: #001080">params</span><span style="color: #000000">.</span><span style="color: #795E26">ensure</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;number&#039;</span><span style="color: #000000">)</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">b</span><span style="color: #000000"> = </span><span style="color: #001080">params</span><span style="color: #000000">.</span><span style="color: #795E26">ensure</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;nonEmptyString&#039;</span><span style="color: #000000">)</span>
+
+<span style="color: #000000">        </span><span style="color: #AF00DB">return</span><span style="color: #000000"> { </span><span style="color: #001080">a</span><span style="color: #000000">, </span><span style="color: #001080">b</span><span style="color: #000000"> }</span>
+<span style="color: #000000">    }</span>
+
+<span style="color: #000000">}</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">ToraModule</span><span style="color: #000000">({</span>
+<span style="color: #000000">    </span><span style="color: #001080">providers:</span><span style="color: #000000"> [</span>
+<span style="color: #000000">    ],</span>
+<span style="color: #000000">    </span><span style="color: #001080">router_gate:</span><span style="color: #000000"> </span><span style="color: #001080">IndexRouter</span>
+<span style="color: #000000">})</span>
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">TestModule</span><span style="color: #000000"> {</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Platform</span><span style="color: #000000">()</span>
+<span style="color: #000000">    .</span><span style="color: #795E26">bootstrap</span><span style="color: #000000">(</span><span style="color: #001080">TestModule</span><span style="color: #000000">)</span>
+<span style="color: #000000">    .</span><span style="color: #795E26">start</span><span style="color: #000000">(</span><span style="color: #098658">3000</span><span style="color: #000000">)</span>
+</code></pre>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/annotationtools.html">Annotation<wbr>Tools</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/tokenutils.html">Token<wbr>Utils</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/apiparams.html" class="tsd-kind-icon">Api<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/authenticator.html" class="tsd-kind-icon">Authenticator</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/cacheproxy.html" class="tsd-kind-icon">Cache<wbr>Proxy</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/classprovider.html" class="tsd-kind-icon">Class<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/configdata.html" class="tsd-kind-icon">Config<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/currenttimestamp.html" class="tsd-kind-icon">Current<wbr>Timestamp</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/factoryprovider.html" class="tsd-kind-icon">Factory<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/injector.html" class="tsd-kind-icon">Injector</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/judgement.html" class="tsd-kind-icon">Judgement</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/lifecycle.html" class="tsd-kind-icon">Life<wbr>Cycle</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/platform.html" class="tsd-kind-icon">Platform</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/resultwrapper.html" class="tsd-kind-icon">Result<wbr>Wrapper</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/schedule.html" class="tsd-kind-icon">Schedule</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/sessioncontext.html" class="tsd-kind-icon">Session<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/sessiondata.html" class="tsd-kind-icon">Session<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/tasklifecycle.html" class="tsd-kind-icon">Task<wbr>Life<wbr>Cycle</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/tasklock.html" class="tsd-kind-icon">Task<wbr>Lock</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/toraserver.html" class="tsd-kind-icon">Tora<wbr>Server</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/uuid.html" class="tsd-kind-icon">UUID</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/valueprovider.html" class="tsd-kind-icon">Value<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/classproviderdef.html" class="tsd-kind-icon">Class<wbr>Provider<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/componentoptions.html" class="tsd-kind-icon">Component<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/factoryproviderdef.html" class="tsd-kind-icon">Factory<wbr>Provider<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/handlerdescriptor.html" class="tsd-kind-icon">Handler<wbr>Descriptor</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/importsandproviders.html" class="tsd-kind-icon">Imports<wbr>And<wbr>Providers</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/moduleoptions.html" class="tsd-kind-icon">Module<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/provider.html" class="tsd-kind-icon">Provider</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/providertreenode.html" class="tsd-kind-icon">Provider<wbr>Tree<wbr>Node</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/routeroptions.html" class="tsd-kind-icon">Router<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/taskdescriptor.html" class="tsd-kind-icon">Task<wbr>Descriptor</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/triggeroptions.html" class="tsd-kind-icon">Trigger<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/type.html" class="tsd-kind-icon">Type</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/valueproviderdef.html" class="tsd-kind-icon">Value<wbr>Provider<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#apimethod" class="tsd-kind-icon">Api<wbr>Method</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#apipath" class="tsd-kind-icon">Api<wbr>Path</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#apireturndatatype" class="tsd-kind-icon">Api<wbr>Return<wbr>Data<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#classtype" class="tsd-kind-icon">Class<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="modules.html#handlerreturntype" class="tsd-kind-icon">Handler<wbr>Return<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#httphandler" class="tsd-kind-icon">Http<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#injectortype" class="tsd-kind-icon">Injector<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="modules.html#keyoffiltertype" class="tsd-kind-icon">Key<wbr>OfFilter<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#litecontext" class="tsd-kind-icon">Lite<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#providerdef" class="tsd-kind-icon">Provider<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="modules.html#toraerror" class="tsd-kind-icon">Tora<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#valuetype" class="tsd-kind-icon">Value<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#nullinjector" class="tsd-kind-icon">Null<wbr>Injector</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#pure_params" class="tsd-kind-icon">PURE_<wbr>PARAMS</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#auth" class="tsd-kind-icon">Auth</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#cachewith" class="tsd-kind-icon">Cache<wbr>With</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#component" class="tsd-kind-icon">Component</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#delete" class="tsd-kind-icon">Delete</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#disabled" class="tsd-kind-icon">Disabled</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#echodependencies" class="tsd-kind-icon">Echo<wbr>Dependencies</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#get" class="tsd-kind-icon">Get</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#gunslinger" class="tsd-kind-icon">Gunslinger</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#inject" class="tsd-kind-icon">Inject</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#lock" class="tsd-kind-icon">Lock</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#meta" class="tsd-kind-icon">Meta</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#nowrap" class="tsd-kind-icon">No<wbr>Wrap</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#post" class="tsd-kind-icon">Post</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#put" class="tsd-kind-icon">Put</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#router" class="tsd-kind-icon">Router</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#task" class="tsd-kind-icon">Task</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#toracomponent" class="tsd-kind-icon">Tora<wbr>Component</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#toramodule" class="tsd-kind-icon">Tora<wbr>Module</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#torarouter" class="tsd-kind-icon">Tora<wbr>Router</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#toratrigger" class="tsd-kind-icon">Tora<wbr>Trigger</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#trigger" class="tsd-kind-icon">Trigger</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#crash" class="tsd-kind-icon">crash</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#reasonable" class="tsd-kind-icon">reasonable</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="modules.html#response" class="tsd-kind-icon">response</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#throw_reasonable" class="tsd-kind-icon">throw_<wbr>reasonable</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

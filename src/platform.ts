@@ -1,9 +1,15 @@
+/**
+ * Copyright (c) Plank Root.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import { Dayjs } from 'dayjs'
 import fs from 'fs'
 import path from 'path'
-import { ConfigData, ToraConfig } from './builtin'
-import { BuiltInModule } from './builtin/built-in.module'
-import { Injector, ValueProvider } from './di'
+import { ConfigData, CurrentTimestamp, UUID } from './builtin'
+import { ClassProvider, Injector, ValueProvider } from './di'
 import { def2Provider } from './di/provider'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
 import { ApiParams, Authenticator, CacheProxy, LifeCycle, PURE_PARAMS, ResultWrapper, SessionContext, SessionData, ToraServer } from './server'
@@ -46,7 +52,7 @@ export class Platform {
     private root_injector = Injector.create()
     private _server = new ToraServer()
     private _koa = new ToraKoa({ cors: true, body_parser: true })
-    private _config_data?: ConfigData<ToraConfig>
+    private _config_data?: ConfigData
     private _revolver = new Revolver()
     private _interval = setInterval(() => this.trigger(), 100)
 
@@ -58,7 +64,8 @@ export class Platform {
         this.root_injector.set_provider(ResultWrapper, new ValueProvider('ResultWrapper', null))
         this.root_injector.set_provider(TaskLifeCycle, new ValueProvider('TaskLifeCycle', null))
         this.root_injector.set_provider(TaskLock, new ValueProvider('TaskLock', null))
-        TokenUtils.ToraModuleProviderCollector.get(BuiltInModule)?.(this.root_injector)
+        this.root_injector.set_provider(CurrentTimestamp, new ClassProvider(CurrentTimestamp, this.root_injector, true))
+        this.root_injector.set_provider(UUID, new ClassProvider(UUID, this.root_injector, true))
     }
 
     provide(def: (ProviderDef | Type<any>)) {
@@ -105,8 +112,8 @@ export class Platform {
      * @param file_path(string) - path of config file, default is 'config/default.json'.
      */
     load_config(file_path?: string): this
-    load_config<T extends ToraConfig>(data: T): this
-    load_config<T extends ToraConfig>(data?: string | T) {
+    load_config(data: ToraConfigSchema): this
+    load_config(data?: string | ToraConfigSchema) {
         if (!data) {
             if (!fs.existsSync(path.resolve('config/default.json'))) {
                 console.error('No specified configuration file, and "config/default.json" not exist.')
@@ -133,7 +140,7 @@ export class Platform {
      *
      * @param msg_builder(function) - extra infos to be print.
      */
-    loading_message<T extends ToraConfig>(msg_builder: (config: ConfigData<T>) => string[]) {
+    loading_message(msg_builder: (config: ConfigData) => string[]) {
         if (this._config_data) {
             msg_builder(this._config_data as any)?.forEach(info => console.log(info))
         }

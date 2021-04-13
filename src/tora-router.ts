@@ -1,15 +1,42 @@
+/**
+ * Copyright (c) Plank Root.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import { ClassProvider, Injector } from './di'
 import { TokenUtils } from './token'
 import { makeProviderCollector } from './tora-module'
 import { ApiMethod, HandlerDescriptor, RouterOptions, Type } from './types'
 
 /**
- * @annotation Router
+ * @annotation
  *
- * Collect and load router info.
+ * Mark class as Tora router component, which can be load by Platform instance.
  *
- * @param path(string) - Absolute path of this node.
- * @param options(RouterOptions)
+ * e.g.
+ * ```typescript
+ * @ToraRouter('/test')
+ * export class SampleComponent {
+ *
+ *     constructor(
+ *         public sc1: SampleComponent1,
+ *         private sc2: SampleComponent2,
+ *     ) {
+ *     }
+ *
+ *     @Get('test-get')
+ *     async test_get_method() {
+ *         return 'OK'
+ *     }
+ * }
+ * ```
+ *
+ * @category Annotation
+ *
+ * @param path
+ * @param options
  */
 export function ToraRouter(path: `/${string}`, options?: RouterOptions) {
     return function(constructor: any) {
@@ -32,24 +59,34 @@ export function ToraRouter(path: `/${string}`, options?: RouterOptions) {
     }
 }
 
+/**
+ * Alias for {@link ToraRouter}
+ *
+ * @category Annotation Alias
+ */
 export const Router = ToraRouter
 
-export interface IGunslinger<T> {
+/**
+ * @private
+ *
+ * GunsLinger Type, see {@link Gunslinger}.
+ */
+interface IGunslinger<T> {
+
+    new(): Type<T>
+
+    mount(path: `/${string}`): Type<T> & IGunslinger<T>
+
     replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & IGunslinger<Omit<T, M>>
 }
 
-export function Gunslinger<T>() {
-
-    return class Gunslinger {
-
-        static mount(path: `/${string}`): Type<T> & IGunslinger<T> {
-            return null as any
-        }
-
-        static replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & IGunslinger<Omit<T, M>> {
-            return null as any
-        }
-    }
+/**
+ * Class factory, for mixin method to modify path of API.
+ * @constructor
+ */
+export function Gunslinger<T>(): IGunslinger<T> {
+    return class {
+    } as any
 }
 
 export type NoTrailingAndLeadingSlash<T> =

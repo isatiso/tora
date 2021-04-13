@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) Plank Root.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import crypto from 'crypto'
 import { Component } from '../tora-component'
 
@@ -57,23 +64,26 @@ let NODE_ID = [
 let CLOCK_SEQ = ((seed_bytes[6] << 8) | seed_bytes[7]) & 0x3fff
 
 /**
- * @author plankroot
- * @class Generate a uuid as 32bytes char sequence.
+ * Injectable UUID implement.
  *
- * @example
+ * e.g.
+ * ```
+ * @Component()
  * class TestRouter {
  *
  *     @Post()
  *     async test(
  *         id: UUID
  *     ) {
- *
  *         return { id }
  *     }
  * }
+ * ```
+ *
+ * @category Builtin Component
  */
 @Component()
-export class UUID extends String {
+export class UUID {
 
     private static _lastMSecs = 0
     private static _lastNSecs = 0

@@ -1,6 +1,12 @@
+/**
+ * Copyright (c) Plank Root.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import { ExtendableContext } from 'koa'
 import { Stream } from 'stream'
-import { LockDescriptor } from './di'
 import { Schedule } from './trigger'
 
 export type LiteContext = ExtendableContext & {
@@ -32,8 +38,6 @@ export type KeyOfFilterType<T, U> = {
     [K in keyof T]: Exclude<T[K], undefined> extends U ? K : never
 }[keyof T]
 
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
-
 export interface HandlerDescriptor {
     path?: string
     method_and_path?: { [prop: string]: [ApiMethod, string] }
@@ -51,7 +55,10 @@ export interface HandlerDescriptor {
 
 export interface TaskDescriptor {
     crontab?: Schedule
-    lock?: LockDescriptor
+    lock?: {
+        key: string
+        expires?: number
+    }
     disabled?: boolean
     handler?: any
     param_types?: any[]

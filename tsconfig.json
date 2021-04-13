@@ -26,5 +26,18 @@
         "out",
         "node_modules",
         "**/*.spec.ts"
-    ]
+    ],
+    "typedocOptions": {
+        "name": "Tora",
+        "theme": "theme",
+        "entryPoints": [
+            "src/index.ts"
+        ],
+        "readme": "README.md",
+        "out": "docs",
+        "markedOptions": {
+            "breaks": true,
+            "headerIds": false
+        }
+    }
 }

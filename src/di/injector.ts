@@ -1,5 +1,15 @@
+/**
+ * Copyright (c) Plank Root.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import { Provider } from '../types'
 
+/**
+ * @private
+ */
 class _NullInjector {
 
     has(token: any) {
@@ -13,15 +23,19 @@ class _NullInjector {
     readonly children: InjectorType[] = []
 }
 
+/**
+ * NullInjector, has no provider, usually treat as root of Injector tree.
+ *
+ * If you searching a provider until here, you will got NullInjectorError.
+ */
 export const NullInjector = new _NullInjector()
 
 export type InjectorType = Injector | _NullInjector
 
 /**
- * @author plankroot
- * @class A special provider for injector.
+ * @private
  */
-export class InjectorProvider implements Provider<Injector> {
+class InjectorProvider implements Provider<Injector> {
 
     public used = false
 
@@ -42,8 +56,9 @@ export class InjectorProvider implements Provider<Injector> {
 }
 
 /**
- * @author plankroot
- * Injector
+ * Injector.
+ *
+ * @category Injector
  */
 export class Injector {
 
@@ -57,8 +72,7 @@ export class Injector {
     }
 
     /**
-     * @author plankroot
-     * @function Injector#create - create a injector.
+     * Create Injector.
      *
      * @param parent(InjectorType) - Injector or NullInjector
      * @param providers(Map) - Providers
@@ -72,18 +86,16 @@ export class Injector {
     }
 
     /**
-     * @author plankroot
-     * @function Injector.set_provider: record a token - provider mapping relation.
+     * Register mapping relation from token to provider.
      *
-     * @param token(any): value to index provider.
-     * @param provider(any): provider for a token.
+     * @param token
+     * @param provider
      */
     set_provider(token: any, provider: Provider<any>) {
         this.providers.set(token, provider)
     }
 
     /**
-     * @author plankroot
      * @function Injector.get: get a provider from injector.
      * @param token: value to index provider.
      * @param info: debug info, usually is a string to show who or where call this method.

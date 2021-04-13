@@ -1,16 +1,18 @@
+/**
+ * Copyright (c) Plank Root.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import { GenericTypeOfCustomMeta, TokenUtils } from '../token'
 import { HandlerDescriptor } from '../types'
 
-export interface LockDescriptor {
-    key: string
-    expires?: number
-}
-
 /**
- * @author plankroot
- * @annotation Inject: Provide a way to inject value by custom token whenever you need to inject with non-class one.
+ * Provide a way to inject value by custom token whenever you need to inject with non-class one.
  *
- * @param token (any) - any value, a number, a string or any object.
+ * @category Annotation
+ * @param token - any value, a number, a string or any object.
  */
 export function Inject(token: any) {
     return function(proto: any, key: string, index: number) {
@@ -20,20 +22,23 @@ export function Inject(token: any) {
 }
 
 /**
- * @annotation Disabled
- *
  * Mark a method which is no need to load.
+ *
+ * @category Annotation
+ * @param disabled_options Options, not used yet.
  */
 export function Disabled(disabled_options?: GenericTypeOfCustomMeta<typeof TokenUtils.DisabledMeta>) {
     return (target: any, key: string) => {
-        TokenUtils.DisabledMeta.set(target, key, {})
+        disabled_options = disabled_options ?? {}
+        TokenUtils.DisabledMeta.set(target, key, disabled_options)
     }
 }
 
 /**
- * @annotation Lock
- *
  * Mark LockMeta to a method.
+ *
+ * @category Annotation
+ * @param lock_options Lock options.
  */
 export function Lock(lock_options?: GenericTypeOfCustomMeta<typeof TokenUtils.LockMeta>) {
     return (target: any, property_key: string) => {
@@ -43,9 +48,11 @@ export function Lock(lock_options?: GenericTypeOfCustomMeta<typeof TokenUtils.Lo
 }
 
 /**
- * @annotation EchoDependencies
+ * Mark a class or method to echo dependencies when loading.
  *
- * Mark LockMeta to a method.
+ * **Note**: It's a debug option, don't use it in production environment.
+ *
+ * @category Annotation
  */
 export function EchoDependencies() {
     return function(target: any, property_key?: string) {
@@ -75,50 +82,27 @@ export function Meta<T extends object = any>(meta: T) {
 }
 
 /**
- * @author plankroot
- * @namespace AnnotationTools: Contain some helpful tools to create annotation.
+ * Contain some helpful tools to create annotation.
  */
 export namespace AnnotationTools {
 
     /**
-     * @author plankroot
-     * @function get_set_meta_data: get metadata by specified target and key. set a default value if there is no value settled.
+     * Get parameter types of a method.
      *
-     * @param metaKey(string) - Key of metadata.
-     * @param target(class) - Target to set metadata.
-     * @param key(string) - key to index metadata, can be undefined.
-     * @param def(any) - default value, set to value if there is no metadata settled. Usually [] or {}.
-     *
-     * @return (any) - metadata which is object or array, or some other types.
+     * @param target - Target to get metadata.
+     * @param property_key - Key to index metadata.
+     * @return - array of types
      */
-    export function get_set_meta_data(metaKey: string, target: any, key: string | undefined, def: any) {
-        if (!Reflect.hasMetadata(metaKey, target, key!)) {
-            Reflect.defineMetadata(metaKey, def, target, key!)
-        }
-        return Reflect.getMetadata(metaKey, target, key!)
+    export function get_param_types(target: any, property_key: string) {
+        const inject_token_map = TokenUtils.ParamInjection.get(target, property_key)
+        return TokenUtils.getParamTypes(target, property_key)?.map((t: any, i: number) => inject_token_map?.[i] ?? t)
     }
 
     /**
-     * @author plankroot
-     * @function get_param_types: get parameter types of a method.
+     * Create class decorator to do something when loading class.
      *
-     * @param target(class) - Target to get metadata.
-     * @param key(string) - Key to index metadata.
-     *
-     * @return (Type[]) - array of types
-     */
-    export function get_param_types(target: any, key: string) {
-        const inject_token_map = TokenUtils.ParamInjection.get(target, key)
-        return TokenUtils.getParamTypes(target, key)?.map((t: any, i: number) => inject_token_map?.[i] ?? t)
-    }
-
-    /**
-     * @author plankroot
-     * @function create_decorator: Create class decorator to do something when loading class.
-     *
-     * @param processor(Function) - function to do something.
-     *
-     * @return (Function) - a decorator function.
+     * @param processor - function to do something.
+     * @return - a decorator function.
      */
     export function create_decorator<T>(processor: (target: any, meta: any, options?: T) => void) {
         return function(options?: T) {
@@ -130,48 +114,37 @@ export namespace AnnotationTools {
     }
 
     /**
-     * @author plankroot
-     * @function add_handler: Add a function to handler set of class.
+     * Add handle function to set of class prototype.
      *
-     * @param proto(prototype) - prototype of class
-     * @param desc(HandlerDescriptor): a object to describe handler
-     *
-     * @return (void)
+     * @param proto - prototype of class.
+     * @param desc: Handler Description.
+     * @return - void
      */
-    export function add_handler(proto: any, desc: HandlerDescriptor) {
+    export function add_handler(proto: any, desc: HandlerDescriptor): void {
         TokenUtils.ToraRouterHandlerList.getset(proto, [])?.push(desc)
     }
 
     /**
-     * @author plankroot
-     * @function get_custom_data: Get custom data of specified target.
+     * Get custom data of specified target.
      *
-     * @param target(any) - any object.
-     * @param key(string) - key to index metadata.
-     *
-     * @return (any) - custom data.
+     * @param target - target of metadata.
+     * @param index
+     * @return - custom data.
      */
-    export function get_custom_data<T>(target: any, key: string): T | undefined {
-        return TokenUtils.CustomData.get(target)?.[key]
+    export function get_custom_data<T>(target: any, index: string): T | undefined {
+        return TokenUtils.CustomData.get(target)?.[index]
     }
 
     /**
-     * @author plankroot
-     * @function define_custom_data: Set custom data of specified target.
+     * Set custom data of specified target.
      *
-     * @param target(any) - any object.
-     * @param key(string) - key to index metadata.
-     * @param value(any) - custom data to set.
-     *
-     * @return (boolean) - true if set successfully.
+     * @param target - target of metadata.
+     * @param index
+     * @param data
+     * @return
      */
-    export function define_custom_data<T = any>(target: any, key: string, value: T) {
-        const custom_data = TokenUtils.CustomData.getset(target, {})
-        if (!custom_data) {
-            return false
-        }
-        custom_data[key] = value
-        return true
+    export function define_custom_data<T = any>(target: any, index: string, data: T) {
+        TokenUtils.CustomData.getset(target, {})[index] = data
     }
 }
 

@@ -1,3 +1,13 @@
+/**
+ * Copyright (c) Plank Root.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * @module SessionContext
+ */
 import { InnerFinish, OuterFinish, throw_reasonable } from '../error'
 import { LiteContext } from '../types'
 import { Authenticator } from './service/authenticator'

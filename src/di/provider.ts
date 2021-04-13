@@ -1,8 +1,20 @@
+/**
+ * Copyright (c) Plank Root.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import { TokenUtils } from '../token'
 import { ClassProviderDef, FactoryProviderDef, Provider, ProviderDef, Type, ValueProviderDef } from '../types'
-import { AnnotationTools } from './annotation'
 import { Injector } from './injector'
 
+/**
+ * @private
+ *
+ * @param defs
+ * @param injector
+ */
 export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Injector) {
     return defs?.map(def => {
         if ((def as any).useValue) {
@@ -60,8 +72,11 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
 }
 
 /**
- * @author plankroot
- * ClassProvider: wrap a class, and create instance when needed.
+ * ClassProvider
+ *
+ * Wrap class, and create instance when needed.
+ *
+ * @category Provider Subtype
  */
 export class ClassProvider<M> implements Provider<M> {
 
@@ -147,6 +162,13 @@ export class ClassProvider<M> implements Provider<M> {
     }
 }
 
+/**
+ * ValueProvider
+ *
+ * Wrap const value, and return it when needed.
+ *
+ * @category Provider Subtype
+ */
 export class ValueProvider<M> implements Provider<M> {
 
     public used = false
@@ -167,6 +189,13 @@ export class ValueProvider<M> implements Provider<M> {
     }
 }
 
+/**
+ * FactoryProvider
+ *
+ * Wrap factory function, and execute it when needed.
+ *
+ * @category Provider Subtype
+ */
 export class FactoryProvider<M> implements Provider<M> {
 
     public used = false

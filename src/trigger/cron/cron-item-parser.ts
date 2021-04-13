@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) Plank Root.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 export type FieldType = 'second' | 'minute' | 'hour' | 'dayOfMonth' | 'month' | 'dayOfWeek'
 
 const VALUE_RANGE = {
@@ -34,9 +41,9 @@ const WEEK_ALIAS: { [prop: string]: number } = {
     sat: 6
 }
 
-const rangeRegex = /^([0-9]{1,2}|[0-9]{1,2}-[0-9]{1,2}|[0-9]{1,2}\/[0-9]{1,2}|[0-9]{1,2}-[0-9]{1,2}\/[0-9]{1,2})$/
-const dayOfWeekSpecial = /^([0-7]#[1-5]|[0-7]l)$/
-const dayOfMonthSpecial = /^(l|[1-9]w|[012][0-9]w|3[01]w|wl|lw)$/
+const RANGE_REGEX = /^([0-9]{1,2}|[0-9]{1,2}-[0-9]{1,2}|[0-9]{1,2}\/[0-9]{1,2}|[0-9]{1,2}-[0-9]{1,2}\/[0-9]{1,2})$/
+const DAY_OF_WEEK_SPECIAL_REGEX = /^([0-7]#[1-5]|[0-7]l)$/
+const DAY_OF_MONTH_SPECIAL_REGEX = /^(l|[1-9]w|[012][0-9]w|3[01]w|wl|lw)$/
 
 function generate_sequence(start: number, end: number, step: number, value_type: FieldType) {
     if (end < start) {
@@ -74,14 +81,14 @@ export function parse_range(value: string, value_type: FieldType): number[] {
 }
 
 export function parse_value(value: string, value_type: FieldType): string | number[] {
-    if (rangeRegex.test(value)) {
+    if (RANGE_REGEX.test(value)) {
         return parse_range(value, value_type)
     } else if (value_type === 'dayOfMonth') {
-        if (dayOfMonthSpecial.test(value)) {
+        if (DAY_OF_MONTH_SPECIAL_REGEX.test(value)) {
             return value
         }
     } else if (value_type === 'dayOfWeek') {
-        if (dayOfWeekSpecial.test(value)) {
+        if (DAY_OF_WEEK_SPECIAL_REGEX.test(value)) {
             if (value.startsWith('7')) {
                 return value.replace(/^7/, '0')
             }
