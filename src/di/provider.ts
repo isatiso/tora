@@ -42,7 +42,7 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
         } else if ((def as any).useClass) {
 
             const d = def as ClassProviderDef
-            const component_name = TokenUtils.ToraComponent.get(d.useClass)
+            const component_name = TokenUtils.ToraComponentName.get(d.useClass)
             if (!component_name) {
                 throw new Error(`${d.useClass.name} is not Component.`)
             }
@@ -56,7 +56,7 @@ export function def2Provider(defs: (ProviderDef | Type<any>)[], injector: Inject
 
         } else {
 
-            const component_name = TokenUtils.ToraComponent.get(def)
+            const component_name = TokenUtils.ToraComponentName.get(def)
             if (!component_name) {
                 throw new Error(`${(def as any).name} is not Component.`)
             }

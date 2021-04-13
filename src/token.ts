@@ -26,7 +26,7 @@ enum DI_TOKEN {
     param_injection = 'lazor:param_injection',
 
     // component
-    tora_component = 'lazor:tora_component',
+    tora_component_name = 'lazor:tora_component_name',
 
     // module
     tora_module_provider_collector = 'lazor:tora_module_provider_collector',
@@ -150,7 +150,7 @@ export namespace TokenUtils {
     export const ClassMeta = new CustomMeta<{ [prop: string]: any }>(DI_TOKEN.class_meta)
 
     // ToraComponent
-    export const ToraComponent = new CustomMeta<string>(DI_TOKEN.tora_component)
+    export const ToraComponentName = new CustomMeta<string>(DI_TOKEN.tora_component_name)
 
     // ToraModule
     export const ToraModuleProviderCollector = new CustomMeta<(injector: Injector) => { children: any[], name: any, providers: Provider<any>[] }>(DI_TOKEN.tora_module_provider_collector)

@@ -35,7 +35,7 @@ import { ComponentOptions } from './types'
 export function ToraComponent(options?: ComponentOptions) {
     return function(target: any) {
         TokenUtils.setClassTypeNX(target, 'ToraComponent')
-        TokenUtils.ToraComponent.set(target, target.name)
+        TokenUtils.ToraComponentName.set(target, target.name)
     }
 }
 
