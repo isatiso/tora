@@ -7,6 +7,8 @@
 
 /**
  * Class to save and pass data in a single session.
+ *
+ * @category API Injectable
  */
 export class SessionData<T extends object = any> {
 

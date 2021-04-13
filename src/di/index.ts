@@ -5,6 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+export { Injector, NullInjector, InjectorType } from './injector'
 export { ClassProvider, ValueProvider, FactoryProvider } from './provider'
 export { Inject, AnnotationTools, Meta, Disabled, Lock, EchoDependencies } from './annotation'
-export { Injector, NullInjector, InjectorType } from './injector'

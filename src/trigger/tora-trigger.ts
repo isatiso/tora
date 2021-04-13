@@ -12,10 +12,12 @@ import { TaskDescriptor, TriggerOptions } from '../types'
 import { Schedule, ScheduleOptions } from './cron'
 
 /**
- * @annotation Trigger
- *
  * Collect and load trigger info.
  *
+ * @public
+ * @category Annotation
+ *
+ * @param options
  */
 export function ToraTrigger(options?: TriggerOptions) {
     return function(constructor: any) {

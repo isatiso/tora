@@ -18,6 +18,7 @@ declare module 'koa' {
 }
 
 /**
+ * @private
  * Koa adaptor.
  */
 export class ToraKoa {

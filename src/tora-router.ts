@@ -125,37 +125,37 @@ function createRequestDecorator(method: ApiMethod) {
 }
 
 /**
- * @annotation Get
- *
  * Mark a method to handle a GET request.
+ *
+ * @category Annotation
  */
 export const Get = createRequestDecorator('GET')
 
 /**
- * @annotation Post
- *
  * Mark a method to handle a POST request.
+ *
+ * @category Annotation
  */
 export const Post = createRequestDecorator('POST')
 
 /**
- * @annotation Put
- *
  * Mark a method to handle a PUT request.
+ *
+ * @category Annotation
  */
 export const Put = createRequestDecorator('PUT')
 
 /**
- * @annotation Delete
- *
  * Mark a method to handle a DELETE request.
+ *
+ * @category Annotation
  */
 export const Delete = createRequestDecorator('DELETE')
 
 /**
- * @annotation Auth
- *
  * Mark a method which need to authorize client info.
+ *
+ * @category Annotation
  */
 export function Auth() {
     return (target: any, key: string) => {
@@ -165,9 +165,9 @@ export function Auth() {
 }
 
 /**
- * @annotation NoWrap
- *
  * Mark a method which's result is no need to wrap.
+ *
+ * @category Annotation
  */
 export function NoWrap() {
     return (target: any, key: string) => {
@@ -177,9 +177,9 @@ export function NoWrap() {
 }
 
 /**
- * @annotation CacheWith
- *
  * Mark cache prefix and expires of a method's response .
+ *
+ * @category Annotation
  */
 export function CacheWith(prefix: string, expires?: number) {
     return (target: any, key: string) => {

@@ -14,10 +14,9 @@ import { Authenticator } from './service/authenticator'
 import { CacheProxy } from './service/cache-proxy'
 
 /**
- * @author plankroot
- * @class
- * @name SessionContext
- * @description Request session context for data transform.
+ * Request session context for data transform.
+ *
+ * @category API Injectable
  */
 export class SessionContext<USER extends object = any> {
 

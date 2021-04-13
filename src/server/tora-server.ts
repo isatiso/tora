@@ -8,6 +8,9 @@
 import { Request } from 'koa'
 import { ApiMethod, ApiPath, ApiReturnDataType, HandlerReturnType, HttpHandler, LiteContext } from '../types'
 
+/**
+ * @private
+ */
 export class ToraServer {
 
     private handlers: {
