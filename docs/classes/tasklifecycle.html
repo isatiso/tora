@@ -73,11 +73,12 @@
 		<div class="col-8 col-content">
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
-					<div class="tsd-comment-tags">
-						<h4 style="text-transform: capitalize">abstract</h4>
-						<div style="line-height: 1.5;"><p>TaskLifeCycle</p>
-						</div>
+					<div class="lead">
+						<p>[[Trigger.Task]] 的生命周期服务。和 <a href="../modules/tora.html#torarouter">Tora.ToraRouter</a> 的 LifeCycle 接口一样，用于在任务执行的几个特定时间点触发一些操作。</p>
 					</div>
+					<p>需要注意的时，如果实现了 TaskLifeCycle 接口，异常会被捕获并传入 on_error 方法。<br>如果此时不需要处理异常，需要将异常抛出。</p>
+					<p>如果 Task 执行过程中遇到了未处理的异常，异常任务会被移出执行队列。</p>
+					<p><strong>注意</strong>：对于实现了 TaskLock 服务，但是获取锁失败的情况不会触发 TaskLifeCycle 中的任何方法。请参考 <a href="tasklock.html">TaskLock</a>。</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -132,19 +133,30 @@
 					<a name="on_error" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on_<wbr>error</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">on_<wbr>error<span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">on_<wbr>error<span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, context<span class="tsd-signature-symbol">: </span><a href="taskcontext.html" class="tsd-signature-type" data-tsd-kind="Class">TaskContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/trigger/service/task-life-cycle.ts#L17">src/trigger/service/task-life-cycle.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/service/task-life-cycle.ts#L46">src/service/task-life-cycle.ts:46</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>任务抛出异常。</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>err: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>context: <a href="taskcontext.html" class="tsd-signature-type" data-tsd-kind="Class">TaskContext</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>任务上下文对象。</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -155,15 +167,20 @@
 					<a name="on_finish" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on_<wbr>finish</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">on_<wbr>finish&lt;T&gt;<span class="tsd-signature-symbol">(</span>res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">on_<wbr>finish&lt;T&gt;<span class="tsd-signature-symbol">(</span>res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, context<span class="tsd-signature-symbol">: </span><a href="taskcontext.html" class="tsd-signature-type" data-tsd-kind="Class">TaskContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/trigger/service/task-life-cycle.ts#L15">src/trigger/service/task-life-cycle.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/service/task-life-cycle.ts#L38">src/service/task-life-cycle.ts:38</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>任务正常执行结束。</p>
+								</div>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -175,6 +192,12 @@
 								<li>
 									<h5>res: <span class="tsd-signature-type">T</span></h5>
 								</li>
+								<li>
+									<h5>context: <a href="taskcontext.html" class="tsd-signature-type" data-tsd-kind="Class">TaskContext</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>任务上下文对象。</p>
+									</div>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
@@ -184,15 +207,29 @@
 					<a name="on_init" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> on_<wbr>init</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">on_<wbr>init<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">on_<wbr>init<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">: </span><a href="taskcontext.html" class="tsd-signature-type" data-tsd-kind="Class">TaskContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/trigger/service/task-life-cycle.ts#L13">src/trigger/service/task-life-cycle.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/service/task-life-cycle.ts#L30">src/service/task-life-cycle.ts:30</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>请求初始化之后，进行依赖查找之前调用。</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>context: <a href="taskcontext.html" class="tsd-signature-type" data-tsd-kind="Class">TaskContext</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>任务上下文对象。</p>
+									</div>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
@@ -245,10 +282,6 @@
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 			</ul>
@@ -259,9 +292,6 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
 			</ul>
 		</div>
 	</div>

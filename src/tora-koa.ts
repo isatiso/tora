@@ -7,7 +7,7 @@
 
 import CoBody from 'co-body'
 import Koa from 'koa'
-import { ToraServer } from './server'
+import { ToraServer } from './tora-server'
 import { LiteContext } from './types'
 
 declare module 'koa' {

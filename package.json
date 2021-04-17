@@ -30,6 +30,9 @@
         "lib": "lib"
     },
     "homepage": "https://github.com/isatiso/tora#readme",
+    "engines": {
+        "node": ">=12.0.0"
+    },
     "dependencies": {
         "@types/co-body": "^5.1.0",
         "@types/koa": "^2.13.1",
@@ -39,17 +42,19 @@
         "koa": "^2.13.1",
         "reflect-metadata": "^0.1.13",
         "todes": "^0.0.37",
-        "tslib": "^2.1.0"
+        "tslib": "^2.2.0"
     },
     "devDependencies": {
         "@rollup/plugin-json": "^4.1.0",
+        "@types/mocha": "^8.2.2",
         "builtin-modules": "^3.2.0",
         "luxon": "^1.26.0",
-        "rollup": "^2.43.1",
+        "mocha": "^8.3.2",
+        "rollup": "^2.45.2",
         "rollup-plugin-dts": "^3.0.1",
         "rollup-plugin-typescript2": "^0.30.0",
         "ts-node": "^9.1.1",
         "typedoc": "^0.20.35",
-        "typescript": "^4.2.3"
+        "typescript": "^4.2.4"
     }
 }

@@ -5,7 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { Injector } from './di'
+import 'reflect-metadata'
+import { Injector } from './injector'
 import { HandlerDescriptor, Provider, RouterOptions, TaskDescriptor, TriggerOptions, Type } from './types'
 
 export type GenericTypeOfCustomMeta<T> = T extends CustomMeta<infer P> ? P : never
@@ -137,6 +138,9 @@ class CustomMeta<T = any> {
     }
 }
 
+/**
+ * @private
+ */
 export namespace TokenUtils {
 
     export const ClassType = new CustomMeta<ClassType>(DI_TOKEN.class_type)

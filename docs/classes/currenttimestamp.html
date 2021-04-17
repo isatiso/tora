@@ -74,17 +74,34 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Injectable Timestamp.</p>
+						<p>内置的时间戳服务。</p>
 					</div>
-					<p>e.g.</p>
-					<pre><code><span style="color: #000000">@</span><span style="color: #795E26">Component</span><span style="color: #000000">()</span>
+					<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ToraRouter</span><span style="color: #000000">, </span><span style="color: #001080">Post</span><span style="color: #000000">, </span><span style="color: #001080">Timestamp</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;tora&#039;</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">ToraRouter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;/&#039;</span><span style="color: #000000">)</span>
 <span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">TestRouter</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">    </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span>
+<span style="color: #000000">        </span><span style="color: #008000">// 这里是在服务加载时注入的，可以粗略的认为是服务的启动时间。</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">module_load_timestamp</span><span style="color: #000000">: </span><span style="color: #267F99">Timestamp</span><span style="color: #000000">,</span>
+<span style="color: #000000">    ) {</span>
+<span style="color: #000000">    }</span>
 
 <span style="color: #000000">    @</span><span style="color: #795E26">Post</span><span style="color: #000000">()</span>
 <span style="color: #000000">    </span><span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #795E26">test</span><span style="color: #000000">(</span>
-<span style="color: #000000">        </span><span style="color: #001080">now</span><span style="color: #000000">: </span><span style="color: #267F99">CurrentTimestamp</span>
+<span style="color: #000000">        </span><span style="color: #008000">// 这里是在 API 调用时注入的，可以认为是 API 收到请求的时间。</span>
+<span style="color: #000000">        </span><span style="color: #001080">now</span><span style="color: #000000">: </span><span style="color: #267F99">Timestamp</span>
 <span style="color: #000000">    ) {</span>
-<span style="color: #000000">        </span><span style="color: #AF00DB">return</span><span style="color: #000000"> { </span><span style="color: #001080">timestamp:</span><span style="color: #000000"> +</span><span style="color: #001080">now</span><span style="color: #000000"> }</span>
+
+<span style="color: #000000">        </span><span style="color: #AF00DB">return</span><span style="color: #000000"> {</span>
+<span style="color: #000000">            </span><span style="color: #001080">start_at:</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">module_load_timestamp</span><span style="color: #000000">.</span><span style="color: #795E26">valueOf</span><span style="color: #000000">(),</span>
+
+<span style="color: #000000">            </span><span style="color: #008000">// 可以通过隐式转换将 Timestamp 对象转换为 number。</span>
+<span style="color: #000000">            </span><span style="color: #001080">timestamp1:</span><span style="color: #000000"> +</span><span style="color: #001080">now</span><span style="color: #000000">,</span>
+
+<span style="color: #000000">            </span><span style="color: #008000">// 或者显式调用 .valueOf() 方法将 Timestamp 对象转换为 number。</span>
+<span style="color: #000000">            </span><span style="color: #001080">timestamp2:</span><span style="color: #000000"> </span><span style="color: #001080">now</span><span style="color: #000000">.</span><span style="color: #795E26">valueOf</span><span style="color: #000000">(),</span>
+<span style="color: #000000">        }</span>
 <span style="color: #000000">    }</span>
 <span style="color: #000000">}</span>
 </code></pre>
@@ -182,7 +199,7 @@
 					<div class="tsd-signature tsd-kind-icon">_timestamp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/builtin/current-timestamp.ts#L32">src/builtin/current-timestamp.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/timestamp.ts#L21">src/builtin/timestamp.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -494,7 +511,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Number.valueOf</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/builtin/current-timestamp.ts#L34">src/builtin/current-timestamp.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/timestamp.ts#L23">src/builtin/timestamp.ts:23</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -798,10 +815,6 @@
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 			</ul>
@@ -812,9 +825,6 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
 			</ul>
 		</div>
 	</div>

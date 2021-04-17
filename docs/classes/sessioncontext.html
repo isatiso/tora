@@ -64,7 +64,7 @@
 					<a href="sessioncontext.html">SessionContext</a>
 				</li>
 			</ul>
-			<h1>Class SessionContext&lt;USER&gt;</h1>
+			<h1>Class SessionContext</h1>
 		</div>
 	</div>
 </header>
@@ -74,17 +74,9 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Request session context for data transform.</p>
+						<p>请求上下文对象。</p>
 					</div>
 				</div>
-			</section>
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>USER<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <span class="tsd-signature-type">any</span></h4>
-					</li>
-				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
@@ -101,13 +93,22 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter"><a href="sessioncontext.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="sessioncontext.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="sessioncontext.html#_custom_data" class="tsd-kind-icon">_custom_<wbr>data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="sessioncontext.html#cache_expires" class="tsd-kind-icon">cache_<wbr>expires</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="sessioncontext.html#cache_key" class="tsd-kind-icon">cache_<wbr>key</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="sessioncontext.html#cache_prefix" class="tsd-kind-icon">cache_<wbr>prefix</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="sessioncontext.html#maybe_user" class="tsd-kind-icon">maybe_<wbr>user</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="sessioncontext.html#auth_info" class="tsd-kind-icon">auth_<wbr>info</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="sessioncontext.html#method" class="tsd-kind-icon">method</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="sessioncontext.html#path" class="tsd-kind-icon">path</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="sessioncontext.html#query" class="tsd-kind-icon">query</a></li>
@@ -121,14 +122,15 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sessioncontext.html#clear_cache" class="tsd-kind-icon">clear_<wbr>cache</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sessioncontext.html#do_auth" class="tsd-kind-icon">do_<wbr>auth</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sessioncontext.html#finish" class="tsd-kind-icon">finish</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="sessioncontext.html#finish_and_cache" class="tsd-kind-icon">finish_<wbr>and_<wbr>cache</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="sessioncontext.html#get_data" class="tsd-kind-icon">get_<wbr>data</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sessioncontext.html#header" class="tsd-kind-icon">header</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sessioncontext.html#headers" class="tsd-kind-icon">headers</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sessioncontext.html#redirect" class="tsd-kind-icon">redirect</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sessioncontext.html#response_header" class="tsd-kind-icon">response_<wbr>header</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sessioncontext.html#return_if_cache" class="tsd-kind-icon">return_<wbr>if_<wbr>cache</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="sessioncontext.html#set_data" class="tsd-kind-icon">set_<wbr>data</a></li>
 							</ul>
 						</section>
 					</div>
@@ -136,35 +138,29 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Session<wbr>Context&lt;USER&gt;<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="../modules.html#litecontext" class="tsd-signature-type" data-tsd-kind="Type alias">LiteContext</a>, auth<span class="tsd-signature-symbol">: </span><a href="authenticator.html" class="tsd-signature-type" data-tsd-kind="Class">Authenticator</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">USER</span><span class="tsd-signature-symbol">&gt;</span>, cache<span class="tsd-signature-symbol">?: </span><a href="cacheproxy.html" class="tsd-signature-type" data-tsd-kind="Class">CacheProxy</a>, cache_prefix<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, cache_expires<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="sessioncontext.html" class="tsd-signature-type" data-tsd-kind="Class">SessionContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">USER</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Session<wbr>Context<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="../modules/toratypes.html#litecontext" class="tsd-signature-type" data-tsd-kind="Type alias">LiteContext</a>, token<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ToraAuthInfo</span>, cache<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="cacheproxy.html" class="tsd-signature-type" data-tsd-kind="Class">CacheProxy</a>, cache_prefix<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, cache_expires<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="sessioncontext.html" class="tsd-signature-type" data-tsd-kind="Class">SessionContext</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L21">src/server/session-context.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L22">src/builtin/session-context.ts:22</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>USER<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <span class="tsd-signature-type">any</span></h4>
-								</li>
-							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>ctx: <a href="../modules.html#litecontext" class="tsd-signature-type" data-tsd-kind="Type alias">LiteContext</a></h5>
+									<h5>ctx: <a href="../modules/toratypes.html#litecontext" class="tsd-signature-type" data-tsd-kind="Type alias">LiteContext</a></h5>
 								</li>
 								<li>
-									<h5>auth: <a href="authenticator.html" class="tsd-signature-type" data-tsd-kind="Class">Authenticator</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">USER</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>token: <span class="tsd-signature-type">ToraAuthInfo</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> cache: <a href="cacheproxy.html" class="tsd-signature-type" data-tsd-kind="Class">CacheProxy</a></h5>
+									<h5>cache: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="cacheproxy.html" class="tsd-signature-type" data-tsd-kind="Class">CacheProxy</a></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> cache_prefix: <span class="tsd-signature-type">string</span></h5>
@@ -173,28 +169,75 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> cache_expires: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="sessioncontext.html" class="tsd-signature-type" data-tsd-kind="Class">SessionContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">USER</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="sessioncontext.html" class="tsd-signature-type" data-tsd-kind="Class">SessionContext</a></h4>
 						</li>
 					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_custom_data" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _custom_<wbr>data</h3>
+					<div class="tsd-signature tsd-kind-icon">_custom_<wbr>data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ToraSession</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = {}</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L22">src/builtin/session-context.ts:22</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="cache_expires" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> cache_<wbr>expires</h3>
+					<div class="tsd-signature tsd-kind-icon">cache_<wbr>expires<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L20">src/builtin/session-context.ts:20</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="cache_key" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> cache_<wbr>key</h3>
+					<div class="tsd-signature tsd-kind-icon">cache_<wbr>key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L21">src/builtin/session-context.ts:21</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="cache_prefix" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> cache_<wbr>prefix</h3>
+					<div class="tsd-signature tsd-kind-icon">cache_<wbr>prefix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L19">src/builtin/session-context.ts:19</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="maybe_user" class="tsd-anchor"></a>
-					<h3>maybe_<wbr>user</h3>
+					<a name="auth_info" class="tsd-anchor"></a>
+					<h3>auth_<wbr>info</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> maybe_user<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">USER</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> auth_info<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ToraAuthInfo</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L89">src/server/session-context.ts:89</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L88">src/builtin/session-context.ts:88</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">USER</span></h4>
-							<p>user info, if user info is not exist, return undefined.</p>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>返回用户信息，如果用户信息不存在，返回 undefined。</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ToraAuthInfo</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -208,11 +251,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L47">src/server/session-context.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L45">src/builtin/session-context.ts:45</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>返回请求的 HTTP 谓词，比如 GET，POST 等。</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h4>
-							<p>method of request.</p>
 						</li>
 					</ul>
 				</section>
@@ -226,11 +273,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L54">src/server/session-context.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L52">src/builtin/session-context.ts:52</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>返回请求路径，比如 <code>/test/return-value</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-							<p>url of request, exclude query string.</p>
 						</li>
 					</ul>
 				</section>
@@ -244,11 +295,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L75">src/server/session-context.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L73">src/builtin/session-context.ts:73</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>以 <code>NodeJS.Dict</code> 形式返回解析后的 querystring。</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Dict</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>query object which parsed from query string.</p>
 						</li>
 					</ul>
 				</section>
@@ -262,11 +317,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L68">src/server/session-context.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L66">src/builtin/session-context.ts:66</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>返回请求体的原始内容。</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-							<p>raw string of request body.</p>
 						</li>
 					</ul>
 				</section>
@@ -280,11 +339,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L61">src/server/session-context.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L59">src/builtin/session-context.ts:59</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>返回请求的客户端 IP 地址，优先使用请求头 X-Real-Ip，如果找不到则使用 X-Forward-For 中的第一个 IP 地址。</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-							<p>ip address of request, from header X-Real-Ip or X-Forward-For or remote-address.</p>
 						</li>
 					</ul>
 				</section>
@@ -298,11 +361,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L40">src/server/session-context.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L38">src/builtin/session-context.ts:38</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>返回请求的 URL，包含 querystring 部分。</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h4>
-							<p>url of request, include query string.</p>
 						</li>
 					</ul>
 				</section>
@@ -310,17 +377,23 @@
 					<a name="user" class="tsd-anchor"></a>
 					<h3>user</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> user<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">USER</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> user<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ToraAuthInfo</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L82">src/server/session-context.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L81">src/builtin/session-context.ts:81</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">USER</span></h4>
-							<p>user info, if user info is not exist, throw a 401 Unauthorized Error.</p>
+							<div class="tsd-comment tsd-typography">
+								<div class="tsd-comment-tags">
+									<h4 style="text-transform: capitalize">deprecated</h4>
+									<div style="line-height: 1.5;"><p>返回用户信息，如果用户信息不存在，则认为未授权操作，返回 <code>401 Unauthorized Error</code>。</p>
+									</div>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ToraAuthInfo</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -337,20 +410,20 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L156">src/server/session-context.ts:156</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L155">src/builtin/session-context.ts:155</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="tsd-comment-tags">
-									<h4 style="text-transform: capitalize">function</h4>
-									<div style="line-height: 1.5;"><p>Clear cache of response of specified key.</p>
-									</div>
+								<div class="lead">
+									<p>清除缓存，参考 <a href="cacheproxy.html#clear">CacheProxy.clear</a>。</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -358,54 +431,30 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="do_auth" class="tsd-anchor"></a>
-					<h3>do_<wbr>auth</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">do_<wbr>auth<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">USER</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L122">src/server/session-context.ts:122</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="tsd-comment-tags">
-									<h4 style="text-transform: capitalize">function</h4>
-									<div style="line-height: 1.5;"><p>check authorization of client info, like cookie things, depends on implementation.</p>
-									</div>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">USER</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>(USER) user info or undefined.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="finish" class="tsd-anchor"></a>
 					<h3>finish</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">finish<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">never</span></li>
+						<li class="tsd-signature tsd-kind-icon">finish<span class="tsd-signature-symbol">(</span>result<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">never</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L148">src/server/session-context.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L146">src/builtin/session-context.ts:146</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="tsd-comment-tags">
-									<h4 style="text-transform: capitalize">function</h4>
-									<div style="line-height: 1.5;"><p>Finish process of handler and go next.</p>
-									</div>
+								<div class="lead">
+									<p>结束并返回请求处理结果。</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>data: <span class="tsd-signature-type">any</span></h5>
+									<h5>result: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>请求处理结果。</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">never</span></h4>
@@ -416,21 +465,19 @@
 					<a name="finish_and_cache" class="tsd-anchor"></a>
 					<h3>finish_<wbr>and_<wbr>cache</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">finish_<wbr>and_<wbr>cache&lt;T&gt;<span class="tsd-signature-symbol">(</span>info_promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">finish_<wbr>and_<wbr>cache&lt;T&gt;<span class="tsd-signature-symbol">(</span>info_promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, also_return<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">never</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">finish_<wbr>and_<wbr>cache&lt;T&gt;<span class="tsd-signature-symbol">(</span>may_be_promised<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">finish_<wbr>and_<wbr>cache&lt;T&gt;<span class="tsd-signature-symbol">(</span>may_be_promised<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, finish<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">never</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L182">src/server/session-context.ts:182</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L180">src/builtin/session-context.ts:180</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="tsd-comment-tags">
-									<h4 style="text-transform: capitalize">function</h4>
-									<div style="line-height: 1.5;"><p>Cache data with key which save in ServerContext.return_if_cache and finish.</p>
-									</div>
+								<div class="lead">
+									<p>设置缓存并返回请求处理结果。参考 <a href="cacheproxy.html#set">CacheProxy.set</a>。</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -442,7 +489,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>info_promise: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>may_be_promised: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
@@ -452,7 +499,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L183">src/server/session-context.ts:183</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L181">src/builtin/session-context.ts:181</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -464,13 +511,42 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>info_promise: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>may_be_promised: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5>also_return: <span class="tsd-signature-type">true</span></h5>
+									<h5>finish: <span class="tsd-signature-type">true</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">never</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="get_data" class="tsd-anchor"></a>
+					<h3>get_<wbr>data</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">get_<wbr>data&lt;M&gt;<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ToraSession</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L96">src/builtin/session-context.ts:96</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>M<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">never</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">M</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ToraSession</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -484,20 +560,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L97">src/server/session-context.ts:97</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L105">src/builtin/session-context.ts:105</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="tsd-comment-tags">
-									<h4 style="text-transform: capitalize">function</h4>
-									<div style="line-height: 1.5;"><p>Get header of specified key.</p>
-									</div>
+								<div class="lead">
+									<p>获取指定的请求头。</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>请求头名称，比如 <code>Content-Type</code></p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -514,14 +591,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L104">src/server/session-context.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L112">src/builtin/session-context.ts:112</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="tsd-comment-tags">
-									<h4 style="text-transform: capitalize">function</h4>
-									<div style="line-height: 1.5;"><p>Get all headers as a dict.</p>
-									</div>
+								<div class="lead">
+									<p>以 <code>NodeJS.Dict</code> 形式返回全部请求头。</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Dict</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -538,19 +613,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L139">src/server/session-context.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L136">src/builtin/session-context.ts:136</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="tsd-comment-tags">
-									<h4 style="text-transform: capitalize">function</h4>
-									<div style="line-height: 1.5;"><p>Perform a 302 redirect to <code>url</code>.</p>
-										<p>The string &quot;back&quot; is special-cased<br>to provide Referrer support, when Referrer<br>is not present <code>alt</code> or &quot;/&quot; is used.</p>
-									</div>
-									<h4 style="text-transform: capitalize">example:</h4>
-									<div style="line-height: 1.5;"><p>   this.redirect(&#39;back&#39;);<br>   this.redirect(&#39;back&#39;, &#39;/index.html&#39;);<br>   this.redirect(&#39;/login&#39;);<br>   this.redirect(&#39;<a href="http://google.com&#39;">http://google.com&#39;</a>);</p>
-									</div>
+								<div class="lead">
+									<p>执行一次向 <code>url</code> 的 302 重定向。<br>字符串 “back” 是特别提供 Referrer 支持的，当 Referrer 不存在时，使用 alt 或 <code>/</code>。</p>
 								</div>
+								<p>e.g.<br>this.redirect(&#39;back&#39;);<br>this.redirect(&#39;back&#39;, &#39;/index.html&#39;);<br>this.redirect(&#39;/login&#39;);<br>this.redirect(&#39;<a href="http://google.com&#39;">http://google.com&#39;</a>);</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -575,23 +645,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L113">src/server/session-context.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L122">src/builtin/session-context.ts:122</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="tsd-comment-tags">
-									<h4 style="text-transform: capitalize">function</h4>
-									<div style="line-height: 1.5;"><p>Set header of response.</p>
-									</div>
+								<div class="lead">
+									<p>设置响应头。</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>响应头字段，比如 <code>Content-Type</code></p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>需要设置的值</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -602,29 +676,61 @@
 					<a name="return_if_cache" class="tsd-anchor"></a>
 					<h3>return_<wbr>if_<wbr>cache</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">return_<wbr>if_<wbr>cache<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">return_<wbr>if_<wbr>cache<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/server/session-context.ts#L167">src/server/session-context.ts:167</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L164">src/builtin/session-context.ts:164</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="tsd-comment-tags">
-									<h4 style="text-transform: capitalize">function</h4>
-									<div style="line-height: 1.5;"><p>Search exist cache data. and store the key.</p>
-									</div>
+								<div class="lead">
+									<p>查询缓存，如果缓存存在则直接返回结果。参考 <a href="cacheproxy.html#get">CacheProxy.get</a>。</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> key: <span class="tsd-signature-type">string</span></h5>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="set_data" class="tsd-anchor"></a>
+					<h3>set_<wbr>data</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">set_<wbr>data&lt;M&gt;<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">M</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ToraSession</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/builtin/session-context.ts#L92">src/builtin/session-context.ts:92</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>M<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">never</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">M</span></h5>
+								</li>
+								<li>
+									<h5>value: <span class="tsd-signature-type">ToraSession</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -642,14 +748,26 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-has-type-parameter">
+					<li class="current tsd-kind-class">
 						<a href="sessioncontext.html" class="tsd-kind-icon">Session<wbr>Context</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="sessioncontext.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="sessioncontext.html#_custom_data" class="tsd-kind-icon">_custom_<wbr>data</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="sessioncontext.html#cache_expires" class="tsd-kind-icon">cache_<wbr>expires</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="sessioncontext.html#cache_key" class="tsd-kind-icon">cache_<wbr>key</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="sessioncontext.html#cache_prefix" class="tsd-kind-icon">cache_<wbr>prefix</a>
+							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="sessioncontext.html#maybe_user" class="tsd-kind-icon">maybe_<wbr>user</a>
+								<a href="sessioncontext.html#auth_info" class="tsd-kind-icon">auth_<wbr>info</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="sessioncontext.html#method" class="tsd-kind-icon">method</a>
@@ -676,13 +794,13 @@
 								<a href="sessioncontext.html#clear_cache" class="tsd-kind-icon">clear_<wbr>cache</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="sessioncontext.html#do_auth" class="tsd-kind-icon">do_<wbr>auth</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="sessioncontext.html#finish" class="tsd-kind-icon">finish</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="sessioncontext.html#finish_and_cache" class="tsd-kind-icon">finish_<wbr>and_<wbr>cache</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="sessioncontext.html#get_data" class="tsd-kind-icon">get_<wbr>data</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="sessioncontext.html#header" class="tsd-kind-icon">header</a>
@@ -698,6 +816,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="sessioncontext.html#return_if_cache" class="tsd-kind-icon">return_<wbr>if_<wbr>cache</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="sessioncontext.html#set_data" class="tsd-kind-icon">set_<wbr>data</a>
 							</li>
 						</ul>
 					</li>
@@ -718,10 +839,6 @@
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 			</ul>
@@ -732,9 +849,6 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
 			</ul>
 		</div>
 	</div>

@@ -7,6 +7,9 @@
 
 import { LiteContext } from './types'
 
+/**
+ * @category Error
+ */
 export class ReasonableError extends Error {
 
     constructor(readonly code: number, readonly msg: string, readonly detail?: any) {
@@ -22,6 +25,9 @@ export class ReasonableError extends Error {
     }
 }
 
+/**
+ * @category Error
+ */
 export class InnerFinish<Context extends LiteContext = LiteContext> extends Error {
 
     constructor(private response_body: any) {
@@ -33,6 +39,9 @@ export class InnerFinish<Context extends LiteContext = LiteContext> extends Erro
     }
 }
 
+/**
+ * @category Error
+ */
 export class OuterFinish<Context extends LiteContext = LiteContext> extends Error {
 
     constructor(private _ctx: Context, private response_body: any) {
@@ -48,18 +57,30 @@ export class OuterFinish<Context extends LiteContext = LiteContext> extends Erro
     }
 }
 
+/**
+ * @category Error
+ */
 export function reasonable(code: number, msg: string, detail?: any) {
     return new ReasonableError(code, msg, detail)
 }
 
+/**
+ * @category Error
+ */
 export function throw_reasonable(code: number, msg: string, detail?: any): never {
     throw new ReasonableError(code, msg, detail)
 }
 
+/**
+ * @category Error
+ */
 export function crash(msg: any): never {
     throw new Error(msg)
 }
 
+/**
+ * @category Error
+ */
 export function response<C extends LiteContext>(ctx: C, data: any): never {
     throw new OuterFinish(ctx, data)
 }

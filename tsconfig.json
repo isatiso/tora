@@ -3,14 +3,14 @@
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
         "baseUrl": "./",
-        "declaration": false,
+        "declaration": true,
         "emitDecoratorMetadata": true,
         "esModuleInterop": true,
         "experimentalDecorators": true,
         "importHelpers": true,
         "jsx": "react",
         "jsxFactory": "tsx",
-        "module": "commonjs",
+        "module": "ESNext",
         "moduleResolution": "node",
         "outDir": "./out",
         "resolveJsonModule": true,
@@ -28,10 +28,24 @@
         "**/*.spec.ts"
     ],
     "typedocOptions": {
+        "includes": "comments",
         "name": "Tora",
         "theme": "theme",
         "entryPoints": [
             "src/index.ts"
+        ],
+        "categorizeByGroup": false,
+        "categoryOrder": [
+            "Namespace",
+            "Tora",
+            "Platform",
+            "Builtin",
+            "Common Annotation",
+            "Router Request",
+            "Router Modifier",
+            "Router Extend",
+            "Trigger Annotation",
+            "*"
         ],
         "readme": "README.md",
         "out": "docs",

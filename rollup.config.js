@@ -9,7 +9,7 @@ const typesDir = './types'
 const tsconfigOverride = {
     compilerOptions: {
         module: "ESNext",
-    }
+    },
 }
 
 function readTextFileSync(path) {
@@ -35,7 +35,6 @@ function createRollupConfig(externalModules) {
     const external = [
         ...builtinModules,
         ...Object.keys(pkg.dependencies || {}),
-        ...Object.keys(pkg.peerDependencies || {}),
         ...external_modules,
     ]
 
@@ -70,7 +69,6 @@ function createRollupConfig(externalModules) {
                     }
                 },
                 dts({
-                    banner: false,
                     compilerOptions: tsconfigOverride.compilerOptions
                 })
             ],

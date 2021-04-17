@@ -74,7 +74,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Contain some helpful tools to create annotation.</p>
+						<p>一些用于开发自定义装饰器的工具函数。</p>
 					</div>
 				</div>
 			</section>
@@ -101,36 +101,37 @@
 					<a name="add_handler" class="tsd-anchor"></a>
 					<h3>add_<wbr>handler</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">add_<wbr>handler<span class="tsd-signature-symbol">(</span>proto<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, desc<span class="tsd-signature-symbol">: </span><a href="../interfaces/handlerdescriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">HandlerDescriptor</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">add_<wbr>handler<span class="tsd-signature-symbol">(</span>proto<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, desc<span class="tsd-signature-symbol">: </span><a href="../interfaces/toratypes.handlerdescriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">HandlerDescriptor</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/di/annotation.ts#L123">src/di/annotation.ts:123</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/injector/tools.ts#L58">src/injector/tools.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Add handle function to set of class prototype.</p>
+									<p>通过处理函数描述对象 <code>HandlerDescriptor</code> 创建监听函数。</p>
 								</div>
+								<p>使用方式参考 <a href="annotationtools.html#add_handler">AnnotationTools.add_handler</a></p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>proto: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>prototype of class.</p>
+										<p>Tora 组件类原型</p>
 									</div>
 								</li>
 								<li>
-									<h5>desc: <a href="../interfaces/handlerdescriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">HandlerDescriptor</a></h5>
+									<h5>desc: <a href="../interfaces/toratypes.handlerdescriptor.html" class="tsd-signature-type" data-tsd-kind="Interface">HandlerDescriptor</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>处理函数描述对象</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-							<ul>
-								<li>void</li>
-							</ul>
 						</li>
 					</ul>
 				</section>
@@ -138,19 +139,80 @@
 					<a name="create_decorator" class="tsd-anchor"></a>
 					<h3>create_<wbr>decorator</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">create_<wbr>decorator&lt;T&gt;<span class="tsd-signature-symbol">(</span>processor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">create_<wbr>decorator&lt;T&gt;<span class="tsd-signature-symbol">(</span>processor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/di/annotation.ts#L107">src/di/annotation.ts:107</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/injector/tools.ts#L26">src/injector/tools.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Create class decorator to do something when loading class.</p>
+									<p>用于创建自定义装饰器。</p>
 								</div>
+								<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">AnnotationTools</span><span style="color: #000000">, </span><span style="color: #001080">Meta</span><span style="color: #000000">, </span><span style="color: #001080">ToraRouter</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;tora&#039;</span>
+
+<span style="color: #008000">// 这里实现一个向 ToraRouter 添加一个单结果查询的 API 的装饰器。</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">GetOneApi</span><span style="color: #000000"> = </span><span style="color: #001080">AnnotationTools</span><span style="color: #000000">.</span><span style="color: #795E26">create_decorator</span><span style="color: #000000">(</span>
+<span style="color: #000000">    (</span><span style="color: #001080">target</span><span style="color: #000000">: </span><span style="color: #267F99">any</span><span style="color: #000000">, </span><span style="color: #001080">meta</span><span style="color: #000000">?: </span><span style="color: #267F99">ApiMetaOptions</span><span style="color: #000000">&lt;</span><span style="color: #267F99">any</span><span style="color: #000000">&gt;, </span><span style="color: #001080">options</span><span style="color: #000000">?: {</span>
+<span style="color: #000000">        </span><span style="color: #001080">id_field</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000"> </span><span style="color: #008000">// 指定需要作为 ID 进行查询的字段。</span>
+<span style="color: #000000">        </span><span style="color: #001080">projection</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">[] </span><span style="color: #008000">// 指定结果集需要的字段。</span>
+<span style="color: #000000">    }) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">        </span><span style="color: #008000">// 这里查询需要注入对应的数据库查询服务。</span>
+<span style="color: #000000">        </span><span style="color: #008000">// 需要注意的是为了进行编译时期检查，这里会检查是否通过装饰器 `Meta` 传入了对应的查询服务。</span>
+<span style="color: #000000">        </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (!</span><span style="color: #001080">meta</span><span style="color: #000000">?.</span><span style="color: #001080">dao</span><span style="color: #000000">) {</span>
+<span style="color: #000000">            </span><span style="color: #AF00DB">throw</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Error</span><span style="color: #000000">(</span><span style="color: #A31515">`[dao] not found in meta of </span><span style="color: #0000FF">${</span><span style="color: #001080">target</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
+<span style="color: #000000">        }</span>
+
+<span style="color: #000000">        </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">desc</span><span style="color: #000000">: </span><span style="color: #267F99">HandlerDescriptor</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">            </span><span style="color: #008000">// 设置请求方法及请求路径</span>
+<span style="color: #000000">            </span><span style="color: #001080">method_and_path:</span><span style="color: #000000"> { </span><span style="color: #A31515">&#039;POST-get-one&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;POST&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;get-one&#039;</span><span style="color: #000000">] },</span>
+<span style="color: #000000">            </span><span style="color: #001080">auth:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #008000">// 需要进行认证</span>
+<span style="color: #000000">            </span><span style="color: #001080">wrap_result:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #008000">// 需要对结果进行默认包裹</span>
+<span style="color: #000000">            </span><span style="color: #001080">pos:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000">, </span><span style="color: #008000">// 代码中的位置，调试时可以帮助定位问题</span>
+<span style="color: #000000">            </span><span style="color: #001080">param_types:</span><span style="color: #000000"> [</span><span style="color: #001080">meta</span><span style="color: #000000">.</span><span style="color: #001080">dao</span><span style="color: #000000">, </span><span style="color: #001080">ApiParams</span><span style="color: #000000">], </span><span style="color: #008000">// 注入的实例列表</span>
+<span style="color: #000000">            </span><span style="color: #001080">property_key:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;get_one&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">            </span><span style="color: #795E26">handler</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #0000FF">function</span><span style="color: #000000"> (</span><span style="color: #001080">dao</span><span style="color: #000000">: </span><span style="color: #267F99">BaseMongo</span><span style="color: #000000">&lt;</span><span style="color: #267F99">any</span><span style="color: #000000">&gt;, </span><span style="color: #001080">params</span><span style="color: #000000">: </span><span style="color: #267F99">ApiParams</span><span style="color: #000000">&lt;{</span>
+<span style="color: #000000">                </span><span style="color: #001080">id</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> | </span><span style="color: #267F99">number</span>
+<span style="color: #000000">            }&gt;) {</span>
+<span style="color: #000000">                </span><span style="color: #008000">// 检查要求 id 字段必须存在</span>
+<span style="color: #000000">                </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">id</span><span style="color: #000000"> = </span><span style="color: #001080">params</span><span style="color: #000000">.</span><span style="color: #795E26">ensure</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;id&#039;</span><span style="color: #000000">)</span>
+
+<span style="color: #000000">                </span><span style="color: #008000">// 索引字段，优先使用直接传入的 key，其次使用 `Meta` 设置的 key，最后使用 `_id`</span>
+<span style="color: #000000">                </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">id_field</span><span style="color: #000000"> = </span><span style="color: #001080">options</span><span style="color: #000000">?.</span><span style="color: #001080">id_field</span><span style="color: #000000"> ?? </span><span style="color: #001080">meta</span><span style="color: #000000">?.</span><span style="color: #001080">id_field</span><span style="color: #000000"> ?? </span><span style="color: #A31515">&#039;_id&#039;</span>
+<span style="color: #000000">                </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">queryOptions</span><span style="color: #000000">: </span><span style="color: #267F99">DaoQueryOptions</span><span style="color: #000000">&lt;</span><span style="color: #267F99">any</span><span style="color: #000000">&gt; = {}</span>
+
+<span style="color: #000000">                </span><span style="color: #008000">// 设置查询选项</span>
+<span style="color: #000000">                </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">options</span><span style="color: #000000">?.</span><span style="color: #001080">projection</span><span style="color: #000000">) {</span>
+<span style="color: #000000">                    </span><span style="color: #001080">queryOptions</span><span style="color: #000000">.</span><span style="color: #001080">projection</span><span style="color: #000000"> = </span><span style="color: #001080">options</span><span style="color: #000000">.</span><span style="color: #001080">projection</span>
+<span style="color: #000000">                }</span>
+
+<span style="color: #000000">                </span><span style="color: #008000">// 进行查询并返回结果</span>
+<span style="color: #000000">                </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">dao</span><span style="color: #000000">.</span><span style="color: #795E26">getOne</span><span style="color: #000000">({ </span><span style="color: #001080">[id_field]:</span><span style="color: #000000"> </span><span style="color: #001080">id</span><span style="color: #000000"> }, </span><span style="color: #001080">queryOptions</span><span style="color: #000000">)</span>
+<span style="color: #000000">            }</span>
+<span style="color: #000000">        }</span>
+
+<span style="color: #000000">        </span><span style="color: #008000">// 添加监听函数</span>
+<span style="color: #000000">        </span><span style="color: #001080">AnnotationTools</span><span style="color: #000000">.</span><span style="color: #795E26">add_handler</span><span style="color: #000000">(</span><span style="color: #267F99">target</span><span style="color: #000000">.</span><span style="color: #001080">prototype</span><span style="color: #000000">, </span><span style="color: #001080">desc</span><span style="color: #000000">)</span>
+<span style="color: #000000">    })</span>
+
+<span style="color: #008000">/**</span>
+<span style="color: #008000"> * 像下面这样添加 `GetOneApi` 装饰器，可以向 TestRouter 添加一个 API。</span>
+<span style="color: #008000"> * 由于 `GetOneApi` 检查了 `Meta` 传入的参数，需要保证 `Meta` 先执行。</span>
+<span style="color: #008000"> * 也就是说 `Meta` 要在 `GetOneApi` 的下面。</span>
+<span style="color: #008000"> */</span>
+<span style="color: #000000">@</span><span style="color: #795E26">GetOneApi</span><span style="color: #000000">()</span>
+<span style="color: #000000">@</span><span style="color: #795E26">Meta</span><span style="color: #000000">({ </span><span style="color: #001080">id_field:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;_id&#039;</span><span style="color: #000000">, </span><span style="color: #001080">dao:</span><span style="color: #000000"> </span><span style="color: #001080">MongoQueryService</span><span style="color: #000000"> })</span>
+<span style="color: #000000">@</span><span style="color: #795E26">ToraRouter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;/&#039;</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">TestRouter</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">    </span><span style="color: #0000FF">constructor</span><span style="color: #000000">() {</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">}</span>
+</code></pre>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -161,21 +223,21 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>processor: <span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+									<h5>processor: <span class="tsd-signature-symbol">(</span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>function to do something.</p>
+										<p>自定义装饰器的处理函数。</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-signature">
 											<ul class="tsd-signatures tsd-kind-type-literal">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>target: <span class="tsd-signature-type">any</span></h5>
+															<h5>constructor: <span class="tsd-signature-type">any</span></h5>
 														</li>
 														<li>
 															<h5>meta: <span class="tsd-signature-type">any</span></h5>
@@ -191,14 +253,12 @@
 									</ul>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
-							<ul>
-								<li>a decorator function.</li>
-							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
+							<p>decorator 新的装饰器。</p>
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter-signature">
 									<ul class="tsd-signatures tsd-kind-type-literal">
-										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
@@ -208,18 +268,18 @@
 													<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">T</span></h5>
 												</li>
 											</ul>
-											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
 											<ul class="tsd-parameters">
 												<li class="tsd-parameter-signature">
 													<ul class="tsd-signatures tsd-kind-type-literal">
-														<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+														<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 													</ul>
 													<ul class="tsd-descriptions">
 														<li class="tsd-description">
 															<h4 class="tsd-parameters-title">Parameters</h4>
 															<ul class="tsd-parameters">
 																<li>
-																	<h5>target: <span class="tsd-signature-type">any</span></h5>
+																	<h5>constructor: <span class="tsd-signature-type">any</span></h5>
 																</li>
 															</ul>
 															<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -238,18 +298,18 @@
 					<a name="define_custom_data" class="tsd-anchor"></a>
 					<h3>define_<wbr>custom_<wbr>data</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">define_<wbr>custom_<wbr>data&lt;T&gt;<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">define_<wbr>custom_<wbr>data&lt;T&gt;<span class="tsd-signature-symbol">(</span>proto<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/di/annotation.ts#L146">src/di/annotation.ts:146</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/injector/tools.ts#L83">src/injector/tools.ts:83</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Set custom data of specified target.</p>
+									<p>添加自定义数据。<br>自定义数据是一个挂在目标 Class 原型上的一个对象，可以通过 index 获取对应内容。</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -261,16 +321,22 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>target: <span class="tsd-signature-type">any</span></h5>
+									<h5>proto: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>target of metadata.</p>
+										<p>Tora 组件类原型</p>
 									</div>
 								</li>
 								<li>
 									<h5>index: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>内容索引</p>
+									</div>
 								</li>
 								<li>
 									<h5>data: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>需要设置的内容</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -281,18 +347,18 @@
 					<a name="get_custom_data" class="tsd-anchor"></a>
 					<h3>get_<wbr>custom_<wbr>data</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">get_<wbr>custom_<wbr>data&lt;T&gt;<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">get_<wbr>custom_<wbr>data&lt;T&gt;<span class="tsd-signature-symbol">(</span>proto<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/di/annotation.ts#L134">src/di/annotation.ts:134</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/injector/tools.ts#L70">src/injector/tools.ts:70</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get custom data of specified target.</p>
+									<p>查询自定义数据。<br>自定义数据是一个挂在目标 Class 原型上的一个对象，可以通过 index 获取对应内容。</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -304,19 +370,20 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>target: <span class="tsd-signature-type">any</span></h5>
+									<h5>proto: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>target of metadata.</p>
+										<p>Tora 组件类原型</p>
 									</div>
 								</li>
 								<li>
 									<h5>index: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>内容索引</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
-							<ul>
-								<li>custom data.</li>
-							</ul>
+							<p>data 查询结果</p>
 						</li>
 					</ul>
 				</section>
@@ -324,39 +391,72 @@
 					<a name="get_param_types" class="tsd-anchor"></a>
 					<h3>get_<wbr>param_<wbr>types</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">get_<wbr>param_<wbr>types<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, property_key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">get_<wbr>param_<wbr>types<span class="tsd-signature-symbol">(</span>proto<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, property_key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/isatiso/tora/blob/e2b1fac/src/di/annotation.ts#L96">src/di/annotation.ts:96</a></li>
+									<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/injector/tools.ts#L44">src/injector/tools.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get parameter types of a method.</p>
+									<p>获取成员函数参数的类型列表。</p>
 								</div>
+								<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ToraRouter</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;tora&#039;</span>
+
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">SomeCustomDecorator</span><span style="color: #000000">() {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">function</span><span style="color: #000000"> (</span><span style="color: #001080">target</span><span style="color: #000000">: </span><span style="color: #267F99">any</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #001080">desc</span><span style="color: #000000">: </span><span style="color: #267F99">PropertyDescriptor</span><span style="color: #000000">) {</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">param_types</span><span style="color: #000000"> = </span><span style="color: #001080">AnnotationTools</span><span style="color: #000000">.</span><span style="color: #795E26">get_param_types</span><span style="color: #000000">(</span><span style="color: #001080">target</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">)</span>
+<span style="color: #000000">        </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">param_types</span><span style="color: #000000">)</span>
+<span style="color: #000000">        </span><span style="color: #008000">// do something useful。</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">ToraRouter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;/&#039;</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">TestRouter</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">    </span><span style="color: #0000FF">constructor</span><span style="color: #000000">() {</span>
+<span style="color: #000000">    }</span>
+
+<span style="color: #000000">    </span><span style="color: #008000">/**</span>
+<span style="color: #008000">     * 这里使用上面定义的装饰器，拿到的 param_types 如下：</span>
+<span style="color: #008000">     * param_types =&gt; [</span>
+<span style="color: #008000">     *     [class SessionContext],</span>
+<span style="color: #008000">     *     [class ApiParams extends Judgement]</span>
+<span style="color: #008000">     * ]</span>
+<span style="color: #008000">     */</span>
+<span style="color: #000000">    @</span><span style="color: #795E26">SomeCustomDeractor</span><span style="color: #000000">()</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #795E26">test</span><span style="color: #000000">(</span>
+<span style="color: #000000">        </span><span style="color: #001080">cs</span><span style="color: #000000">: </span><span style="color: #267F99">SessionContext</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #001080">params</span><span style="color: #000000">: </span><span style="color: #267F99">ApiParams</span><span style="color: #000000">&lt;{</span>
+<span style="color: #000000">            </span><span style="color: #001080">a</span><span style="color: #000000">: </span><span style="color: #267F99">string</span>
+<span style="color: #000000">            </span><span style="color: #001080">b</span><span style="color: #000000">: </span><span style="color: #267F99">number</span>
+<span style="color: #000000">        }&gt;</span>
+<span style="color: #000000">    ) {</span>
+<span style="color: #000000">        </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;OK&#039;</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">}</span>
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>target: <span class="tsd-signature-type">any</span></h5>
+									<h5>proto: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Target to get metadata.</p>
+										<p>Tora 组件类的原型。</p>
 									</div>
 								</li>
 								<li>
 									<h5>property_key: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Key to index metadata.</p>
+										<p>成员函数名。</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
-							<ul>
-								<li>array of types</li>
-							</ul>
+							<p>type_list 类型列表。</p>
 						</li>
 					</ul>
 				</section>
@@ -371,8 +471,14 @@
 					<li class="current tsd-kind-namespace">
 						<a href="annotationtools.html">Annotation<wbr>Tools</a>
 					</li>
-					<li class=" tsd-kind-namespace">
+					<li class=" tsd-kind-namespace tsd-is-private">
 						<a href="tokenutils.html">Token<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="tora.html">Tora</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="toratypes.html">Tora<wbr>Types</a>
 					</li>
 				</ul>
 			</nav>
@@ -408,10 +514,6 @@
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 			</ul>
@@ -422,9 +524,6 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
 			</ul>
 		</div>
 	</div>
