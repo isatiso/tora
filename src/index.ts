@@ -31,7 +31,7 @@ export { TaskLifeCycle } from './service/task-life-cycle'
 export { TaskLock } from './service/task-lock'
 
 export { ClassProvider, ValueProvider, FactoryProvider, Injector } from './injector'
-export { UUID, CurrentTimestamp, Timestamp, ConfigData, ApiParams, SessionContext, TaskContext } from './builtin'
+export { UUID, CurrentTimestamp, Timestamp, ConfigData, ApiParams, SessionContext, TaskContext, Path, PathValue, ValueType } from './builtin'
 
 export { Schedule } from './schedule'
 export { Platform } from './platform'
