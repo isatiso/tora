@@ -35,7 +35,7 @@ export { UUID, CurrentTimestamp, Timestamp, ConfigData, ApiParams, SessionContex
 
 export { Schedule } from './schedule'
 export { Platform } from './platform'
-export { PURE_PARAMS } from './platform-utils'
+export { PURE_PARAMS, ToraError } from './platform-utils'
 
 export { AnnotationTools } from './injector'
 export { TokenUtils } from './token'

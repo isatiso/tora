@@ -15,7 +15,7 @@ import { HandlerDescriptor, KoaResponseType, LiteContext, Provider, TaskDescript
  */
 export const PURE_PARAMS = 'PURE_PARAMS'
 
-class ErrorWrapper<T> {
+export class ToraError<T> {
 
     public readonly err_data: any
     public readonly err_type: 'reasonable' | 'crash'
@@ -60,7 +60,7 @@ export namespace PlatformUtils {
             } else if (reason instanceof OuterFinish) {
                 return reason
             } else {
-                return new ErrorWrapper(reason)
+                return new ToraError(reason)
             }
         }
     }
@@ -156,7 +156,7 @@ export namespace PlatformUtils {
 
             const res = await run_handler(cs, () => desc.handler(...param_list))
 
-            if (res instanceof ErrorWrapper) {
+            if (res instanceof ToraError) {
                 await hooks?.on_error(context, res)
                 finish_process(cs, { error: res.err_data })
             } else if (res instanceof OuterFinish) {
