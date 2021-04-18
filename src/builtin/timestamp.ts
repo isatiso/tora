@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { ToraComponent } from '../core'
+import { ToraService } from '../core'
 
 /**
  * 内置的时间戳服务。
@@ -15,7 +15,7 @@ import { ToraComponent } from '../core'
  * @category Builtin
  */
 
-@ToraComponent()
+@ToraService()
 export class Timestamp extends Number {
 
     private _timestamp = new Date().getTime()

@@ -6,7 +6,7 @@
  */
 
 import crypto from 'crypto'
-import { ToraComponent } from '../core'
+import { ToraService } from '../core'
 
 /**
  * 内置的 UUID（通用唯一识别码）服务，版本为 Version 1 (date-time and MAC address)。
@@ -15,7 +15,7 @@ import { ToraComponent } from '../core'
  *
  * @category Builtin
  */
-@ToraComponent()
+@ToraService()
 export class UUID {
 
     private static random_8_pool = new Uint8Array(256) // # of random values to pre-allocate

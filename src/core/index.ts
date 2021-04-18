@@ -8,11 +8,11 @@
  *
  * Tora 核心模块。
  *
- * @category Tora
+ * @category Namespace
  */
 
 export {
-    ToraModule, ToraComponent, ToraRouter, ToraTrigger,
+    ToraModule, ToraService, ToraRouter, ToraTrigger,
     Get, Post, Put, Delete,
     Auth, Task, Lock, Inject, Meta, Disabled, EchoDependencies, NoWrap, CacheWith,
 } from './annotation'

@@ -11,7 +11,7 @@ import { HandlerDescriptor } from '../types'
 /**
  * 一些用于开发自定义装饰器的工具函数。
  *
- * @category AnnotationTools
+ * @category Namespace
  */
 export namespace AnnotationTools {
 

@@ -8,7 +8,7 @@
 import { ClassProvider, Injector } from '../injector'
 import { def2Provider } from '../injector/provider'
 import { TokenUtils } from '../token'
-import { HandlerDescriptor, ImportsAndProviders, Provider, ProviderDef, RouterOptions, TriggerOptions, Type } from '../types'
+import { HandlerDescriptor, ImportsAndProviders, Provider, ProviderDef, ToraRouterOptions, ToraTriggerOptions, Type } from '../types'
 
 /**
  * @private
@@ -38,7 +38,7 @@ export function makeProviderCollector(target: any, options?: ImportsAndProviders
  * @param target
  * @param options
  */
-export function makeRouterCollector(target: any, options?: RouterOptions): (injector: Injector) => HandlerDescriptor[] {
+export function makeRouterCollector(target: any, options?: ToraRouterOptions): (injector: Injector) => HandlerDescriptor[] {
     return function(injector: Injector) {
         const instance = new ClassProvider(target, injector).create()
         TokenUtils.Instance.set(target, instance)
@@ -63,7 +63,7 @@ export function makeRouterCollector(target: any, options?: RouterOptions): (inje
  * @param target
  * @param options
  */
-export function makeTaskCollector(target: any, options?: TriggerOptions) {
+export function makeTaskCollector(target: any, options?: ToraTriggerOptions) {
     return function(injector: Injector) {
         const instance = new ClassProvider<typeof target>(target, injector).create()
         TokenUtils.Instance.set(target, instance)

@@ -15,7 +15,7 @@ export * as Tora from './core'
 export {
     ToraRouter,
     ToraTrigger,
-    ToraComponent,
+    ToraService,
     ToraModule,
     Get, Post, Put, Delete,
     NoWrap, CacheWith, EchoDependencies,
@@ -32,12 +32,10 @@ export { TaskLock } from './service/task-lock'
 
 export { ClassProvider, ValueProvider, FactoryProvider, Injector } from './injector'
 export { UUID, CurrentTimestamp, Timestamp, ConfigData, ApiParams, SessionContext, TaskContext } from './builtin'
-export { ToraServer } from './tora-server'
+
 export { Schedule } from './schedule'
 export { Platform } from './platform'
+export { PURE_PARAMS } from './platform-utils'
 
-export { TokenUtils } from './token'
 export { AnnotationTools } from './injector'
-
-export { ToraError } from './platform-utils'
-export { ClassType } from './token'
+export { TokenUtils } from './token'

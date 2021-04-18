@@ -7,7 +7,7 @@
 
 import { Schedule, ScheduleOptions } from '../schedule'
 import { GenericTypeOfCustomMeta, TokenUtils } from '../token'
-import { ComponentOptions, ModuleOptions, NoTrailingAndLeadingSlash, RouterOptions, TaskDescriptor, TriggerOptions } from '../types'
+import { ToraServiceOptions, ToraModuleOptions, NoTrailingAndLeadingSlash, ToraRouterOptions, TaskDescriptor, ToraTriggerOptions } from '../types'
 import { makeProviderCollector, makeRouterCollector, makeTaskCollector } from './collector'
 import { _Delete, _Get, _Post, _Put } from './request'
 
@@ -19,9 +19,9 @@ import { _Delete, _Get, _Post, _Put } from './request'
  * @category Tora Core
  * @param options
  */
-export function ToraModule(options?: ModuleOptions) {
+export function ToraModule(options?: ToraModuleOptions) {
     return function(target: any) {
-        TokenUtils.setClassTypeNX(target, 'ToraModule')
+        TokenUtils.setComponentTypeNX(target, 'ToraModule')
         TokenUtils.ToraModuleProviderCollector.set(target, makeProviderCollector(target, options))
         TokenUtils.ToraModuleRouters.set(target, options?.routers)
         TokenUtils.ToraModuleTasks.set(target, options?.tasks)
@@ -29,17 +29,17 @@ export function ToraModule(options?: ModuleOptions) {
 }
 
 /**
- * 把一个类标记为 Tora.ToraComponent。
+ * 把一个类标记为 Tora.ToraService。
  *
- * [[include:core/tora-component.md]]
+ * [[include:core/tora-service.md]]
  *
  * @category Tora Core
  * @param options
  */
-export function ToraComponent(options?: ComponentOptions) {
+export function ToraService(options?: ToraServiceOptions) {
     return function(target: any) {
-        TokenUtils.setClassTypeNX(target, 'ToraComponent')
-        TokenUtils.ToraComponentName.set(target, target.name)
+        TokenUtils.setComponentTypeNX(target, 'ToraService')
+        TokenUtils.ToraServiceName.set(target, target.name)
     }
 }
 
@@ -52,10 +52,10 @@ export function ToraComponent(options?: ComponentOptions) {
  * @param path
  * @param options
  */
-export function ToraRouter(path: `/${string}`, options?: RouterOptions) {
+export function ToraRouter(path: `/${string}`, options?: ToraRouterOptions) {
     return function(constructor: any) {
 
-        TokenUtils.setClassTypeNX(constructor, 'ToraRouter')
+        TokenUtils.setComponentTypeNX(constructor, 'ToraRouter')
         TokenUtils.ToraRouterPath.set(constructor, path)
         TokenUtils.ToraRouterOptions.set(constructor, options)
         TokenUtils.ToraRouterHandlerCollector.set(constructor, makeRouterCollector(constructor, options))
@@ -81,9 +81,9 @@ export function ToraRouter(path: `/${string}`, options?: RouterOptions) {
  * @category Tora Core
  * @param options
  */
-export function ToraTrigger(options?: TriggerOptions) {
+export function ToraTrigger(options?: ToraTriggerOptions) {
     return function(constructor: any) {
-        TokenUtils.setClassTypeNX(constructor, 'ToraTrigger')
+        TokenUtils.setComponentTypeNX(constructor, 'ToraTrigger')
         TokenUtils.ToraTriggerOptions.set(constructor, options)
         TokenUtils.ToraTriggerTaskCollector.set(constructor, makeTaskCollector(constructor, options))
         TokenUtils.ToraModuleProviderCollector.set(constructor, makeProviderCollector(constructor, options))

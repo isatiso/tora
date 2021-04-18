@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
-	<title>ComponentOptions | Tora</title>
+	<title>ToraRouterOptions | Tora</title>
 	<meta name="description" content="Documentation for Tora">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -64,10 +64,10 @@
 					<a href="../modules/toratypes.html">ToraTypes</a>
 				</li>
 				<li>
-					<a href="toratypes.componentoptions.html">ComponentOptions</a>
+					<a href="toratypes.torarouteroptions.html">ToraRouterOptions</a>
 				</li>
 			</ul>
-			<h1>Interface ComponentOptions</h1>
+			<h1>Interface ToraRouterOptions</h1>
 		</div>
 	</div>
 </header>
@@ -78,7 +78,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ComponentOptions</span>
+						<a href="toratypes.importsandproviders.html" class="tsd-signature-type" data-tsd-kind="Interface">ImportsAndProviders</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">ToraRouterOptions</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -86,24 +91,37 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="toratypes.componentoptions.html#echo_dependencies" class="tsd-kind-icon">echo_<wbr>dependencies</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="toratypes.torarouteroptions.html#imports" class="tsd-kind-icon">imports</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="toratypes.torarouteroptions.html#providers" class="tsd-kind-icon">providers</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="echo_dependencies" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> echo_<wbr>dependencies</h3>
-					<div class="tsd-signature tsd-kind-icon">echo_<wbr>dependencies<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="imports" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> imports</h3>
+					<div class="tsd-signature tsd-kind-icon">imports<span class="tsd-signature-symbol">:</span> <a href="toratypes.type.html" class="tsd-signature-type" data-tsd-kind="Interface">Type</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="toratypes.importsandproviders.html">ImportsAndProviders</a>.<a href="toratypes.importsandproviders.html#imports">imports</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/isatiso/tora/blob/f345771/src/types.ts#L135">src/types.ts:135</a></li>
+							<li>Defined in <a href="https://github.com/isatiso/tora/blob/986d2e1/src/types.ts#L117">src/types.ts:117</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="providers" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> providers</h3>
+					<div class="tsd-signature tsd-kind-icon">providers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><a href="toratypes.type.html" class="tsd-signature-type" data-tsd-kind="Interface">Type</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../modules/toratypes.html#providerdef" class="tsd-signature-type" data-tsd-kind="Type alias">ProviderDef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="toratypes.importsandproviders.html">ImportsAndProviders</a>.<a href="toratypes.importsandproviders.html#providers">providers</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/isatiso/tora/blob/986d2e1/src/types.ts#L118">src/types.ts:118</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -118,7 +136,7 @@
 					<li class=" tsd-kind-namespace">
 						<a href="../modules/annotationtools.html">Annotation<wbr>Tools</a>
 					</li>
-					<li class=" tsd-kind-namespace tsd-is-private">
+					<li class=" tsd-kind-namespace">
 						<a href="../modules/tokenutils.html">Token<wbr>Utils</a>
 					</li>
 					<li class=" tsd-kind-namespace">
@@ -134,18 +152,6 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
 						<a href="toratypes.classproviderdef.html" class="tsd-kind-icon">Class<wbr>Provider<wbr>Def</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="toratypes.componentoptions.html" class="tsd-kind-icon">Component<wbr>Options</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="toratypes.componentoptions.html#echo_dependencies" class="tsd-kind-icon">echo_<wbr>dependencies</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
 						<a href="toratypes.factoryproviderdef.html" class="tsd-kind-icon">Factory<wbr>Provider<wbr>Def</a>
 					</li>
@@ -158,9 +164,6 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
 						<a href="toratypes.importsandproviders.html" class="tsd-kind-icon">Imports<wbr>And<wbr>Providers</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="toratypes.moduleoptions.html" class="tsd-kind-icon">Module<wbr>Options</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
 						<a href="toratypes.provider.html" class="tsd-kind-icon">Provider</a>
 					</li>
@@ -168,13 +171,31 @@
 						<a href="toratypes.providertreenode.html" class="tsd-kind-icon">Provider<wbr>Tree<wbr>Node</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="toratypes.routeroptions.html" class="tsd-kind-icon">Router<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
 						<a href="toratypes.taskdescriptor.html" class="tsd-kind-icon">Task<wbr>Descriptor</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="toratypes.triggeroptions.html" class="tsd-kind-icon">Trigger<wbr>Options</a>
+						<a href="toratypes.toramoduleoptions.html" class="tsd-kind-icon">Tora<wbr>Module<wbr>Options</a>
+					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="toratypes.torarouteroptions.html" class="tsd-kind-icon">Tora<wbr>Router<wbr>Options</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="toratypes.torarouteroptions.html#imports" class="tsd-kind-icon">imports</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="toratypes.torarouteroptions.html#providers" class="tsd-kind-icon">providers</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="toratypes.toraserviceoptions.html" class="tsd-kind-icon">Tora<wbr>Service<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="toratypes.toratriggeroptions.html" class="tsd-kind-icon">Tora<wbr>Trigger<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
 						<a href="toratypes.type.html" class="tsd-kind-icon">Type</a>
@@ -231,9 +252,6 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 		</div>
 	</div>

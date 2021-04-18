@@ -10,7 +10,7 @@ import path from 'path'
 import { ApiParams, ConfigData, SessionContext, Timestamp, UUID } from './builtin'
 import { Injector } from './injector'
 import { ClassProvider, def2Provider, ValueProvider } from './injector/provider'
-import { PlatformUtils } from './platform-utils'
+import { PlatformUtils, PURE_PARAMS } from './platform-utils'
 import { Revolver } from './schedule'
 import { Authenticator } from './service/authenticator'
 import { CacheProxy } from './service/cache-proxy'
@@ -22,8 +22,6 @@ import { TokenUtils } from './token'
 import { ToraKoa } from './tora-koa'
 import { ToraServer } from './tora-server'
 import { ApiMethod, ApiPath, HandlerDescriptor, HandlerReturnType, KoaResponseType, LiteContext, Provider, ProviderDef, ProviderTreeNode, TaskDescriptor, Type } from './types'
-
-export const PURE_PARAMS = 'PURE_PARAMS'
 
 function _join_path(front: string, rear: string) {
     return [front, rear].filter(i => i).join('/')
@@ -131,7 +129,7 @@ export class Platform {
     }
 
     /**
-     * 直接挂载 ToraComponent 到 [[Platform.root_injector]] 的接口。
+     * 直接挂载 ToraService 到 [[Platform.root_injector]] 的接口。
      * @param def
      */
     provide(def: (ProviderDef<any> | Type<any>)) {
@@ -144,7 +142,7 @@ export class Platform {
      * @param module
      */
     import(module: any) {
-        if (TokenUtils.ClassType.get(module) !== 'ToraModule') {
+        if (TokenUtils.ComponentType.get(module) !== 'ToraModule') {
             throw new Error(`${module.name} is not a ToraModule.`)
         }
         TokenUtils.ToraModuleProviderCollector.get(module)?.(this.root_injector)
@@ -224,7 +222,7 @@ export class Platform {
      * @param module
      */
     register_module(name: string, module: any) {
-        if (TokenUtils.ClassType.get(module) !== 'ToraModule') {
+        if (TokenUtils.ComponentType.get(module) !== 'ToraModule') {
             throw new Error(`${module.name ?? module.prototype?.toString()} is not a "tora_module".`)
         }
 
@@ -233,7 +231,7 @@ export class Platform {
             throw new Error(`"routers" should be set with a list of "@ToraRouter".`)
         } else {
             routers.forEach(router => {
-                if (TokenUtils.ClassType.get(router) !== 'ToraRouter') {
+                if (TokenUtils.ComponentType.get(router) !== 'ToraRouter') {
                     throw new Error(`${router.name ?? router.prototype?.toString()} is not a "tora_router". Only a "tora_module" with a list of "tora_router" can be registered.`)
                 }
             })
@@ -269,7 +267,7 @@ export class Platform {
 
         console.log('root_module', root_module)
 
-        if (TokenUtils.ClassType.get(root_module) !== 'ToraModule') {
+        if (TokenUtils.ComponentType.get(root_module) !== 'ToraModule') {
             throw new Error(`${root_module.name} is not a ToraModule.`)
         }
 

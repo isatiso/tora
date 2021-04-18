@@ -69,6 +69,7 @@ function createRollupConfig(externalModules) {
                     }
                 },
                 dts({
+                    banner: false,
                     compilerOptions: tsconfigOverride.compilerOptions
                 })
             ],

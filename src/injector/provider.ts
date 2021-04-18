@@ -44,9 +44,9 @@ export function def2Provider(defs: (ProviderDef<any> | Type<any>)[], injector: I
         } else if ((def as any).useClass) {
 
             const d = def as ClassProviderDef<any>
-            const component_name = TokenUtils.ToraComponentName.get(d.useClass)
-            if (!component_name) {
-                throw new Error(`${d.useClass.name} is not Component.`)
+            const service_name = TokenUtils.ToraServiceName.get(d.useClass)
+            if (!service_name) {
+                throw new Error(`${d.useClass.name} is not ToraService.`)
             }
             if (injector.local_has(d.provide)) {
                 return injector.get(d.provide)
@@ -58,9 +58,9 @@ export function def2Provider(defs: (ProviderDef<any> | Type<any>)[], injector: I
 
         } else {
 
-            const component_name = TokenUtils.ToraComponentName.get(def)
-            if (!component_name) {
-                throw new Error(`${(def as any).name} is not Component.`)
+            const service_name = TokenUtils.ToraServiceName.get(def)
+            if (!service_name) {
+                throw new Error(`${(def as any).name} is not ToraService.`)
             }
             if (injector.local_has(def)) {
                 return injector.get(def)

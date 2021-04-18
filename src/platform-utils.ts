@@ -2,7 +2,6 @@ import { Dayjs } from 'dayjs'
 import { ApiParams, SessionContext, TaskContext } from './builtin'
 import { InnerFinish, OuterFinish, ReasonableError } from './error'
 import { Injector } from './injector'
-import { PURE_PARAMS } from './platform'
 import { Authenticator } from './service/authenticator'
 import { CacheProxy } from './service/cache-proxy'
 import { LifeCycle } from './service/life-cycle'
@@ -10,6 +9,11 @@ import { ResultWrapper } from './service/result-wrapper'
 import { TaskLifeCycle } from './service/task-life-cycle'
 import { TaskLock } from './service/task-lock'
 import { HandlerDescriptor, KoaResponseType, LiteContext, Provider, TaskDescriptor } from './types'
+
+/**
+ * @category Platform
+ */
+export const PURE_PARAMS = 'PURE_PARAMS'
 
 class ErrorWrapper<T> {
 
@@ -35,8 +39,6 @@ class ErrorWrapper<T> {
         }
     }
 }
-
-export type ToraError<T> = ErrorWrapper<T>
 
 /**
  * @namespace PlatformUtils

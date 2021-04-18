@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
 
  * @module
- * @category Tora Types
+ * @category Namespace
  */
 
 import { ExtendableContext } from 'koa'
@@ -118,20 +118,20 @@ export interface ImportsAndProviders {
     providers?: (ProviderDef<any> | Type<any>)[]
 }
 
-export interface ModuleOptions extends ImportsAndProviders {
+export interface ToraModuleOptions extends ImportsAndProviders {
     routers?: Type<any>[]
     tasks?: Type<any>[]
 }
 
-export interface RouterOptions extends ImportsAndProviders {
+export interface ToraRouterOptions extends ImportsAndProviders {
 
 }
 
-export interface TriggerOptions extends ImportsAndProviders {
+export interface ToraTriggerOptions extends ImportsAndProviders {
 
 }
 
-export interface ComponentOptions {
+export interface ToraServiceOptions {
     echo_dependencies?: boolean
 }
 

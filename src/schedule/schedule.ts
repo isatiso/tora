@@ -26,7 +26,7 @@ interface InnerOptions {
 }
 
 /**
- * @category Crontab
+ * @category Schedule
  */
 export class Schedule {
 
