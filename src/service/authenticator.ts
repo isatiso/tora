@@ -15,7 +15,7 @@ import { LiteContext } from '../types'
  *
  * @category Abstract Service
  */
-export abstract class Authenticator<USER_INFO> {
+export abstract class Authenticator {
 
     /**
      * 对用户的请求进行授权校验。
@@ -26,5 +26,5 @@ export abstract class Authenticator<USER_INFO> {
      *
      * @param ctx
      */
-    abstract auth(ctx: LiteContext): Promise<USER_INFO | undefined>
+    abstract auth(ctx: LiteContext): Promise<ToraAuthInfo | undefined>
 }

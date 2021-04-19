@@ -25,14 +25,20 @@ export type ValueType =
  * @private
  * 推断配置对象的合法路径。
  */
-export type Path<T extends Object, Key extends keyof T = keyof T> =
+export type Path<T, Key extends keyof T = keyof T> =
     Key extends string
-        ? Exclude<T[Key], undefined> extends Array<any>
-        ? `${Key}.${Path<Exclude<T[Key], undefined>, Exclude<keyof Exclude<T[Key], undefined>, keyof Array<any> & string>>}` | Key
-        : Exclude<T[Key], undefined> extends Record<string, any>
-            ? `${Key}.${Path<Exclude<T[Key], undefined>>}` | Key
-            : (Exclude<T[Key], undefined> extends number | string | boolean | null ? Key : never)
-        : never;
+        ?
+        Exclude<T[Key], undefined> extends Array<any>
+            ?
+            `${Key}.${Path<Exclude<T[Key], undefined>, Exclude<keyof Exclude<T[Key], undefined>, keyof Array<any> & string>>}` | Key
+            :
+            Exclude<T[Key], undefined> extends Record<string, any>
+                ?
+                `${Key}.${Path<Exclude<T[Key], undefined>>}` | Key
+                :
+                Key
+        :
+        never;
 
 /**
  * @private
@@ -40,14 +46,22 @@ export type Path<T extends Object, Key extends keyof T = keyof T> =
  */
 export type PathValue<T extends Object, P extends Path<T>> =
     P extends `${infer Key}.${infer Rest}`
-        ? Key extends keyof T
-        ? Rest extends Path<Exclude<T[Key], undefined>>
-            ? PathValue<Exclude<T[Key], undefined>, Rest>
-            : never
-        : never
-        : P extends keyof T
-        ? T[P]
-        : never;
+        ?
+        Key extends keyof T
+            ?
+            Rest extends Path<Exclude<T[Key], undefined>>
+                ?
+                PathValue<Exclude<T[Key], undefined>, Rest>
+                :
+                never
+            :
+            never
+        :
+        P extends keyof T
+            ?
+            T[P]
+            :
+            never;
 
 /**
  * @private

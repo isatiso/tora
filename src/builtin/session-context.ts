@@ -22,13 +22,13 @@ export class SessionContext {
     private _custom_data: Partial<ToraSession> = {}
 
     constructor(
-        private ctx: LiteContext,
-        private token: ToraAuthInfo,
-        private cache: CacheProxy | undefined,
+        private _ctx: LiteContext,
+        private _auth_info: ToraAuthInfo | undefined,
+        private _cache: CacheProxy | undefined,
         cache_prefix?: string,
         cache_expires?: number,
     ) {
-        this.cache_prefix = cache_prefix ?? this.ctx.path
+        this.cache_prefix = cache_prefix ?? this._ctx.path
         this.cache_expires = cache_expires ?? 3600
     }
 
@@ -36,63 +36,69 @@ export class SessionContext {
      * 返回请求的 URL，包含 querystring 部分。
      */
     get url() {
-        return this.ctx.req.url
+        return this._ctx.req.url
     }
 
     /**
      * 返回请求的 HTTP 谓词，比如 GET，POST 等。
      */
     get method() {
-        return this.ctx.req.method
+        return this._ctx.req.method
     }
 
     /**
      * 返回请求路径，比如 `/test/return-value`
      */
     get path() {
-        return this.ctx.path
+        return this._ctx.path
     }
 
     /**
      * 返回请求的客户端 IP 地址，优先使用请求头 X-Real-Ip，如果找不到则使用 X-Forward-For 中的第一个 IP 地址。
      */
     get real_ip() {
-        return this.ctx.request.get('X-Real-Ip') || this.ctx.request.get('X-Forwarded-For')?.split(',')[0] || this.ctx.ip
+        return this._ctx.request.get('X-Real-Ip') || this._ctx.request.get('X-Forwarded-For')?.split(',')[0] || this._ctx.ip
     }
 
     /**
      * 返回请求体的原始内容。
      */
     get rawBody() {
-        return this.ctx.request.rawBody
+        return this._ctx.request.rawBody
     }
 
     /**
      * 以 `NodeJS.Dict` 形式返回解析后的 querystring。
      */
     get query(): NodeJS.Dict<string | string[]> {
-        return this.ctx.query
-    }
-
-    /**
-     * @deprecated
-     * 返回用户信息，如果用户信息不存在，则认为未授权操作，返回 `401 Unauthorized Error`。
-     */
-    get user(): ToraAuthInfo {
-        return this.token ?? throw_reasonable(401, 'Unauthorized.')
+        return this._ctx.query
     }
 
     /**
      * 返回用户信息，如果用户信息不存在，返回 undefined。
+     * 通过声明全局 [[ToraAuthInfo]] 接口定义授权数据类型。
      */
     get auth_info(): ToraAuthInfo | undefined {
-        return this.token
+        return this._auth_info
     }
 
+    /**
+     * 设置用户自定义数据。
+     * 通过声明全局 [[ToraSession]] 接口定义自定义数据类型。
+     *
+     * @param key
+     * @param value
+     */
     set_data<M extends keyof ToraSession>(key: M, value: ToraSession[M]) {
         this._custom_data[key] = value
     }
 
+    /**
+     * 查询用户自定义数据。
+     * 通过声明全局 [[ToraSession]] 接口定义自定义数据类型。
+     *
+     * @param key
+     */
     get_data<M extends keyof ToraSession>(key: M): ToraSession[M] | undefined {
         return this._custom_data[key]
     }
@@ -103,14 +109,14 @@ export class SessionContext {
      * @param key 请求头名称，比如 `Content-Type`
      */
     header(key: string): string | string[] | undefined {
-        return this.ctx.request.headers[key.toLowerCase()]
+        return this._ctx.request.headers[key.toLowerCase()]
     }
 
     /**
      * 以 `NodeJS.Dict` 形式返回全部请求头。
      */
     headers(): NodeJS.Dict<string | string[]> {
-        return this.ctx.request.headers
+        return this._ctx.request.headers
     }
 
     /**
@@ -120,7 +126,7 @@ export class SessionContext {
      * @param value 需要设置的值
      */
     response_header(key: string, value: string | number) {
-        this.ctx.response.set(key.toLowerCase(), value + '')
+        this._ctx.response.set(key.toLowerCase(), value + '')
     }
 
     /**
@@ -134,8 +140,8 @@ export class SessionContext {
      * this.redirect('http://google.com');
      */
     redirect(url: string, alt?: string): never {
-        this.ctx.redirect(url, alt)
-        throw new OuterFinish(this.ctx, '')
+        this._ctx.redirect(url, alt)
+        throw new OuterFinish(this._ctx, '')
     }
 
     /**
@@ -153,7 +159,7 @@ export class SessionContext {
      * @param key
      */
     async clear_cache(key: string) {
-        return this.cache?.clear(key, this.cache_prefix, this.cache_expires)
+        return this._cache?.clear(key, this.cache_prefix, this.cache_expires)
     }
 
     /**
@@ -165,7 +171,7 @@ export class SessionContext {
         if (!this.cache_key) {
             this.cache_key = key
         }
-        const cache = key && await this.cache?.get(key, this.cache_prefix, this.cache_expires)
+        const cache = key && await this._cache?.get(key, this.cache_prefix, this.cache_expires)
         if (cache) {
             this.finish(cache)
         }
@@ -182,7 +188,7 @@ export class SessionContext {
     async finish_and_cache<T>(may_be_promised: Promise<T> | T, finish?: true): Promise<T | never> {
         const info = await may_be_promised
         if (this.cache_key) {
-            await this.cache?.set(this.cache_key, info, this.cache_prefix, this.cache_expires)
+            await this._cache?.set(this.cache_key, info, this.cache_prefix, this.cache_expires)
         }
         if (finish) {
             this.finish(info)

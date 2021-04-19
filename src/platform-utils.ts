@@ -123,7 +123,7 @@ export namespace PlatformUtils {
             const cache: CacheProxy | undefined = injector.get(CacheProxy)?.create()
             const result_wrapper: ResultWrapper | undefined = injector.get(ResultWrapper)?.create()
             const hooks: LifeCycle | undefined = injector.get(LifeCycle)?.create()
-            const authenticator: Authenticator<any> | undefined = injector.get(Authenticator)?.create()
+            const authenticator: Authenticator | undefined = injector.get(Authenticator)?.create()
 
             const auth_info = await authenticator?.auth(cs)
 
