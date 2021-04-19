@@ -67,7 +67,7 @@ export function makeTaskCollector(target: any, options?: ToraTriggerOptions) {
     return function(injector: Injector) {
         const instance = new ClassProvider<typeof target>(target, injector).create()
         TokenUtils.Instance.set(target, instance)
-        const tasks = TokenUtils.ToraTriggerTaskList.getset(target, [])
+        const tasks = TokenUtils.ToraTriggerTaskList.getset(target.prototype, [])
         tasks?.forEach((t: any) => {
             t.handler = t.handler.bind(instance)
             t.pos = `${target.name}.${t.property_key}`
