@@ -123,8 +123,8 @@ export class Platform {
         this.root_injector.set_provider(ResultWrapper, new ValueProvider('ResultWrapper', null))
         this.root_injector.set_provider(TaskLifeCycle, new ValueProvider('TaskLifeCycle', null))
         this.root_injector.set_provider(TaskLock, new ValueProvider('TaskLock', null))
+        this.root_injector.set_provider(UUID, new ClassProvider(UUID, this.root_injector))
         this.root_injector.set_provider(Timestamp, new ClassProvider(Timestamp, this.root_injector, true))
-        this.root_injector.set_provider(UUID, new ClassProvider(UUID, this.root_injector, true))
     }
 
     /**
