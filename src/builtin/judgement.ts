@@ -94,7 +94,12 @@ export class Reference<T> {
                     break
                 }
             }
-            this._cache[path] = { value: JSON.parse(JSON.stringify(data ?? def)) }
+            const final = data ?? def
+            if (final !== undefined) {
+                this._cache[path] = { value: JSON.parse(JSON.stringify(data ?? def)) }
+            } else {
+                this._cache[path] = { value: undefined }
+            }
         }
         return this._cache[path].value as any
     }
