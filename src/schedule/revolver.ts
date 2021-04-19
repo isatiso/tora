@@ -17,7 +17,7 @@ export class Revolver {
         const bullet = new Bullet(crontab, handler, crontab.next(), null, desc)
         if (!this._clip) {
             this._clip = bullet
-        } else if (this._clip.execution.isAfter(bullet.execution)) {
+        } else if (bullet.execution.isBefore(this._clip.execution)) {
             bullet.next_bullet = this._clip
             this._clip = bullet
         } else {
@@ -43,7 +43,7 @@ export class Revolver {
         }[] = []
 
         let bullet = this._clip
-        while(bullet) {
+        while (bullet) {
             list.push({
                 name: bullet.desc.name ?? bullet.desc.pos ?? '',
                 pos: bullet.desc.pos ?? '',
@@ -83,11 +83,11 @@ export class Revolver {
     private insert(clip: Bullet, bullet: Bullet) {
         if (!clip.next_bullet) {
             clip.next_bullet = bullet
-        } else if (bullet.execution.isAfter(clip.execution)) {
-            this.insert(clip.next_bullet, bullet)
-        } else {
+        } else if (bullet.execution.isBefore(clip.next_bullet.execution)) {
             bullet.next_bullet = clip.next_bullet
             clip.next_bullet = bullet
+        } else {
+            this.insert(clip.next_bullet, bullet)
         }
     }
 
