@@ -338,7 +338,7 @@ export class Platform {
         const task_list = this._revolver.get_task_list()
         console.log('\nCurrent Task list:')
         for (const task of task_list) {
-            console.log(formatter?.(task) ?? `    ${task.next_execution} ${task.crontab} ${task.name.padEnd(7)}`)
+            console.log(formatter?.(task) ?? `    ${task.next_execution} ${task.name.padEnd(7)} ${task.crontab}`)
         }
         return this
     }
