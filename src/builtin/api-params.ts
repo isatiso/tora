@@ -35,7 +35,7 @@ export class ApiParams<T> extends Judgement<T> {
      * @param match 预设类型或者正则表达式
      * @param def 默认值
      */
-    getIf<P extends Path<T>>(prop: P, match: ValueType | RegExp, def: PathValue<T, P>): PathValue<T, P>
+    getIf<P extends Path<T>>(prop: P, match: ValueType | RegExp, def: PathValue<T, P>): Exclude<PathValue<T, P>, undefined>
     getIf<P extends Path<T>>(prop: P, match: ValueType | RegExp, def?: PathValue<T, P>) {
         const res = super.get(prop)
         if (res !== undefined && this.testValue(res, match)) {
@@ -64,7 +64,7 @@ export class ApiParams<T> extends Judgement<T> {
      * @param match_list 预设的多个类型或者正则表达式
      * @param def 默认值
      */
-    getIfAny<P extends Path<T>>(prop: P, match_list: (ValueType | RegExp)[], def: PathValue<T, P>): PathValue<T, P>
+    getIfAny<P extends Path<T>>(prop: P, match_list: (ValueType | RegExp)[], def: PathValue<T, P>): Exclude<PathValue<T, P>, undefined>
     getIfAny<P extends Path<T>>(prop: P, match_list: (ValueType | RegExp)[], def?: PathValue<T, P>) {
         const res = super.get(prop)
         if (res !== undefined && this.any(res, match_list)) {
@@ -93,7 +93,7 @@ export class ApiParams<T> extends Judgement<T> {
      * @param match_list 预设的多个类型或者正则表达式
      * @param def 默认值
      */
-    getIfAll<P extends Path<T>>(prop: P, match_list: (ValueType | RegExp)[], def: PathValue<T, P>): PathValue<T, P>
+    getIfAll<P extends Path<T>>(prop: P, match_list: (ValueType | RegExp)[], def: PathValue<T, P>): Exclude<PathValue<T, P>, undefined>
     getIfAll<P extends Path<T>>(prop: P, match_list: (ValueType | RegExp)[], def?: PathValue<T, P>) {
         const res = super.get(prop)
         if (res !== undefined && this.all(res, match_list)) {
@@ -108,14 +108,14 @@ export class ApiParams<T> extends Judgement<T> {
      * @param prop 需要匹配的属性
      * @param match 预设类型或者正则表达式
      */
-    ensure<P extends Path<T>>(prop: P, match?: ValueType | RegExp): PathValue<T, P> {
+    ensure<P extends Path<T>>(prop: P, match?: ValueType | RegExp): Exclude<PathValue<T, P>, undefined> {
         match = match || 'exist'
         const res = super.get(prop)
         if (res === undefined) {
             throw_reasonable(400, `Can not find ${prop}`)
         }
         if (this.testValue(res, match)) {
-            return res
+            return res as any
         }
         throw_reasonable(400, `prop "${prop}" is illegal.`)
     }
@@ -126,13 +126,13 @@ export class ApiParams<T> extends Judgement<T> {
      * @param prop 需要匹配的属性
      * @param match_list 预设的多个类型或者正则表达式
      */
-    ensureAny<P extends Path<T>>(prop: P, match_list: (ValueType | RegExp)[]): PathValue<T, P> {
+    ensureAny<P extends Path<T>>(prop: P, match_list: (ValueType | RegExp)[]): Exclude<PathValue<T, P>, undefined> {
         const res = super.get(prop)
         if (res === undefined) {
             throw_reasonable(400, `Can not find ${prop}`)
         }
         if (this.any(res, match_list)) {
-            return res
+            return res as any
         }
         throw_reasonable(400, `prop "${prop}" is illegal.`)
     }
@@ -143,13 +143,13 @@ export class ApiParams<T> extends Judgement<T> {
      * @param prop 需要匹配的属性
      * @param match_list 预设的多个类型或者正则表达式
      */
-    ensureAll<P extends Path<T>>(prop: P, match_list: (ValueType | RegExp)[]): PathValue<T, P> {
+    ensureAll<P extends Path<T>>(prop: P, match_list: (ValueType | RegExp)[]): Exclude<PathValue<T, P>, undefined> {
         const res = super.get(prop)
         if (res === undefined) {
             throw_reasonable(400, `Can not find ${prop}`)
         }
         if (this.all(res, match_list)) {
-            return res
+            return res as any
         }
         throw_reasonable(400, `prop "${prop}" is illegal.`)
     }

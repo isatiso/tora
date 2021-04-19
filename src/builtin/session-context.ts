@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { InnerFinish, OuterFinish, throw_reasonable } from '../error'
+import { InnerFinish, OuterFinish } from '../error'
 import { CacheProxy } from '../service/cache-proxy'
 import { LiteContext } from '../types'
 
