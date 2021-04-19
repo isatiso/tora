@@ -226,12 +226,18 @@ export class Platform {
         }
 
         const routers = TokenUtils.ToraModuleRouters.get(module)
-        if (!routers) {
-            throw new Error(`"routers" should be set with a list of "@ToraRouter".`)
+        const tasks = TokenUtils.ToraModuleTasks.get(module)
+        if (!routers && !tasks) {
+            throw new Error(`ToraModule "${module.name}" do not carry any routers or tasks.`)
         } else {
-            routers.forEach(router => {
+            routers?.forEach(router => {
                 if (TokenUtils.ComponentType.get(router) !== 'ToraRouter') {
-                    throw new Error(`${router.name ?? router.prototype?.toString()} is not a "tora_router". Only a "tora_module" with a list of "tora_router" can be registered.`)
+                    throw new Error(`${router.name ?? router.prototype?.toString()} is not a "ToraRouter" but place in a routers array.`)
+                }
+            })
+            tasks?.forEach(task => {
+                if (TokenUtils.ComponentType.get(task) !== 'ToraTrigger') {
+                    throw new Error(`${task.name ?? task.prototype?.toString()} is not a "ToraTrigger" but place in a tasks array.`)
                 }
             })
         }
