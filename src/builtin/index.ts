@@ -12,4 +12,4 @@ export { ApiParams } from './api-params'
 export { SessionContext } from './session-context'
 export { TaskContext } from './task-context'
 
-export { ValueType, Path, PathValue } from './judgement'
+export { ValueType, Path, PathValue, Judgement, Reference } from './judgement'
