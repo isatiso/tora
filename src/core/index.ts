@@ -17,4 +17,4 @@ export {
     Auth, Task, Lock, Inject, Meta, Disabled, EchoDependencies, NoWrap, CacheWith,
 } from './annotation'
 
-export { Gunslinger } from './gunslinger'
+export { Gunslinger, IGunslinger } from './gunslinger'

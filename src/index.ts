@@ -20,7 +20,8 @@ export {
     Get, Post, Put, Delete,
     NoWrap, CacheWith, EchoDependencies,
     Auth, Task, Lock, Inject, Meta, Disabled,
-    Gunslinger
+    Gunslinger,
+    IGunslinger,
 } from './core'
 
 export { Authenticator } from './service/authenticator'

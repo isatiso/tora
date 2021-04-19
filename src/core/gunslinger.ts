@@ -5,7 +5,23 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { IGunslinger } from '../types'
+import { Type } from '../types'
+
+/**
+ * @private
+ *
+ * GunsLinger Type, see {@link Gunslinger}.
+ *
+ * @category Router Extend
+ */
+export interface IGunslinger<T> {
+
+    new(): Type<T>
+
+    mount(path: `/${string}`): Type<T> & IGunslinger<T>
+
+    replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & IGunslinger<Omit<T, M>>
+}
 
 /**
  * Tora.ToraRouter 的扩展函数。

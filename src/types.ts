@@ -157,18 +157,4 @@ export type NoTrailingAndLeadingSlash<T> =
         ? 'NoTrailingAndLeadingSlash' :
         T
 
-/**
- * @private
- *
- * GunsLinger Type, see {@link Gunslinger}.
- *
- * @category Router Extend
- */
-export interface IGunslinger<T> {
 
-    new(): Type<T>
-
-    mount(path: `/${string}`): Type<T> & IGunslinger<T>
-
-    replace<M extends keyof T>(method: M, new_path: string): Type<Omit<T, M>> & IGunslinger<Omit<T, M>>
-}
