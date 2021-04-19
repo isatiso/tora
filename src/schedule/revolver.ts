@@ -50,6 +50,7 @@ export class Revolver {
                 crontab: bullet.desc.crontab ?? '',
                 next_execution: bullet.execution.format('YYYY-MM-DD HH:mm:ss'),
             })
+            bullet = bullet.next_bullet
         }
         return list
     }
