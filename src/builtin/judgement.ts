@@ -24,6 +24,8 @@ export type ValueType =
 /**
  * @private
  * 推断配置对象的合法路径。
+ *
+ * **注意**：类型中不能出现 any，对于未知类型请使用 unknown。
  */
 export type Path<T, Key extends keyof T = keyof T> =
     Key extends string
