@@ -6,6 +6,7 @@
  */
 
 import { Dayjs } from 'dayjs'
+import { TaskDescriptor } from '../types'
 import { Schedule } from './schedule'
 
 export class Bullet {
@@ -14,6 +15,7 @@ export class Bullet {
         public handler: Function,
         public execution: Dayjs,
         public next_bullet: Bullet | null,
+        public desc: TaskDescriptor,
     ) {
     }
 }

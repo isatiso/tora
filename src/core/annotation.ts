@@ -145,6 +145,7 @@ export function Task(crontab: string, options?: ScheduleOptions) {
 
         const task: TaskDescriptor = {}
         task.crontab = crontab
+        task.name = options?.name
         task.schedule = Schedule.parse(crontab, options)
         task.property_key = key
         task.handler = desc.value

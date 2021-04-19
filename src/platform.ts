@@ -111,11 +111,10 @@ export class Platform {
      * @private
      * 定时器。
      */
-    private _interval = setInterval(() => {
-        this._revolver?.shoot(new Date().getTime())
-    }, 100)
-
     constructor() {
+        setInterval(() => {
+            this._revolver?.shoot(new Date().getTime())
+        }, 100)
         this.started_at = new Date().getTime()
         // 设置默认的内置 Provider，如果没有另外设置 Provider 时，查找结果为 null，而不会查找到 NullInjector。
         this.root_injector.set_provider(Authenticator, new ValueProvider('Authenticator', null))
@@ -314,7 +313,26 @@ export class Platform {
         const handler_list = this._server.get_handler_list()
         console.log('\nUsable API list:')
         for (const desc of handler_list) {
-            console.log(formatter?.(desc.method, desc.path) ?? `    ${desc.method.padEnd(7)}`, desc.path)
+            console.log(formatter?.(desc.method, desc.path) ?? `    ${desc.method.padEnd(7)} ${desc.path}`)
+        }
+        return this
+    }
+
+    /**
+     * 展示任务列表，按执行顺序。
+     *
+     * @param formatter 自定义格式处理函数。
+     */
+    show_task_list(formatter?: (task: {
+        name: string
+        pos: string
+        crontab: string
+        next_execution: string
+    }) => string) {
+        const task_list = this._revolver.get_task_list()
+        console.log('\nCurrent Task list:')
+        for (const task of task_list) {
+            console.log(formatter?.(task) ?? `    ${task.next_execution} ${task.crontab} ${task.name.padEnd(7)}`)
         }
         return this
     }
@@ -368,7 +386,7 @@ export class Platform {
                 }
                 const provider_list = this._get_providers(desc, injector)
                 provider_list.forEach(p => p.create?.())
-                this._revolver.fill(desc.schedule, PlatformUtils.makeTask(injector, desc, provider_list))
+                this._revolver.fill(desc.schedule, PlatformUtils.makeTask(injector, desc, provider_list), desc)
             }
         })
         router_provider_tree?.children.filter(def => !_find_usage(def))

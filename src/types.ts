@@ -73,6 +73,7 @@ export interface HandlerDescriptor {
 
 export interface TaskDescriptor {
     schedule?: Schedule
+    name?: string
     crontab?: string
     lock?: {
         key: string

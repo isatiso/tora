@@ -18,6 +18,7 @@ dayjs.extend(timezone)
 export interface ScheduleOptions {
     utc?: boolean
     tz?: string
+    name?: string
 }
 
 interface InnerOptions {
@@ -158,7 +159,6 @@ export class Schedule {
     }
 
     private _deal_special_day_of_week(schedule: Set<number>, date: Dayjs) {
-        const day_of_week = Array.from(this.parsed_fields.dayOfWeek)
         const days_in_month = date.daysInMonth()
         const date_matrix: number[][] = [[], [], [], [], [], [], []]
         for (let d = 1, wd = date.day(); d <= days_in_month; d++) {

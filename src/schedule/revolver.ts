@@ -5,15 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { Schedule } from './schedule'
+import { TaskDescriptor } from '../types'
 import { Bullet } from './bullet'
+import { Schedule } from './schedule'
 
 export class Revolver {
 
     private _clip?: Bullet | null
 
-    fill(crontab: Schedule, handler: Function) {
-        const bullet = new Bullet(crontab, handler, crontab.next(), null)
+    fill(crontab: Schedule, handler: Function, desc: TaskDescriptor) {
+        const bullet = new Bullet(crontab, handler, crontab.next(), null, desc)
         if (!this._clip) {
             this._clip = bullet
         } else if (this._clip.execution.isAfter(bullet.execution)) {
@@ -31,6 +32,26 @@ export class Revolver {
         while (this._clip.execution.valueOf() <= timestamp) {
             this.execute()
         }
+    }
+
+    get_task_list() {
+        const list: {
+            name: string
+            pos: string
+            crontab: string
+            next_execution: string
+        }[] = []
+
+        let bullet = this._clip
+        while(bullet) {
+            list.push({
+                name: bullet.desc.name ?? bullet.desc.pos ?? '',
+                pos: bullet.desc.pos ?? '',
+                crontab: bullet.desc.crontab ?? '',
+                next_execution: bullet.execution.format('YYYY-MM-DD HH:mm:ss'),
+            })
+        }
+        return list
     }
 
     private execute() {
