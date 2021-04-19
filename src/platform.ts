@@ -227,7 +227,7 @@ export class Platform {
 
         const routers = TokenUtils.ToraModuleRouters.get(module)
         const tasks = TokenUtils.ToraModuleTasks.get(module)
-        if (!routers && !tasks) {
+        if (!routers?.length && !tasks?.length) {
             throw new Error(`ToraModule "${module.name}" do not carry any routers or tasks.`)
         } else {
             routers?.forEach(router => {
