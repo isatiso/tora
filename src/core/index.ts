@@ -12,7 +12,7 @@
  */
 
 export {
-    ToraModule, ToraService, ToraRouter, ToraTrigger,
+    ToraRoot, ToraModule, ToraService, ToraRouter, ToraTrigger,
     Get, Post, Put, Delete,
     Auth, Task, Lock, Inject, Meta, Disabled, EchoDependencies, NoWrap, CacheWith,
 } from './annotation'

@@ -13,6 +13,7 @@ export * as ToraTypes from './types'
 export * as Tora from './core'
 
 export {
+    ToraRoot,
     ToraRouter,
     ToraTrigger,
     ToraService,
