@@ -7,9 +7,26 @@
 
 import { Schedule, ScheduleOptions } from '../schedule'
 import { GenericTypeOfCustomMeta, TokenUtils } from '../token'
-import { ToraServiceOptions, ToraModuleOptions, NoTrailingAndLeadingSlash, ToraRouterOptions, TaskDescriptor, ToraTriggerOptions } from '../types'
+import { ToraServiceOptions, ToraRootOptions, NoTrailingAndLeadingSlash, ToraRouterOptions, TaskDescriptor, ToraTriggerOptions, ToraModuleOptions } from '../types'
 import { makeProviderCollector, makeRouterCollector, makeTaskCollector } from './collector'
 import { _Delete, _Get, _Post, _Put } from './request'
+
+/**
+ * 把一个类标记为 Tora.ToraRoot，并提供配置元数据。
+ *
+ * [[include:core/tora-root.md]]
+ *
+ * @category Tora Core
+ * @param options
+ */
+export function ToraRoot(options?: ToraRootOptions) {
+    return function(target: any) {
+        TokenUtils.setComponentTypeNX(target, 'ToraRoot')
+        TokenUtils.ToraModuleProviderCollector.set(target, makeProviderCollector(target, options))
+        TokenUtils.ToraRootRouters.set(target, options?.routers)
+        TokenUtils.ToraRootTasks.set(target, options?.tasks)
+    }
+}
 
 /**
  * 把一个类标记为 Tora.ToraModule，并提供配置元数据。
@@ -23,8 +40,6 @@ export function ToraModule(options?: ToraModuleOptions) {
     return function(target: any) {
         TokenUtils.setComponentTypeNX(target, 'ToraModule')
         TokenUtils.ToraModuleProviderCollector.set(target, makeProviderCollector(target, options))
-        TokenUtils.ToraModuleRouters.set(target, options?.routers)
-        TokenUtils.ToraModuleTasks.set(target, options?.tasks)
     }
 }
 

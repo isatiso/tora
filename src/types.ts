@@ -120,6 +120,10 @@ export interface ImportsAndProviders {
 }
 
 export interface ToraModuleOptions extends ImportsAndProviders {
+
+}
+
+export interface ToraRootOptions extends ImportsAndProviders {
     routers?: Type<any>[]
     tasks?: Type<any>[]
 }

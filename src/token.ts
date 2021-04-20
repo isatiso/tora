@@ -221,7 +221,7 @@ export namespace TokenUtils {
      * ComponentType
      * @category Type
      */
-    export type ComponentType = 'ToraRouter' | 'ToraModule' | 'ToraTrigger' | 'ToraService'
+    export type ComponentType = 'ToraService' | 'ToraModule' | 'ToraRoot' | 'ToraRouter' | 'ToraTrigger'
 
     /**
      * Tora 组件类型。
@@ -289,13 +289,13 @@ export namespace TokenUtils {
      * ToraModule 的 routers，对应 ToraModuleOptions 中的 routers。
      * @category Tora Module Meta
      */
-    export const ToraModuleRouters = new MetaTool<Type<any>[] | undefined>(DI_TOKEN.tora_module_routers)
+    export const ToraRootRouters = new MetaTool<Type<any>[] | undefined>(DI_TOKEN.tora_module_routers)
 
     /**
      * ToraModule 的 tasks，对应 ToraModuleOptions 中的 tasks。
      * @category Tora Module Meta
      */
-    export const ToraModuleTasks = new MetaTool<Type<any>[] | undefined>(DI_TOKEN.tora_module_tasks)
+    export const ToraRootTasks = new MetaTool<Type<any>[] | undefined>(DI_TOKEN.tora_module_tasks)
 
     // ToraRouter
 

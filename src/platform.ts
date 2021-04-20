@@ -141,7 +141,8 @@ export class Platform {
      * @param module
      */
     import(module: any) {
-        if (TokenUtils.ComponentType.get(module) !== 'ToraModule') {
+        const component_type = TokenUtils.ComponentType.get(module)
+        if (!component_type || !['ToraModule', 'ToraRoot', 'ToraRouter', 'ToraTrigger'].includes(component_type)) {
             throw new Error(`${module.name} is not a ToraModule.`)
         }
         TokenUtils.ToraModuleProviderCollector.get(module)?.(this.root_injector)
@@ -222,12 +223,12 @@ export class Platform {
      * @param module
      */
     register_module(name: string, module: any) {
-        if (TokenUtils.ComponentType.get(module) !== 'ToraModule') {
-            throw new Error(`${module.name ?? module.prototype?.toString()} is not a "tora_module".`)
+        if (TokenUtils.ComponentType.get(module) !== 'ToraRoot') {
+            throw new Error(`${module.name ?? module.prototype?.toString()} is not a "ToraRoot".`)
         }
 
-        const routers = TokenUtils.ToraModuleRouters.get(module)
-        const tasks = TokenUtils.ToraModuleTasks.get(module)
+        const routers = TokenUtils.ToraRootRouters.get(module)
+        const tasks = TokenUtils.ToraRootTasks.get(module)
         if (!routers?.length && !tasks?.length) {
             throw new Error(`ToraModule "${module.name}" do not carry any routers or tasks.`)
         } else {
@@ -273,8 +274,8 @@ export class Platform {
 
         console.log('root_module', root_module)
 
-        if (TokenUtils.ComponentType.get(root_module) !== 'ToraModule') {
-            throw new Error(`${root_module.name} is not a ToraModule.`)
+        if (TokenUtils.ComponentType.get(root_module) !== 'ToraRoot') {
+            throw new Error(`${root_module.name} is not a ToraRoot.`)
         }
 
         const sub_injector = Injector.create(this.root_injector)
@@ -284,11 +285,11 @@ export class Platform {
         sub_injector.get(LifeCycle)?.set_used()
         sub_injector.get(CacheProxy)?.set_used()
 
-        TokenUtils.ToraModuleRouters.get(root_module)?.forEach(router_module => {
+        TokenUtils.ToraRootRouters.get(root_module)?.forEach(router_module => {
             this._mount_router(router_module, sub_injector)
         })
 
-        TokenUtils.ToraModuleTasks.get(root_module)?.forEach(trigger_module => {
+        TokenUtils.ToraRootTasks.get(root_module)?.forEach(trigger_module => {
             this._mount_task(trigger_module, sub_injector)
         })
 
