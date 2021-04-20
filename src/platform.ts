@@ -155,6 +155,7 @@ export class Platform {
      */
     route(router_module: Type<any>) {
         this._mount_router(router_module, this.root_injector)
+        return this
     }
 
     /**
