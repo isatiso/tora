@@ -67,60 +67,120 @@
 				<a href="#tora" id="tora" style="color: inherit; text-decoration: none;">
 					<h1>Tora</h1>
 				</a>
-				<p>node.js 的依赖注入框架，typescript 实现。</p>
+				<p>基于 typescript reflect 实现的依赖注入服务框架。</p>
 				<p><a href="https://isatiso.github.io/tora">文档</a></p>
 				<p><a href="https://github.com/isatiso/tora">Github</a></p>
-				<blockquote>
-					<p>鉴于编译低版本 nodejs 时使用 async &amp; await 会导致内存泄漏。<br>现在导出的包 target 为 es2019</p>
-				</blockquote>
-				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
-					<h2>Installation</h2>
+				<a href="#安装" id="安装" style="color: inherit; text-decoration: none;">
+					<h2>安装</h2>
 				</a>
+				<p>需要 typescript 4.2 以上。</p>
 				<pre><code><span style="color: #001080">$</span><span style="color: #000000"> </span><span style="color: #001080">npm</span><span style="color: #000000"> </span><span style="color: #001080">install</span><span style="color: #000000"> </span><span style="color: #001080">tora</span>
 </code></pre>
 				<a href="#hello-tora" id="hello-tora" style="color: inherit; text-decoration: none;">
 					<h2>Hello Tora</h2>
 				</a>
-				<pre><code><span style="color: #000000">@</span><span style="color: #795E26">Router</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;test&#039;</span><span style="color: #000000">, {</span>
-<span style="color: #000000">    </span><span style="color: #001080">children:</span><span style="color: #000000"> []</span>
-<span style="color: #000000">})</span>
-<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">IndexRouter</span><span style="color: #000000"> {</span>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ApiParams</span><span style="color: #000000">, </span><span style="color: #001080">Platform</span><span style="color: #000000">, </span><span style="color: #001080">Post</span><span style="color: #000000">, </span><span style="color: #001080">ToraRouter</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;tora&#039;</span>
 
-<span style="color: #000000">    </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span>
-<span style="color: #000000">        </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">env</span><span style="color: #000000">: </span><span style="color: #267F99">Environment</span><span style="color: #000000">,</span>
-<span style="color: #000000">        </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">gen</span><span style="color: #000000">: </span><span style="color: #267F99">GeneratorService</span><span style="color: #000000">,</span>
-<span style="color: #000000">        </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">jwt</span><span style="color: #000000">: </span><span style="color: #267F99">JwtService</span><span style="color: #000000">,</span>
-<span style="color: #000000">        </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">oss</span><span style="color: #000000">: </span><span style="color: #267F99">OssService</span><span style="color: #000000">,</span>
-<span style="color: #000000">    ) {</span>
+<span style="color: #000000">@</span><span style="color: #795E26">ToraRouter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;/hello&#039;</span><span style="color: #000000">)</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">TestRouter</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">    @</span><span style="color: #795E26">Post</span><span style="color: #000000">()</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #795E26">test</span><span style="color: #000000">(</span>
+<span style="color: #000000">            </span><span style="color: #001080">params</span><span style="color: #000000">: </span><span style="color: #267F99">ApiParams</span><span style="color: #000000">&lt;{</span>
+<span style="color: #000000">                </span><span style="color: #001080">hello</span><span style="color: #000000">: </span><span style="color: #267F99">string</span>
+<span style="color: #000000">            }&gt;) {</span>
+
+<span style="color: #000000">        </span><span style="color: #AF00DB">return</span><span style="color: #000000"> { </span><span style="color: #001080">hello:</span><span style="color: #000000"> </span><span style="color: #001080">params</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;hello&#039;</span><span style="color: #000000">) }</span>
 <span style="color: #000000">    }</span>
 
-<span style="color: #000000">    @</span><span style="color: #795E26">Post</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;normal&#039;</span><span style="color: #000000">)</span>
-<span style="color: #000000">    </span><span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #795E26">normal</span><span style="color: #000000">(</span>
-<span style="color: #000000">        </span><span style="color: #001080">cs</span><span style="color: #000000">: </span><span style="color: #267F99">SessionContext</span><span style="color: #000000">,</span>
-<span style="color: #000000">        </span><span style="color: #001080">params</span><span style="color: #000000">: </span><span style="color: #267F99">ApiParams</span><span style="color: #000000">&lt;{</span>
-<span style="color: #000000">            </span><span style="color: #001080">a</span><span style="color: #000000">: </span><span style="color: #267F99">number</span>
-<span style="color: #000000">            </span><span style="color: #001080">b</span><span style="color: #000000">: </span><span style="color: #267F99">string</span>
-<span style="color: #000000">        }&gt;) {</span>
-
-<span style="color: #000000">        </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">a</span><span style="color: #000000"> = </span><span style="color: #001080">params</span><span style="color: #000000">.</span><span style="color: #795E26">ensure</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;number&#039;</span><span style="color: #000000">)</span>
-<span style="color: #000000">        </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">b</span><span style="color: #000000"> = </span><span style="color: #001080">params</span><span style="color: #000000">.</span><span style="color: #795E26">ensure</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;nonEmptyString&#039;</span><span style="color: #000000">)</span>
-
-<span style="color: #000000">        </span><span style="color: #AF00DB">return</span><span style="color: #000000"> { </span><span style="color: #001080">a</span><span style="color: #000000">, </span><span style="color: #001080">b</span><span style="color: #000000"> }</span>
-<span style="color: #000000">    }</span>
-
-<span style="color: #000000">}</span>
-
-<span style="color: #000000">@</span><span style="color: #795E26">ToraModule</span><span style="color: #000000">({</span>
-<span style="color: #000000">    </span><span style="color: #001080">providers:</span><span style="color: #000000"> [</span>
-<span style="color: #000000">    ],</span>
-<span style="color: #000000">    </span><span style="color: #001080">router_gate:</span><span style="color: #000000"> </span><span style="color: #001080">IndexRouter</span>
-<span style="color: #000000">})</span>
-<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">TestModule</span><span style="color: #000000"> {</span>
 <span style="color: #000000">}</span>
 
 <span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Platform</span><span style="color: #000000">()</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">bootstrap</span><span style="color: #000000">(</span><span style="color: #001080">TestModule</span><span style="color: #000000">)</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">start</span><span style="color: #000000">(</span><span style="color: #098658">3000</span><span style="color: #000000">)</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">load_config</span><span style="color: #000000">({ </span><span style="color: #001080">tora:</span><span style="color: #000000"> { </span><span style="color: #001080">port:</span><span style="color: #000000"> </span><span style="color: #098658">3000</span><span style="color: #000000"> } })</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #001080">TestRouter</span><span style="color: #000000">)</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">start</span><span style="color: #000000">()</span>
+
+<span style="color: #008000">// $ curl --request POST --url http://localhost:3000/hello/test --header &#039;Content-Type: application/json&#039; --data &#039;{ &quot;hello&quot;: &quot;world&quot; }&#039;</span>
+<span style="color: #008000">// $ {&quot;hello&quot;:&quot;world&quot;}</span>
+</code></pre>
+				<a href="#tora-组件" id="tora-组件" style="color: inherit; text-decoration: none;">
+					<h2>Tora 组件</h2>
+				</a>
+				<p>Tora 中的核心组件有四种：</p>
+				<ul>
+					<li><a href="modules/tora.html#toraservice">ToraService</a> 用来实现可以注入的服务。</li>
+					<li><a href="modules/tora.html#toramodule">ToraModule</a> 用于提供 ToraService，加载其他 ToraModule，是连接服务的中枢。</li>
+					<li>[[ToraRoot]] 特殊 ToraModule，可以携带 routers 和 tasks，作为 Platform 的启动入口。</li>
+					<li><a href="modules/tora.html#torarouter">ToraRouter</a> 特殊 ToraModule，用于实现 API，提供服务，加载模块。</li>
+					<li><a href="modules/tora.html#toratrigger">ToraTrigger</a> 特殊 ToraModule，用于实现定时任务。</li>
+				</ul>
+				<a href="#toraservice" id="toraservice" style="color: inherit; text-decoration: none;">
+					<h3>ToraService</h3>
+				</a>
+				<p>先实现一个最基础的 Service，以一定格式把两个字符串拼起来。</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ToraService</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;tora&#039;</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">ToraService</span><span style="color: #000000">()</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">AssembleStringService</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">    </span><span style="color: #795E26">assemble</span><span style="color: #000000">(</span><span style="color: #001080">front</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #001080">rear</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">) {</span>
+<span style="color: #000000">        </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">`</span><span style="color: #0000FF">${</span><span style="color: #001080">front</span><span style="color: #0000FF">}</span><span style="color: #A31515">^_^</span><span style="color: #0000FF">${</span><span style="color: #001080">rear</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>接下来我们来使用这个服务。 我们先构建一个可以请求的接口，这样可以直接看到运行结果。</p>
+				<pre><code class="language-typescript"><span style="color: #000000">@</span><span style="color: #795E26">ToraRouter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;/test&#039;</span><span style="color: #000000">, {</span>
+<span style="color: #000000">    </span><span style="color: #001080">providers:</span><span style="color: #000000"> [</span>
+<span style="color: #000000">        </span><span style="color: #001080">AssembleStringService</span><span style="color: #000000">, </span><span style="color: #008000">// 需要有一个可以提供这个服务的模块在，</span>
+<span style="color: #000000">    ]</span>
+<span style="color: #000000">})</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">SampleRouter</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">    </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span>
+<span style="color: #000000">            </span><span style="color: #008000">// 这样就获得了这个服务。</span>
+<span style="color: #000000">            </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">assemble_string</span><span style="color: #000000">: </span><span style="color: #267F99">AssembleStringService</span>
+<span style="color: #000000">    ) {</span>
+<span style="color: #000000">    }</span>
+
+<span style="color: #000000">    @</span><span style="color: #795E26">Get</span><span style="color: #000000">()</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #795E26">sample</span><span style="color: #000000">() {</span>
+<span style="color: #000000">        </span><span style="color: #AF00DB">return</span><span style="color: #000000"> {</span>
+<span style="color: #000000">            </span><span style="color: #008000">// 使用服务生成字符串并返回。</span>
+<span style="color: #000000">            </span><span style="color: #001080">res:</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">assemble_string</span><span style="color: #000000">.</span><span style="color: #795E26">assemble</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;@@@&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;$$$&#039;</span><span style="color: #000000">)</span>
+<span style="color: #000000">        }</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #008000">// $ curl -X GET --url http://localhost:3000/test/sample</span>
+<span style="color: #008000">// $ { &quot;res&quot;: &quot;@@@^_^$$$&quot; }</span>
+</code></pre>
+				<p>下面展示如何使用 ToraModule 进行模块连接。先创建一个 ToraModule。</p>
+				<pre><code class="language-typescript"><span style="color: #000000">@</span><span style="color: #795E26">ToraModule</span><span style="color: #000000">({</span>
+<span style="color: #000000">    </span><span style="color: #001080">providers:</span><span style="color: #000000"> [</span>
+<span style="color: #000000">        </span><span style="color: #001080">AssembleStringService</span><span style="color: #000000">, </span><span style="color: #008000">// 这次由 SampleModule 进行服务提供。，</span>
+<span style="color: #000000">    ]</span>
+<span style="color: #000000">})</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">SampleModule</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>将 ToraRouter 元数据做如下修改。</p>
+				<pre><code class="language-typescript"><span style="color: #000000">@</span><span style="color: #795E26">ToraRouter</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;/test&#039;</span><span style="color: #000000">, {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// providers: [</span>
+<span style="color: #000000">    </span><span style="color: #008000">//     AssembleStringService,</span>
+<span style="color: #000000">    </span><span style="color: #008000">// ]</span>
+<span style="color: #000000">    </span><span style="color: #001080">imports:</span><span style="color: #000000"> [</span>
+<span style="color: #000000">        </span><span style="color: #001080">SampleModule</span><span style="color: #000000">, </span><span style="color: #008000">// 这次将模块加在这里。</span>
+<span style="color: #000000">    ]</span>
+<span style="color: #000000">})</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">SampleRouter</span><span style="color: #000000"> {</span>
+
+<span style="color: #000000">    </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span>
+<span style="color: #000000">            </span><span style="color: #008000">// 同样的方式使用这个服务。</span>
+<span style="color: #000000">            </span><span style="color: #0000FF">private</span><span style="color: #000000"> </span><span style="color: #001080">assemble_string</span><span style="color: #000000">: </span><span style="color: #267F99">AssembleStringService</span>
+<span style="color: #000000">    ) {</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">}</span>
 </code></pre>
 			</div>
 		</div>
