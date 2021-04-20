@@ -42,7 +42,7 @@ new Platform()
 // $ {"hello":"world"}
 ```
 
-## Tora 组件
+## 认识 Tora 组件
 
 Tora 中的核心组件有四种：
 
@@ -51,8 +51,6 @@ Tora 中的核心组件有四种：
 - [[ToraRoot]] 特殊 ToraModule，可以携带 routers 和 tasks，作为 Platform 的启动入口。
 - [[ToraRouter]] 特殊 ToraModule，用于实现 API，提供服务，加载模块。
 - [[ToraTrigger]] 特殊 ToraModule，用于实现定时任务。
-
-### ToraService
 
 先实现一个最基础的 Service，以一定格式把两个字符串拼起来。
 
@@ -129,6 +127,43 @@ export class SampleRouter {
     ) {
     }
 }
+```
+
+## 启动 Tora
+
+我们现在有了一个使用自定义服务的 API。下面看看怎么启动它。 Tora 的启动入口是 Platform 类。
+
+```typescript
+
+new Platform()
+        .load_config({ tora: { port: 3000 } }) // 这个配置文件格式定义在了 global.ToraConfigSchema 接口中，可以通过生命合并扩展这个接口。
+        .route(SampleRouter) // 这样就挂载了 SampleRouter
+        .start() // 这样就开始监听了。
+
+// 输出内容如下：
+// tora server starting...
+//     listen at port 3000...
+//
+// tora server started successfully in 0.004s.
+
+```
+
+大多数情况我们的一个服务不止是启动一个接口，而是一批接口以及若干定时任务。 这时我们可以使用 [[ToraRoot]]
+
+```typescript
+@ToraRoot({
+    imports: [SampleModule1, SampleModule2, /* ... */],
+    providers: [SampleService1, SampleService2, /* ... */],
+    routers: [SampleRouter1, SampleRouter2, /* ... */],
+    tasks: [SampleTrigger1, SampleTrigger2, /* ... */],
+})
+export class SampleRoot {
+}
+
+new Platform()
+        .load_config({ tora: { port: 3000 } })
+        .bootstrap(SampleRoot) // 这样就可以加载一个 Root 模块。
+        .start()
 ```
 
 

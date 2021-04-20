@@ -103,20 +103,17 @@
 <span style="color: #008000">// $ curl --request POST --url http://localhost:3000/hello/test --header &#039;Content-Type: application/json&#039; --data &#039;{ &quot;hello&quot;: &quot;world&quot; }&#039;</span>
 <span style="color: #008000">// $ {&quot;hello&quot;:&quot;world&quot;}</span>
 </code></pre>
-				<a href="#tora-组件" id="tora-组件" style="color: inherit; text-decoration: none;">
-					<h2>Tora 组件</h2>
+				<a href="#认识-tora-组件" id="认识-tora-组件" style="color: inherit; text-decoration: none;">
+					<h2>认识 Tora 组件</h2>
 				</a>
 				<p>Tora 中的核心组件有四种：</p>
 				<ul>
 					<li><a href="modules/tora.html#toraservice">ToraService</a> 用来实现可以注入的服务。</li>
 					<li><a href="modules/tora.html#toramodule">ToraModule</a> 用于提供 ToraService，加载其他 ToraModule，是连接服务的中枢。</li>
-					<li>[[ToraRoot]] 特殊 ToraModule，可以携带 routers 和 tasks，作为 Platform 的启动入口。</li>
+					<li><a href="modules/tora.html#toraroot">ToraRoot</a> 特殊 ToraModule，可以携带 routers 和 tasks，作为 Platform 的启动入口。</li>
 					<li><a href="modules/tora.html#torarouter">ToraRouter</a> 特殊 ToraModule，用于实现 API，提供服务，加载模块。</li>
 					<li><a href="modules/tora.html#toratrigger">ToraTrigger</a> 特殊 ToraModule，用于实现定时任务。</li>
 				</ul>
-				<a href="#toraservice" id="toraservice" style="color: inherit; text-decoration: none;">
-					<h3>ToraService</h3>
-				</a>
 				<p>先实现一个最基础的 Service，以一定格式把两个字符串拼起来。</p>
 				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ToraService</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;tora&#039;</span>
 
@@ -181,6 +178,38 @@
 <span style="color: #000000">    ) {</span>
 <span style="color: #000000">    }</span>
 <span style="color: #000000">}</span>
+</code></pre>
+				<a href="#启动-tora" id="启动-tora" style="color: inherit; text-decoration: none;">
+					<h2>启动 Tora</h2>
+				</a>
+				<p>我们现在有了一个使用自定义服务的 API。下面看看怎么启动它。 Tora 的启动入口是 Platform 类。</p>
+				<pre><code class="language-typescript">
+<span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Platform</span><span style="color: #000000">()</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">load_config</span><span style="color: #000000">({ </span><span style="color: #001080">tora:</span><span style="color: #000000"> { </span><span style="color: #001080">port:</span><span style="color: #000000"> </span><span style="color: #098658">3000</span><span style="color: #000000"> } }) </span><span style="color: #008000">// 这个配置文件格式定义在了 global.ToraConfigSchema 接口中，可以通过生命合并扩展这个接口。</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">route</span><span style="color: #000000">(</span><span style="color: #001080">SampleRouter</span><span style="color: #000000">) </span><span style="color: #008000">// 这样就挂载了 SampleRouter</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">start</span><span style="color: #000000">() </span><span style="color: #008000">// 这样就开始监听了。</span>
+
+<span style="color: #008000">// 输出内容如下：</span>
+<span style="color: #008000">// tora server starting...</span>
+<span style="color: #008000">//     listen at port 3000...</span>
+<span style="color: #008000">//</span>
+<span style="color: #008000">// tora server started successfully in 0.004s.</span>
+
+</code></pre>
+				<p>大多数情况我们的一个服务不止是启动一个接口，而是一批接口以及若干定时任务。 这时我们可以使用 <a href="modules/tora.html#toraroot">ToraRoot</a></p>
+				<pre><code class="language-typescript"><span style="color: #000000">@</span><span style="color: #795E26">ToraRoot</span><span style="color: #000000">({</span>
+<span style="color: #000000">    </span><span style="color: #001080">imports:</span><span style="color: #000000"> [</span><span style="color: #001080">SampleModule1</span><span style="color: #000000">, </span><span style="color: #001080">SampleModule2</span><span style="color: #000000">, </span><span style="color: #008000">/* ... */</span><span style="color: #000000">],</span>
+<span style="color: #000000">    </span><span style="color: #001080">providers:</span><span style="color: #000000"> [</span><span style="color: #001080">SampleService1</span><span style="color: #000000">, </span><span style="color: #001080">SampleService2</span><span style="color: #000000">, </span><span style="color: #008000">/* ... */</span><span style="color: #000000">],</span>
+<span style="color: #000000">    </span><span style="color: #001080">routers:</span><span style="color: #000000"> [</span><span style="color: #001080">SampleRouter1</span><span style="color: #000000">, </span><span style="color: #001080">SampleRouter2</span><span style="color: #000000">, </span><span style="color: #008000">/* ... */</span><span style="color: #000000">],</span>
+<span style="color: #000000">    </span><span style="color: #001080">tasks:</span><span style="color: #000000"> [</span><span style="color: #001080">SampleTrigger1</span><span style="color: #000000">, </span><span style="color: #001080">SampleTrigger2</span><span style="color: #000000">, </span><span style="color: #008000">/* ... */</span><span style="color: #000000">],</span>
+<span style="color: #000000">})</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">SampleRoot</span><span style="color: #000000"> {</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Platform</span><span style="color: #000000">()</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">load_config</span><span style="color: #000000">({ </span><span style="color: #001080">tora:</span><span style="color: #000000"> { </span><span style="color: #001080">port:</span><span style="color: #000000"> </span><span style="color: #098658">3000</span><span style="color: #000000"> } })</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">bootstrap</span><span style="color: #000000">(</span><span style="color: #001080">SampleRoot</span><span style="color: #000000">) </span><span style="color: #008000">// 这样就可以加载一个 Root 模块。</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">start</span><span style="color: #000000">()</span>
 </code></pre>
 			</div>
 		</div>
@@ -256,6 +285,9 @@
 					</li>
 					<li class=" tsd-kind-reference">
 						<a href="modules.html#toramodule" class="tsd-kind-icon">Tora<wbr>Module</a>
+					</li>
+					<li class=" tsd-kind-reference">
+						<a href="modules.html#toraroot" class="tsd-kind-icon">Tora<wbr>Root</a>
 					</li>
 					<li class=" tsd-kind-reference">
 						<a href="modules.html#torarouter" class="tsd-kind-icon">Tora<wbr>Router</a>
