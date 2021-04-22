@@ -25,21 +25,24 @@ export abstract class ResultWrapper {
     /**
      * 实现具体的包装逻辑。
      *
+     * 如果返回 undefined 表示不对结果进行封装，直接返回原处理结果。
+     *
      * **注意**：只有请求处理正常执行完毕才会调用 wrap 方法。
      *
      * @param result 请求处理函数的结果
      * @param context 请求上下文对象
      * @return real_result 实际需要写入请求连接的响应内容。
      */
-    abstract wrap(result: any, context: SessionContext): KoaResponseType
+    abstract wrap(result: any, context: SessionContext): KoaResponseType | undefined
 
     /**
      * 实现异常的处理逻辑。
+     *
      * 如果返回 undefined 则会使用默认的异常结构。
      *
      * @param err
      * @param context 请求上下文对象
      * @return real_result 实际需要写入请求连接的响应内容。
      */
-    abstract wrap_error<T = any>(err: T, context: SessionContext): KoaResponseType
+    abstract wrap_error<T = any>(err: T, context: SessionContext): KoaResponseType | undefined
 }

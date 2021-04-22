@@ -51,6 +51,22 @@ export namespace PlatformUtils {
         koa_context.response.body = response_body
     }
 
+    function do_wrap(result_wrapper: ResultWrapper | undefined, data: any, context: SessionContext) {
+        if (!result_wrapper) {
+            return data
+        }
+        const res = result_wrapper?.wrap(data, context)
+        return res === undefined ? data : res
+    }
+
+    function do_wrap_error(result_wrapper: ResultWrapper | undefined, err: ToraError<any>, context: SessionContext) {
+        if (!result_wrapper) {
+            return { error: err.err_data }
+        }
+        const res = result_wrapper?.wrap_error(err, context)
+        return res === undefined ? { error: err.err_data } : res
+    }
+
     export async function run_handler(handler_wrapper: () => any) {
         try {
             return await handler_wrapper?.()
@@ -135,13 +151,13 @@ export namespace PlatformUtils {
                 if (!authenticator) {
                     const err = new ToraError(new Error('no provider for <Authenticator>.'))
                     await hooks?.on_error(context, err)
-                    const err_result = desc.wrap_result ? result_wrapper?.wrap_error(err, context) ?? { error: err.err_data } : { error: err.err_data }
+                    const err_result = desc.wrap_result ? do_wrap_error(result_wrapper, err, context) : { error: err.err_data }
                     return finish_process(koa_context, err_result)
                 }
                 if (auth_info === undefined) {
                     const err = new ToraError(reasonable(401, 'Unauthorized.'))
                     await hooks?.on_error(context, err)
-                    const err_result = desc.wrap_result ? result_wrapper?.wrap_error(err, context) ?? { error: err.err_data } : { error: err.err_data }
+                    const err_result = desc.wrap_result ? do_wrap_error(result_wrapper, err, context) : { error: err.err_data }
                     return finish_process(koa_context, err_result)
                 }
             }
@@ -164,15 +180,15 @@ export namespace PlatformUtils {
 
             if (handler_result instanceof ToraError) {
                 await hooks?.on_error(context, handler_result)
-                const err_response = desc.wrap_result ? result_wrapper?.wrap_error(handler_result, context) ?? { error: handler_result.err_data } : { error: handler_result.err_data }
+                const err_response = desc.wrap_result ? do_wrap_error(result_wrapper, handler_result, context) : { error: handler_result.err_data }
                 finish_process(koa_context, err_response)
             } else if (handler_result instanceof OuterFinish) {
                 await hooks?.on_finish(context)
-                const normal_res = desc.wrap_result ? result_wrapper?.wrap(handler_result.body, context) ?? handler_result.body : handler_result.body
+                const normal_res = desc.wrap_result ? do_wrap(result_wrapper, handler_result, context) : handler_result.body
                 finish_process(koa_context, normal_res)
             } else {
                 await hooks?.on_finish(context)
-                const normal_res = desc.wrap_result ? result_wrapper?.wrap(handler_result, context) ?? handler_result : handler_result
+                const normal_res = desc.wrap_result ? do_wrap(result_wrapper, handler_result, context) : handler_result
                 finish_process(koa_context, normal_res)
             }
         }
