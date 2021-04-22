@@ -58,6 +58,7 @@ export class OuterFinish<Context extends LiteContext = LiteContext> extends Erro
 }
 
 /**
+ * 返回一个受控异常，包含预先定义的状态码和错误信息。
  * @category Error
  */
 export function reasonable(code: number, msg: string, detail?: any) {
@@ -65,6 +66,7 @@ export function reasonable(code: number, msg: string, detail?: any) {
 }
 
 /**
+ * 直接抛出一个受控异常，跳出执行过程，返回预先定义的状态码和错误信息。
  * @category Error
  */
 export function throw_reasonable(code: number, msg: string, detail?: any): never {
@@ -72,6 +74,7 @@ export function throw_reasonable(code: number, msg: string, detail?: any): never
 }
 
 /**
+ * 未知异常，直接抛出异常，提供可选的调试信息。
  * @category Error
  */
 export function crash(msg: any): never {
@@ -79,8 +82,12 @@ export function crash(msg: any): never {
 }
 
 /**
+ * 跳出执行过程，直接返回响应结果。
  * @category Error
+ *
+ * @param koa_context
+ * @param data 响应结果。
  */
-export function response<C extends LiteContext>(ctx: C, data: any): never {
-    throw new OuterFinish(ctx, data)
+export function response<C extends LiteContext>(koa_context: C, data: any): never {
+    throw new OuterFinish(koa_context, data)
 }

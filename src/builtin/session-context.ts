@@ -83,6 +83,20 @@ export class SessionContext {
     }
 
     /**
+     * 获取当前响应状态码。
+     */
+    get response_status() {
+        return this._ctx.response.status
+    }
+
+    /**
+     * 设置响应状态码。
+     */
+    set response_status(value: number) {
+        this._ctx.response.status = value
+    }
+
+    /**
      * 设置用户自定义数据。
      * 通过声明全局 [[ToraSession]] 接口定义自定义数据类型。
      *
