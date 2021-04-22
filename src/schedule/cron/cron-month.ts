@@ -39,7 +39,7 @@ export class CronMonth {
             const hour = (this._current[1] + '').padStart(2, '0')
             const min = (this._current[2] + '').padStart(2, '0')
             const sec = (this._current[3] + '').padStart(2, '0')
-            const date = dayjs(`${y}-${m}-${d} ${hour}:${min}:${sec}`).tz(this._tz)
+            const date = dayjs.tz(`${y}-${m}-${d} ${hour}:${min}:${sec}`, this._tz)
             this._current = this._tick()
             return date
         } else {
