@@ -9,6 +9,14 @@ import { TaskDescriptor } from '../types'
 import { Bullet } from './bullet'
 import { Schedule } from './schedule'
 
+export interface TaskDesc {
+    name: string
+    pos: string
+    crontab: string
+    next_exec_ts: number
+    next_exec_date_string: string
+}
+
 export class Revolver {
 
     private _clip?: Bullet | null
@@ -35,12 +43,7 @@ export class Revolver {
     }
 
     get_task_list() {
-        const list: {
-            name: string
-            pos: string
-            crontab: string
-            next_execution: string
-        }[] = []
+        const list: TaskDesc[] = []
 
         let bullet = this._clip
         while (bullet) {
@@ -48,7 +51,8 @@ export class Revolver {
                 name: bullet.desc.name ?? bullet.desc.pos ?? '',
                 pos: bullet.desc.pos ?? '',
                 crontab: bullet.desc.crontab ?? '',
-                next_execution: bullet.execution.format('YYYY-MM-DD HH:mm:ss'),
+                next_exec_ts: bullet.execution.valueOf(),
+                next_exec_date_string: bullet.execution.format(),
             })
             bullet = bullet.next_bullet
         }

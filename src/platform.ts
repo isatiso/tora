@@ -12,6 +12,7 @@ import { Injector } from './injector'
 import { ClassProvider, def2Provider, ValueProvider } from './injector/provider'
 import { PlatformUtils, PURE_PARAMS } from './platform-utils'
 import { Revolver } from './schedule'
+import { TaskDesc } from './schedule/revolver'
 import { Authenticator } from './service/authenticator'
 import { CacheProxy } from './service/cache-proxy'
 import { LifeCycle } from './service/life-cycle'
@@ -327,20 +328,22 @@ export class Platform {
     }
 
     /**
+     * 获取当前任务列表。
+     */
+    get_task_list() {
+        return this._revolver.get_task_list()
+    }
+
+    /**
      * 展示任务列表，按执行顺序。
      *
      * @param formatter 自定义格式处理函数。
      */
-    show_task_list(formatter?: (task: {
-        name: string
-        pos: string
-        crontab: string
-        next_execution: string
-    }) => string) {
+    show_task_list(formatter?: (task: TaskDesc) => string) {
         const task_list = this._revolver.get_task_list()
         console.log('\nCurrent Task list:')
         for (const task of task_list) {
-            console.log(formatter?.(task) ?? `    ${task.next_execution} ${task.name.padEnd(7)} ${task.crontab}`)
+            console.log(formatter?.(task) ?? `    ${task.next_exec_date_string} ${task.name.padEnd(7)} ${task.crontab}`)
         }
         return this
     }
