@@ -14,6 +14,7 @@ import { Dayjs } from 'dayjs'
  */
 export class TaskContext {
 
+    private readonly _name?: string
     private readonly _lock_key?: string
     private readonly _lock_expires?: number
     private readonly _crontab: string
@@ -23,6 +24,7 @@ export class TaskContext {
 
     constructor(
         desc: {
+            name: string,
             crontab: string,
             execution: Dayjs,
             pos: string,
@@ -33,12 +35,17 @@ export class TaskContext {
             },
         }
     ) {
+        this._name = desc.name
         this._crontab = desc.crontab
         this._pos = desc.pos
         this._property_key = desc.property_key
         this._execution = desc.execution
         this._lock_key = desc.lock?.key
         this._lock_expires = desc.lock?.expires
+    }
+
+    get name(): string | undefined {
+        return this._name
     }
 
     get lock_key(): string | undefined {

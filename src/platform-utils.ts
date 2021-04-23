@@ -98,6 +98,7 @@ export namespace PlatformUtils {
             }
 
             const context = new TaskContext({
+                name: desc.name ?? desc.pos ?? '',
                 execution,
                 pos: desc.pos!,
                 property_key: desc.property_key!,
